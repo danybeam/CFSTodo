@@ -3,7 +3,6 @@ import { Signal } from "solid-js";
 export class Task {
     id: number = 0;
     text: string = "";
-    testParam: string = "boogityboo";
     completed: boolean;
 
     constructor(id: number, text: string, completed: boolean) {

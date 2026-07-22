@@ -1,18 +1,19 @@
 import { Task } from "../models/Task";
+import { useTask } from "./context/TaskContext";
 
 class TaskListItemProps {
     task!: Task;
-    toggleTodo!: (id: number) => void;
 }
 
 export function TaskListItem(props: TaskListItemProps) {
-    console.log("creating task item");
+    const [tasks, { addTask, toggleTask }] = useTask();
+
     return (
         <div>
             <input
                 type="checkbox"
                 checked={props.task.completed}
-                onChange={[props.toggleTodo, props.task.id]}
+                onChange={[toggleTask, props.task.id]}
             />
             <span>{props.task.text}</span>
         </div>

@@ -1,8 +1,12 @@
+import { useTask } from "./context/TaskContext";
+
 class TaskFormProps {
     addTaskFunc!: (text: string) => void;
 }
 
-function TaskForm(props: TaskFormProps) {
+function TaskForm() {
+    const [tasks, { addTask, toggleTask }] = useTask()
+
     return (
         <form
             class="row"
@@ -18,7 +22,7 @@ function TaskForm(props: TaskFormProps) {
                     return; // If empty do not throw but don't save it.
                 }
 
-                props.addTaskFunc(text);
+                addTask(text);
             }}
         >
             <input
