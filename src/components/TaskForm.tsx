@@ -1,11 +1,7 @@
-import { useTask } from "./context/TaskContext";
-
-class TaskFormProps {
-    addTaskFunc!: (text: string) => void;
-}
+import TaskContext from "./context/GlobalTaskList"
 
 function TaskForm() {
-    const [tasks, { addTask, toggleTask }] = useTask()
+    const {addTask} = TaskContext;
 
     return (
         <form
@@ -30,7 +26,7 @@ function TaskForm() {
                 name="input"
                 placeholder="Enter a task..."
             />
-            <button type="submit">Greet</button>
+            <button type="submit">Add</button>
         </form>
     )
 }

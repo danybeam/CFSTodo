@@ -1,21 +1,27 @@
+import { batch, createSignal } from "solid-js";
 import { Task } from "../models/Task";
-import { useTask } from "./context/TaskContext";
+
+import TaskContext from "./context/GlobalTaskList"
 
 class TaskListItemProps {
     task!: Task;
 }
 
 export function TaskListItem(props: TaskListItemProps) {
-    const [tasks, { addTask, toggleTask }] = useTask();
+    const { toggleTask } = TaskContext;
+    //  const [checked, setChecked] = createSignal(props.task.completed);
+    //  const [itemText, setItemText] = createSignal(props.task.text + " " + props.task.completed);
 
     return (
-        <div>
-            <input
-                type="checkbox"
-                checked={props.task.completed}
-                onChange={[toggleTask, props.task.id]}
-            />
-            <span>{props.task.text}</span>
+        <div class="row padded">
+            <div class="framed">
+                <input
+                    type="checkbox"
+                    checked={props.task.completed}
+                    onInput={[toggleTask, props.task.id]}
+                />
+                <span>{props.task.text + " " + props.task.completed}</span>
+            </div>
         </div>
     );
 }

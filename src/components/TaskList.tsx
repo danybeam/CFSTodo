@@ -1,10 +1,10 @@
 import { For } from "solid-js";
-import { useTask } from "./context/TaskContext";
 import { TaskListItem } from "./TaskListItem";
+import TaskContext from "./context/GlobalTaskList"
 
-export function TaskList(props: any) {
-    const [tasks, { addTask, toggleTask }] = useTask();
-    
+export function TaskList() {
+    const { tasks } = TaskContext;
+
     return (
         <For each={tasks}>{
             (task) => <TaskListItem task={task} />
