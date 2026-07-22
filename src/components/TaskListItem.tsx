@@ -1,4 +1,4 @@
-import { createSignal, Show } from "solid-js";
+import { createSignal } from "solid-js";
 import { Task } from "../models/Task";
 
 import TaskContext from "./context/GlobalTaskList"
