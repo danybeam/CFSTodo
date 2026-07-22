@@ -3,10 +3,10 @@ import TaskContext from "./context/GlobalTaskList"
 import { TaskListItem } from "./TaskListItem";
 import { Task } from "../models/Task";
 
-export function ActiveTask() {
+export function CurrentTask() {
     const [firstTask, setFirstTask] = createSignal<Task>(TaskContext.tasks[0]);
     createEffect(() => {
-        setFirstTask(TaskContext.tasks.at(0) ?? { id: -1, text: "error", completed: false });
+        setFirstTask(TaskContext.tasks.at(0) ?? { id: -1, text: "error", completed: false, isSuspended: false });
     })
 
     return (
@@ -14,7 +14,7 @@ export function ActiveTask() {
             when={firstTask()?.id >= 0}
             fallback={<span>Add a task to get started</span>}
         >
-            <TaskListItem task={firstTask()} />
+            <TaskListItem task={firstTask()} isCurrentTask={firstTask()?.id == 0} />
         </Show>
     );
 }

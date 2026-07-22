@@ -1,5 +1,5 @@
 import "./App.css";
-import { ActiveTask } from "./components/ActiveTask";
+import { CurrentTask } from "./components/CurrentTask";
 
 import TaskForm from "./components/TaskForm";
 import { TaskList } from "./components/TaskList";
@@ -8,8 +8,10 @@ function App() {
 
   return (
     <main class="container">
-      <ActiveTask />
+      <CurrentTask />
+      <div class="medium padded" />
       <TaskForm />
+      <div class="medium padded" />
       <TaskList />
     </main>
   );

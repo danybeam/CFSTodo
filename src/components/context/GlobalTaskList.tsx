@@ -6,7 +6,7 @@ function createGlobalTaskList() {
     const [tasks, setTasks] = createStore<Task[]>([]);
 
     const addTask = (text: string) => {
-        setTasks([...tasks, { id: tasks.length, text: text, completed: false }]);
+        setTasks([...tasks, { id: tasks.length, text: text, completed: false, isSuspended: false }]);
     }
 
     const toggleTask = (id: number) => {

@@ -1,36 +1,53 @@
-import { createSignal } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { Task } from "../models/Task";
 
 import TaskContext from "./context/GlobalTaskList"
 
-class TaskListItemProps {
-    task!: Task;
+type TaskListItemProps = {
+    task: Task,
+    isCurrentTask: boolean
 }
 
 export function TaskListItem(props: TaskListItemProps) {
     const [extraMenu, setExtraMenu] = createSignal(false);
 
+    let suspendBtn = <button>⏸️</button>
+    let preemptBtn = <button>▶️</button>;
+    let completeBtn = <button>✅</button>;
+    let deleteBtn = <button onClick={() => TaskContext.removeTask(props.task.id)}>❌</button>;
+
     return (
         <div class="padded row">
             <div class="framed row">
-                <span style="margin-right: 20px;">{props.task.text}</span>
+                <span style="margin-right: 20px;">{props.task.text + " " + props.task.isSuspended}</span>
 
-                <div class="button-container">
-                    <div class="button-slider" classList={{ secondary: extraMenu() }}>
-                        <div class="button-group">
-                            <button>ℹ️</button>
-                            <button>✅</button>
-                            <button>🔄️</button>
-                            <button onClick={() => setExtraMenu(!extraMenu())}>↪️</button>
+                <Show
+                    when={props.isCurrentTask}
+                    fallback={
+                        <div class = "static-button-group">
+                            {preemptBtn}
+                            {suspendBtn}
+                            {completeBtn}
+                            {deleteBtn}
                         </div>
-                        <div class="button-group">
-                            <button>⏸️</button>
-                            <button>▶️</button>
-                            <button onClick={() => TaskContext.removeTask(props.task.id)}>❌</button>
-                            <button onClick={() => setExtraMenu(!extraMenu())}>🔙</button>
+                    }
+                >
+                    <div class="button-container">
+                        <div class="button-slider" classList={{ secondary: extraMenu() }}>
+                            <div class="button-group">
+                                <button>ℹ️</button>
+                                {completeBtn}
+                                <button>🔄️</button>
+                                <button onClick={() => setExtraMenu(!extraMenu())}>↪️</button>
+                            </div>
+                            <div class="button-group">
+                                {suspendBtn}
+                                {deleteBtn}
+                                <button onClick={() => setExtraMenu(!extraMenu())}>🔙</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </Show>
 
 
             </div>
