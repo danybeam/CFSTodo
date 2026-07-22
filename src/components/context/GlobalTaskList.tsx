@@ -16,7 +16,13 @@ function createGlobalTaskList() {
         )
     }
 
-    return { tasks, addTask, toggleTask };
+    const removeTask = (id: number) => {
+        console.log(id);
+        setTasks(tasks.filter((task) => task.id !== id));
+        console.log(tasks);
+    }
+
+    return { tasks, addTask, toggleTask, removeTask };
 }
 
 export default createRoot(createGlobalTaskList);

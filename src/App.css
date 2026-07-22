@@ -59,6 +59,27 @@
   padding-top: 2px;
 }
 
+.button-container {
+    width: 290px; /* width of one button row */
+    overflow: hidden;
+}
+
+.button-slider {
+    display: flex;
+    width: 200%;
+    transition: transform 250ms ease;
+}
+
+.button-slider.secondary {
+    transform: translateX(-50%);
+}
+
+.button-group {
+    width: 50%;
+    display: flex;
+    gap: 0.5rem;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
