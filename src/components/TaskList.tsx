@@ -6,7 +6,7 @@ export function TaskList() {
     const { tasks } = TaskContext;
 
     return (
-        <For each={tasks}>{
+        <For each={tasks.slice(1)}>{
             (task) => <TaskListItem task={task} />
         }
         </For>

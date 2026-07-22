@@ -1,8 +1,9 @@
 import { createRoot } from "solid-js";
 import { createStore } from "solid-js/store";
+import { Task } from "../../models/Task";
 
 function createGlobalTaskList() {
-    const [tasks, setTasks] = createStore([]);
+    const [tasks, setTasks] = createStore<Task[]>([]);
 
     const addTask = (text: string) => {
         setTasks([...tasks, { id: tasks.length, text: text, completed: false }]);
