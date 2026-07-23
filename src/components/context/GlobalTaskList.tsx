@@ -35,7 +35,6 @@ function createGlobalTaskList() {
             )
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
-            console.log(tasks);
         })
     }
 
