@@ -1,4 +1,4 @@
-import { batch, createRoot } from "solid-js";
+import { batch, createRoot, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Task } from "../../models/Task";
 
@@ -16,6 +16,10 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
 
 function createGlobalTaskList() {
     const [tasks, setTasks] = createStore<Task[]>([]);
+
+    onMount(() => {
+        SettingsContext.calculateNewTimeSlice(tasks);
+    });
 
     const addTask = (text: string) => {
         batch(() => {
