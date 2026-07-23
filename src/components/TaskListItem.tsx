@@ -13,7 +13,7 @@ export default function TaskListItem(props: TaskListItemProps) {
 
     let suspendBtn = <button>⏸️</button>
     let preemptBtn = <button>▶️</button>;
-    let completeBtn = <button>✅</button>;
+    let completeBtn = <button onClick={() => TaskContext.toggleTask(props.task.id)}>✅</button>;
     let deleteBtn = <button onClick={() => TaskContext.removeTask(props.task.id)}>❌</button>;
 
     return (
@@ -24,7 +24,7 @@ export default function TaskListItem(props: TaskListItemProps) {
                 <Show
                     when={props.isCurrentTask}
                     fallback={
-                        <div class = "static-button-group">
+                        <div class="static-button-group">
                             {preemptBtn}
                             {suspendBtn}
                             {completeBtn}

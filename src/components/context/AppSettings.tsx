@@ -3,22 +3,32 @@ import { Task } from "../../models/Task";
 
 declare global {
     var AppSettings: {
-        availableHours: 35.0;
-        minimumScheduleSlice: 4.0;
+        availableHours: number;
+        minimumScheduleSlice: number;
     };
 }
 
+function initializeSettings() {
+    globalThis.AppSettings = { availableHours: 35.0, minimumScheduleSlice: 4.0 }
+}
+
 function createSettings() {
+    initializeSettings();
+
     const [calculatedTimeSlice, setCalculatedTimeSlice] = createSignal(0);
+    const [isOverburdened, setIsOverburdened] = createSignal(false);
 
     const calculateNewTimeSlice = (list: Task[]) => {
-        // TODO filter task list to not count completed tasks
-        let timeSlice = Math.max(globalThis.AppSettings.availableHours / Math.max(list.length, 1.0), globalThis.AppSettings.minimumScheduleSlice);
+        let filteredList = list.filter((item) => !item.completed);
+        let candidateTimeSlice = globalThis.AppSettings.availableHours / Math.max(filteredList.length, 1.0);
+
+        let timeSlice = Math.max(candidateTimeSlice, globalThis.AppSettings.minimumScheduleSlice);
         setCalculatedTimeSlice(timeSlice);
+        setIsOverburdened(candidateTimeSlice < globalThis.AppSettings.minimumScheduleSlice);
     }
 
 
-    return { calculatedTimeSlice, calculateNewTimeSlice };
+    return { calculatedTimeSlice, calculateNewTimeSlice, isOverburdened };
 }
 
 export default createRoot(createSettings);

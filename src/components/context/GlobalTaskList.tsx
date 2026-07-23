@@ -16,19 +16,21 @@ function createGlobalTaskList() {
     }
 
     const toggleTask = (id: number) => {
-        // TODO Update after adding filter to calculateNewTimeSlice
-        setTasks(
-            (task) => task.id === id,
-            "completed",
-            completed => !completed
-        )
+        batch(() => {
+            setTasks(
+                (task) => task.id === id,
+                "completed",
+                completed => !completed
+            )
+            SettingsContext.calculateNewTimeSlice(tasks);
+        })
     }
 
     const removeTask = (id: number) => {
-        // TODO Update after adding filter to calculateNewTimeSlice
-        console.log(id);
-        setTasks(tasks.filter((task) => task.id !== id));
-        console.log(tasks);
+        batch(() => {
+            setTasks(tasks.filter((task) => task.id !== id));
+            SettingsContext.calculateNewTimeSlice(tasks);
+        })
     }
 
     return { tasks, addTask, toggleTask, removeTask };

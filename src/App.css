@@ -95,6 +95,22 @@
   margin-right: 25px;
 }
 
+.time-slice {
+  background-color: #0f0f0f98;
+  width: fit-content;
+  min-width: 290px;
+  padding: 10px;
+}
+
+.time-slice.overburdened {
+  background-color: #ffd412de;
+  color: #ca1b1bea;
+  font-weight: bold;
+  width: fit-content;
+  min-width: 290px;
+  padding: 10px;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -139,10 +155,6 @@ button:active {
 input,
 button {
   outline: none;
-}
-
-#greet-input {
-  margin-right: 5px;
 }
 
 @media (prefers-color-scheme: dark) {

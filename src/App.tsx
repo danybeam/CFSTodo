@@ -1,19 +1,26 @@
 import "./App.css";
-import { CurrentTask } from "./components/CurrentTask";
+import CurrentTask from "./components/CurrentTask";
 
 import TaskForm from "./components/TaskForm";
-import { TaskList } from "./components/TaskList";
+import TaskList from "./components/TaskList";
+
+import SettingsContext from "./components/context/AppSettings"
 
 function App() {
 
   return (
-    <main class="container">
-      <CurrentTask />
-      <div class="medium padded" />
-      <TaskForm />
-      <div class="medium padded" />
-      <TaskList />
-    </main>
+    <>
+      <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
+        {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice() + " hours per slice")}
+      </div>
+      <div class="container">
+        <CurrentTask />
+        <div class="medium padded" />
+        <TaskForm />
+        <div class="medium padded" />
+        <TaskList />
+      </div>
+    </>
   );
 }
 
