@@ -4,14 +4,22 @@ import { Task } from "../../models/Task";
 
 import SettingsContext from "./AppSettings"
 
+function compareTasks(left: Task, right: Task) {
+    if (left.completed != right.completed) {
+        return left.completed ? 1 : -1;
+    }
+    if (left.vruntime === right.vruntime) {
+        return left.id > right.id ? 1 : -1;
+    }
+
+    return left.vruntime - right.vruntime;
+}
+
 function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
-    let incompleteTasks = list.filter(t => !t.completed);
-    let completedTasks = list.filter(t => t.completed);
+    let copyList = [...list];
+    copyList.sort(compareTasks)
 
-    incompleteTasks.sort((left: Task, right: Task) => (left.id > right.id) ? 1 : (left.id == right.id) ? 0 : -1);
-    completedTasks.sort((left: Task, right: Task) => (left.id > right.id) ? 1 : (left.id == right.id) ? 0 : -1);
-
-    setterFunction([...incompleteTasks, ...completedTasks])
+    setterFunction([...copyList]);
 }
 
 function createGlobalTaskList() {
@@ -23,7 +31,7 @@ function createGlobalTaskList() {
 
     const addTask = (text: string) => {
         batch(() => {
-            setTasks([...tasks, { id: tasks.length, text: text, completed: false, isSuspended: false }]);
+            setTasks([...tasks, { id: tasks.length, text: text, completed: false, isSuspended: false, vruntime: 0.0 }]);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
         })
@@ -42,6 +50,18 @@ function createGlobalTaskList() {
         })
     }
 
+    const rotateTask = (id: number, runtime: number) => {
+        batch(() => {
+            setTasks(
+                (task) => task.id === id,
+                "vruntime",
+                vruntime => vruntime + Math.max(runtime, globalThis.AppSettings.minimumRotationCost)
+            )
+            SettingsContext.calculateNewTimeSlice(tasks);
+            sortTasks(tasks, setTasks);
+        })
+    }
+
     const removeTask = (id: number) => {
         batch(() => {
             setTasks(tasks.filter((task) => task.id !== id));
@@ -50,7 +70,7 @@ function createGlobalTaskList() {
         })
     }
 
-    return { tasks, addTask, toggleTask, removeTask };
+    return { tasks, addTask, toggleTask, rotateTask, removeTask };
 }
 
 export default createRoot(createGlobalTaskList);

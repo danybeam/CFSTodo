@@ -5,11 +5,16 @@ declare global {
     var AppSettings: {
         availableHours: number;
         minimumScheduleSlice: number;
+        minimumRotationCost: number;
     };
 }
 
 function initializeSettings() {
-    globalThis.AppSettings = { availableHours: 35.0, minimumScheduleSlice: 4.0 }
+    globalThis.AppSettings = {
+        availableHours: 35.0,
+        minimumScheduleSlice: 4.0,
+        minimumRotationCost: 1.0
+    }
 }
 
 function createSettings() {

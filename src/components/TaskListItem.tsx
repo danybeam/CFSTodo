@@ -11,6 +11,8 @@ type TaskListItemProps = {
 export default function TaskListItem(props: TaskListItemProps) {
     const [extraMenu, setExtraMenu] = createSignal(false);
 
+    // TODO update vruntime with input + calculation later
+    let rotateBtn = <button onClick={() => TaskContext.rotateTask(props.task.id, 0)}>🔄️</button >;
     let suspendBtn = <button>⏸️</button>
     let preemptBtn = <button>▶️</button>;
     let completeBtn = <button onClick={() => TaskContext.toggleTask(props.task.id)}>✅</button>;
@@ -20,7 +22,7 @@ export default function TaskListItem(props: TaskListItemProps) {
         <div class="padded row">
             <div class="framed row">
                 <span style="margin-right: 20px;">
-                    {props.task.text + " " + props.task.completed}
+                    {props.task.text + " " + props.task.completed + " " + props.task.vruntime.toFixed(2)}
                 </span>
 
                 <Show
@@ -39,7 +41,7 @@ export default function TaskListItem(props: TaskListItemProps) {
                             <div class="button-group">
                                 <button>ℹ️</button>
                                 {completeBtn}
-                                <button>🔄️</button>
+                                {rotateBtn}
                                 <button onClick={() => setExtraMenu(!extraMenu())}>↪️</button>
                             </div>
                             <div class="button-group">

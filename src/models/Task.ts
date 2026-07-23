@@ -3,4 +3,5 @@ export type Task = {
     text: string;
     completed: boolean;
     isSuspended: boolean;
+    vruntime: number;
 }
