@@ -49,6 +49,17 @@ function createGlobalTaskList() {
             sortTasks(tasks, setTasks);
         })
     }
+    const suspendResumeTask = (id: number) => {
+        batch(() => {
+            setTasks(
+                (task) => task.id === id,
+                "isSuspended",
+                isSuspended => !isSuspended
+            )
+            SettingsContext.calculateNewTimeSlice(tasks);
+            sortTasks(tasks, setTasks);
+        })
+    }
 
     const rotateTask = (id: number, runtime: number) => {
         batch(() => {
@@ -70,7 +81,7 @@ function createGlobalTaskList() {
         })
     }
 
-    return { tasks, addTask, toggleTask, rotateTask, removeTask };
+    return { tasks, addTask, toggleTask, suspendResumeTask, rotateTask, removeTask };
 }
 
 export default createRoot(createGlobalTaskList);
