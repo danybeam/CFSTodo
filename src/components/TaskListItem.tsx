@@ -12,25 +12,46 @@ export default function TaskListItem(props: TaskListItemProps) {
     const [extraMenu, setExtraMenu] = createSignal(false);
 
     // TODO update vruntime with input + calculation later
-    let rotateBtn = <button onClick={() => TaskContext.rotateTask(props.task.id, 0)}>🔄️</button >;
-    let suspendBtn = <button>⏸️</button>
-    let preemptBtn = <button>▶️</button>;
-    let completeBtn = <button onClick={() => TaskContext.toggleTask(props.task.id)}>✅</button>;
-    let deleteBtn = <button onClick={() => TaskContext.removeTask(props.task.id)}>❌</button>;
+    let rotateBtn = <button
+        onClick={() => TaskContext.rotateTask(props.task.id, 0)}
+    >
+        🔄️
+    </button >;
+    let suspreemptBtn = <button
+        onClick={() => TaskContext.suspendResumeTask(props.task.id)}
+    >
+        {props.task.isSuspended ? "▶️" : "⏸️"}
+    </button>;
+    let completeBtn = <button
+        onClick={() => TaskContext.toggleTask(props.task.id)}
+    >
+        ✅
+    </button>;
+    let deleteBtn = <button
+        onClick={() => TaskContext.removeTask(props.task.id)}
+    >
+        ❌
+    </button>;
 
     return (
         <div class="padded row">
             <div class="framed row">
                 <span style="margin-right: 20px;">
-                    {props.task.text + " " + props.task.completed + " " + props.task.vruntime.toFixed(2)}
+                    {
+                        props.task.text + " " +
+                        props.task.completed + " " +
+                        props.task.isSuspended + " " +
+                        props.task.vruntime.toFixed(2)
+                    }
                 </span>
 
                 <Show
                     when={props.isCurrentTask}
                     fallback={
                         <div class="static-button-group">
-                            {preemptBtn}
-                            {suspendBtn}
+                            <Show when={!props.task.completed}>
+                                {suspreemptBtn}
+                            </Show>
                             {completeBtn}
                             {deleteBtn}
                         </div>
@@ -42,12 +63,20 @@ export default function TaskListItem(props: TaskListItemProps) {
                                 <button>ℹ️</button>
                                 {completeBtn}
                                 {rotateBtn}
-                                <button onClick={() => setExtraMenu(!extraMenu())}>↪️</button>
+                                <button
+                                    onClick={() => setExtraMenu(!extraMenu())}
+                                >
+                                    {extraMenu() ? "🔙" : "↪️"}
+                                </button>
                             </div>
                             <div class="button-group">
-                                {suspendBtn}
+                                {suspreemptBtn}
                                 {deleteBtn}
-                                <button onClick={() => setExtraMenu(!extraMenu())}>🔙</button>
+                                <button
+                                    onClick={() => setExtraMenu(!extraMenu())}
+                                >
+                                    {extraMenu() ? "🔙" : "↪️"}
+                                </button>
                             </div>
                         </div>
                     </div>

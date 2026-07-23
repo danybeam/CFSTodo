@@ -8,6 +8,9 @@ function compareTasks(left: Task, right: Task) {
     if (left.completed != right.completed) {
         return left.completed ? 1 : -1;
     }
+    if (left.isSuspended != right.isSuspended) {
+        return left.isSuspended ? 1 : -1;
+    }
     if (left.vruntime === right.vruntime) {
         return left.id > right.id ? 1 : -1;
     }
