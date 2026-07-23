@@ -25,8 +25,9 @@ function TaskForm() {
                 id="task-input"
                 name="input"
                 placeholder="Enter a task..."
+                style="width: 80%"
             />
-            <button type="submit">Add</button>
+            <button type="submit" style="widht:10%">Add</button>
         </form>
     )
 }
