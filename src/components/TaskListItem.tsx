@@ -18,15 +18,15 @@ export default function TaskListItem(props: TaskListItemProps) {
     // TODO update vruntime with input + calculation later
     let rotateBtn = <button
         onClick={() => {
-            setShowModal(false);
-            TaskContext.rotateTask(props.task.id, 0);
+            setShowModal(true);
+            //TaskContext.rotateTask(props.task.id, 0);
         }}
     >
         🔄️
     </button >;
     let suspreemptBtn = <button
         onClick={() => {
-            setShowModal(true);
+            setShowModal(false);
         }}
     >
         {props.task.isSuspended ? "▶️" : "⏸️"}

@@ -7,7 +7,11 @@ type TimeEntryProps = {
 // Needs callback to tell task list item how much time to add
 export default function TimeEntry(props: TimeEntryProps) {
     return (
-        <form class="popup row">
+        <form class="popup row"
+            onSubmit={(e) => {
+                e.preventDefault();
+                console.log("submited")
+            }}>
             <input
                 type="number"
                 id="real-hrs"
