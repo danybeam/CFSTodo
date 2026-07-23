@@ -1,4 +1,4 @@
-import { batch, createRoot, createSignal } from "solid-js";
+import { batch, createRoot } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Task } from "../../models/Task";
 

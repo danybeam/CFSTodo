@@ -11,7 +11,7 @@ function App() {
   return (
     <>
       <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
-        {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice() + " hours per slice")}
+        {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(2) + " hours per slice")}
       </div>
       <div class="container">
         <CurrentTask />

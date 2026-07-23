@@ -14,7 +14,7 @@ export default function CurrentTask() {
             when={firstTask()?.id >= 0}
             fallback={<span>Add a task to get started</span>}
         >
-            <TaskListItem task={firstTask()} isCurrentTask={firstTask()?.id == 0} />
+            <TaskListItem task={firstTask()} isCurrentTask={true} />
         </Show>
     );
 }
