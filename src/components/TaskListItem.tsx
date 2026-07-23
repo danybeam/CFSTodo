@@ -20,7 +20,7 @@ export default function TaskListItem(props: TaskListItemProps) {
         <div class="padded row">
             <div class="framed row">
                 <span style="margin-right: 20px;">
-                    {props.task.text + " " + props.task.isSuspended}
+                    {props.task.text + " " + props.task.completed}
                 </span>
 
                 <Show
