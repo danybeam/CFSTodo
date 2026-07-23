@@ -8,7 +8,7 @@ type TaskListItemProps = {
     isCurrentTask: boolean
 }
 
-export function TaskListItem(props: TaskListItemProps) {
+export default function TaskListItem(props: TaskListItemProps) {
     const [extraMenu, setExtraMenu] = createSignal(false);
 
     let suspendBtn = <button>⏸️</button>
