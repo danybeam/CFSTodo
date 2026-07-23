@@ -19,7 +19,9 @@ export default function TaskListItem(props: TaskListItemProps) {
     return (
         <div class="padded row">
             <div class="framed row">
-                <span style="margin-right: 20px;">{props.task.text + " " + props.task.isSuspended}</span>
+                <span style="margin-right: 20px;">
+                    {props.task.text + " " + props.task.isSuspended}
+                </span>
 
                 <Show
                     when={props.isCurrentTask}
