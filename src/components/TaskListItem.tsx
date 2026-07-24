@@ -23,7 +23,9 @@ export default function TaskListItem(props: TaskListItemProps) {
             }
 
             if (shouldSuspend()) {
+                console.log("should suspend")
                 TaskContext.suspendResumeTask(props.task.id);
+                setShouldSuspend(false);
             }
 
             setShowModal(false);
