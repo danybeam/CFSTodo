@@ -74,7 +74,7 @@ export default function TaskListItem(props: TaskListItemProps) {
             </Show>
             <div class="padded row">
                 <div class="framed row">
-                    <span style="margin-right: 20px;">
+                    <span style={`margin-right: 20px; ${props.task.completed ? "text-decoration: line-through;" : ""}`}>
                         {
                             props.task.text + " " +
                             props.task.completed + " " +
