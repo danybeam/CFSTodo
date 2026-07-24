@@ -1,5 +1,5 @@
 import { createRoot, createSignal } from "solid-js";
-import { Task } from "../../models/Task";
+import { Task } from "../../models/bindings";
 
 declare global {
     var AppSettings: {
