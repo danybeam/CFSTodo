@@ -23,9 +23,13 @@ function compareTasks(left: Task, right: Task) {
 
 function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     let copyList = [...list];
-    copyList.sort(compareTasks)
+    copyList.sort(compareTasks);
 
-    setterFunction([...copyList]);
+    let topRuntime = copyList[0].vruntime;
+
+    setterFunction(copyList.map(item => {
+        return { ...item, vruntime: item.vruntime - topRuntime } as Task;
+    }));
 }
 
 function createGlobalTaskList() {
