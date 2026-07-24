@@ -75,7 +75,8 @@ export default function TaskListItem(props: TaskListItemProps) {
                             props.task.text + " " +
                             props.task.completed + " " +
                             props.task.isSuspended + " " +
-                            props.task.vruntime.toFixed(0)
+                            props.task.vruntime.toFixed(0) + " " +
+                            props.task.priority
                         }
                     </span>
 

@@ -178,7 +178,24 @@
   animation-timing-function: cubic-bezier(1, 0, .75, 1);
 }
 
+.form-with-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  text-align: left;
+}
 
+.form-with-title.small {
+  width: 10%;
+}
+
+.form-with-title.medium {
+  width: 30%;
+}
+
+.form-with-title.large {
+  width: 50%;
+}
 
 a {
   font-weight: 500;
