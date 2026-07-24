@@ -11,7 +11,7 @@ await appWindow.listen('tauri://close-requested', async (event) => {
     let incompleteTasks = TaskContext.tasks.filter(t => !t.completed);
 
     console.log(typeof (incompleteTasks[0].priority));
-    await commands.testFunction(incompleteTasks);
+    await commands.saveTasks(incompleteTasks);
     // doesn't close program but effectively closes program
     //appWindow.destroy();
 });

@@ -4,7 +4,8 @@ import { invoke as __TAURI_INVOKE } from "@tauri-apps/api/core";
 
 /** Commands */
 export const commands = {
-	testFunction: (items: Task[]) => __TAURI_INVOKE<void>("test_function", { items }),
+	saveTasks: (items: Task[]) => __TAURI_INVOKE<void>("save_tasks", { items }),
+	loadTasks: () => __TAURI_INVOKE<Task[]>("load_tasks"),
 };
 
 /* Types */
