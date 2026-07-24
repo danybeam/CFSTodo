@@ -14,10 +14,9 @@ function App() {
   const [hasLoaded, setHasLoaded] = createSignal(false);
 
   onMount(async () => {
-    console.log("Loading")
     setHasLoaded(false);
     TaskContext.batchAddTasks(await commands.loadTasks());
-    setHasLoaded(true);
+    await setTimeout(() => { setHasLoaded(true); }, 100);
   })
 
   return (

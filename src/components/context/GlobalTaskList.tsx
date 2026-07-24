@@ -25,7 +25,7 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     let copyList = [...list];
     copyList.sort(compareTasks);
 
-    let topRuntime = copyList[0].vruntime;
+    let topRuntime = copyList[0]?.vruntime ?? 0;
 
     setterFunction(copyList.map(item => {
         return { ...item, vruntime: item.vruntime - topRuntime } as Task;
@@ -60,16 +60,17 @@ function createGlobalTaskList() {
                 "completed",
                 completed => !completed
             )
+            suspendResumeTask(id, true);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
         })
     }
-    const suspendResumeTask = (id: number) => {
+    const suspendResumeTask = (id: number, forceResume: boolean = false) => {
         batch(() => {
             setTasks(
                 (task) => task.id === id,
                 "is_suspended",
-                is_suspended => !is_suspended
+                is_suspended => !forceResume && !is_suspended
             )
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
