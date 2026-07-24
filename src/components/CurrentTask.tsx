@@ -17,7 +17,7 @@ export default function CurrentTask() {
             return;
         }
 
-        setFirstTask(TaskContext.tasks.at(0) ?? { id: -1, text: "error", completed: false, isSuspended: false, vruntime: 0 });
+        setFirstTask(TaskContext.tasks.at(0) ?? { id: -1, text: "error", completed: false, isSuspended: false, vruntime: 0, priority: -1 });
         setIsValidId((firstTask()?.id ?? -1) >= 0)
         setIsValidTask(!(firstTask()?.completed ?? true) && !(firstTask()?.isSuspended ?? true))
     })
@@ -25,7 +25,7 @@ export default function CurrentTask() {
     return (
         <Show
             when={isValidId() && isValidTask()}
-            fallback={<span>{isValidId() ? "All task are completed or suspended. Add another task to get started." : "Add a task to get started"}</span>}
+            fallback={<span style="height: 68px">{isValidId() ? "All task are completed or suspended. Add another task to get started." : "Add a task to get started"}</span>}
         >
             <TaskListItem task={firstTask()} isCurrentTask={true} />
         </Show>
