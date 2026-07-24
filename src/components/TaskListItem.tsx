@@ -1,4 +1,4 @@
-import { batch, createEffect, createSignal, Show } from "solid-js";
+import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { Task } from "../models/Task";
 
 import TaskContext from "./context/GlobalTaskList"
@@ -23,7 +23,6 @@ export default function TaskListItem(props: TaskListItemProps) {
             }
 
             if (shouldSuspend()) {
-                console.log("should suspend")
                 TaskContext.suspendResumeTask(props.task.id);
                 setShouldSuspend(false);
             }
@@ -65,6 +64,9 @@ export default function TaskListItem(props: TaskListItemProps) {
         ❌
     </button>;
 
+    // TODO Implement later if/when I add additional details to tasks
+    // let infoBtn =  <button>ℹ️</button>;
+
     return (
         <>
             <Show when={showModal()}>
@@ -97,7 +99,6 @@ export default function TaskListItem(props: TaskListItemProps) {
                         <div class="button-container">
                             <div class="button-slider" classList={{ secondary: extraMenu() }}>
                                 <div class="button-group">
-                                    <button>ℹ️</button>
                                     {completeBtn}
                                     {rotateBtn}
                                     <button
