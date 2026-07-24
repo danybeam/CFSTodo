@@ -9,11 +9,13 @@ import { commands } from "./models/bindings";
 const appWindow = getCurrentWindow();
 await appWindow.listen('tauri://close-requested', async (event) => {
     let incompleteTasks = TaskContext.tasks.filter(t => !t.completed);
-
-    console.log(typeof (incompleteTasks[0].priority));
+    if (incompleteTasks.length == 0) {
+        appWindow.destroy();
+        return;
+    }
     await commands.saveTasks(incompleteTasks);
     // doesn't close program but effectively closes program
-    //appWindow.destroy();
+    appWindow.destroy();
 });
 
 render(() => <App />, document.getElementById("root") as HTMLElement);

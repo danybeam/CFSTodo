@@ -12,7 +12,6 @@ export default function CurrentTask() {
         let task = TaskContext.tasks.at(0);
 
         if (task == null) {
-            console.log("nullish");
             setIsValidId(false);
             setIsValidTask(false);
             return;
