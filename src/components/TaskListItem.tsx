@@ -1,4 +1,4 @@
-import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
+import { batch, createEffect, createSignal, Show } from "solid-js";
 import { Task } from "../models/Task";
 
 import TaskContext from "./context/GlobalTaskList"
