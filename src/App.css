@@ -116,7 +116,7 @@
   height: 42px;
   padding: 10px;
   animation-name: popupAnimation;
-  animation-duration: 3s;
+  animation-duration: 1s;
   text-align: center;
   margin-inline: auto;
   overflow: hidden;
@@ -134,7 +134,7 @@
 
 .popup>* {
   animation-name: popupChildrenAnimation;
-  animation-duration: 3s;
+  animation-duration: 1s;
   animation-timing-function: cubic-bezier(1,0,.75,1);
 }
 

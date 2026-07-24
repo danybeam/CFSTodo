@@ -1,16 +1,17 @@
 type TimeEntryProps = {
-
+    timeEntryCallback: (hrs: number) => void
+    requestSuspendCallback: (suspend: boolean) => void
 }
 
-// TODO change submit button to rotate and  rotate and suspend
-// TODO change default value to current slice time
-// Needs callback to tell task list item how much time to add
 export default function TimeEntry(props: TimeEntryProps) {
     return (
         <form class="popup row"
             onSubmit={(e) => {
                 e.preventDefault();
-                console.log("submited")
+                let button = new FormData(e.currentTarget, e.submitter).get("action");
+                let hours = (new FormData(e.currentTarget).get("hr-input") ?? 0.0) as number;
+                props.timeEntryCallback(hours);
+                props.requestSuspendCallback(button == "suspend");
             }}>
             <input
                 type="number"
@@ -18,7 +19,8 @@ export default function TimeEntry(props: TimeEntryProps) {
                 name="hr-input"
                 value="1"
             />
-            <button type="submit" style="width: fit-content">Submit</button>
+            <button type="submit" name="action" style="width: fit-content" value="rotate">Rotate Task</button>
+            <button type="submit" name="action" style="width: fit-content" value="suspend">Rotate Task</button>
         </form>
     );
 }

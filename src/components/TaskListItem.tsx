@@ -1,4 +1,4 @@
-import { createSignal, Show } from "solid-js";
+import { batch, createEffect, createSignal, Show } from "solid-js";
 import { Task } from "../models/Task";
 
 import TaskContext from "./context/GlobalTaskList"
@@ -9,17 +9,31 @@ type TaskListItemProps = {
     isCurrentTask: boolean
 }
 
-
-
 export default function TaskListItem(props: TaskListItemProps) {
     const [extraMenu, setExtraMenu] = createSignal(false);
     const [showModal, setShowModal] = createSignal(false);
+    const [workedHours, setWorkedHours] = createSignal(0.0);
+    const [shouldSuspend, setShouldSuspend] = createSignal(false);
 
-    // TODO update vruntime with input + calculation later
+    createEffect(() => {
+        batch(() => {
+            if (workedHours() != 0) {
+                TaskContext.rotateTask(props.task.id, workedHours());
+                setWorkedHours(0);
+            }
+
+            if (shouldSuspend()) {
+                TaskContext.suspendResumeTask(props.task.id);
+            }
+
+            setShowModal(false);
+        })
+    });
+
+
     let rotateBtn = <button
         onClick={() => {
             setShowModal(true);
-            //TaskContext.rotateTask(props.task.id, 0);
         }}
     >
         🔄️
@@ -27,6 +41,7 @@ export default function TaskListItem(props: TaskListItemProps) {
     let suspreemptBtn = <button
         onClick={() => {
             setShowModal(false);
+            setShouldSuspend(true);
         }}
     >
         {props.task.isSuspended ? "▶️" : "⏸️"}
@@ -51,10 +66,7 @@ export default function TaskListItem(props: TaskListItemProps) {
     return (
         <>
             <Show when={showModal()}>
-                {
-                    // TODO send callbacks for vruntime calculation
-                }
-                <TimeEntry />
+                <TimeEntry timeEntryCallback={setWorkedHours} requestSuspendCallback={setShouldSuspend} />
             </Show>
             <div class="padded row">
                 <div class="framed row">
