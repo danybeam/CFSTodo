@@ -1,4 +1,4 @@
-import { batch, createRoot, onMount, createSignal } from "solid-js";
+import { batch, createRoot, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Task } from "../../models/bindings";
 

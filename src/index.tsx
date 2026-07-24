@@ -7,7 +7,7 @@ import TaskContext from "./components/context/GlobalTaskList"
 import { commands } from "./models/bindings";
 
 const appWindow = getCurrentWindow();
-await appWindow.listen('tauri://close-requested', async (event) => {
+await appWindow.listen('tauri://close-requested', async (_) => {
     let incompleteTasks = TaskContext.tasks.filter(t => !t.completed);
     if (incompleteTasks.length == 0) {
         appWindow.destroy();

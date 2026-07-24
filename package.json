@@ -1,7 +1,7 @@
 {
   "name": "cfs-todo",
   "version": "0.1.0",
-  "description": "",
+  "description": "A Tauri App to manage your long term tasks using similar principles to the Linux scheduler",
   "type": "module",
   "scripts": {
     "start": "vite",

@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount, Show } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 import "./App.css";
 
 import CurrentTask from "./components/CurrentTask";
