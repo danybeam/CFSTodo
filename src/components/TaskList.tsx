@@ -8,8 +8,8 @@ export default function TaskList() {
     const [allComplete, setAllComplete] = createSignal(false);
     createEffect(() => {
         let isComplete = tasks.at(0)?.completed ?? false;
-        let isSuspended = tasks.at(0)?.isSuspended ?? false;
-        setAllComplete(isComplete || isSuspended);
+        let is_suspended = tasks.at(0)?.is_suspended ?? false;
+        setAllComplete(isComplete || is_suspended);
     })
 
     return (

@@ -14,7 +14,6 @@ await appWindow.listen('tauri://close-requested', async (event) => {
     await commands.testFunction(incompleteTasks);
     // doesn't close program but effectively closes program
     //appWindow.destroy();
-    // TODO remove before shipping
 });
 
 render(() => <App />, document.getElementById("root") as HTMLElement);
