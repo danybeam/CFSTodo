@@ -27,6 +27,8 @@ export default function TimeEntry(props: TimeEntryProps) {
                 type="number"
                 id="real-hrs"
                 name="hr-input"
+                min="1"
+                max="24"
                 value={AppContext.calculatedTimeSlice()}
             />
             <button type="submit" name="action" style="width: fit-content" value="rotate">Rotate Task</button>

@@ -39,6 +39,8 @@ function TaskForm() {
                     name="priority-input"
                     type="number"
                     value="10"
+                    min="0"
+                    max="500"
                 />
             </div>
             <button type="submit" style="height: fit-content; align-self:flex-end;">Add</button>
