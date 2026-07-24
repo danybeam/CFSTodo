@@ -10,7 +10,7 @@ function TaskForm() {
                 e.preventDefault();
                 let form = new FormData(e.currentTarget);
                 let text = form.get("input")?.toString();
-                let priority = (form.get("priority-input") ?? 0.0) as number;
+                let priority: number = Number(form.get("priority-input") ?? 0.0);
                 e.currentTarget.reset();
 
                 if (text == null) {

@@ -1,6 +1,6 @@
 import { batch, createRoot, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
-import { Task } from "../../models/Task";
+import { Task } from "../../models/bindings";
 
 import SettingsContext from "./AppSettings"
 
@@ -8,8 +8,8 @@ function compareTasks(left: Task, right: Task) {
     if (left.completed !== right.completed) {
         return left.completed ? 1 : -1;
     }
-    if (left.isSuspended !== right.isSuspended) {
-        return left.isSuspended ? 1 : -1;
+    if (left.is_suspended !== right.is_suspended) {
+        return left.is_suspended ? 1 : -1;
     }
     if (left.vruntime !== right.vruntime) {
         return left.vruntime - right.vruntime;
@@ -41,7 +41,7 @@ function createGlobalTaskList() {
 
     const addTask = (text: string, priority: number) => {
         batch(() => {
-            setTasks([...tasks, { id: tasks.length, text: text, completed: false, isSuspended: false, vruntime: 0.0, priority: priority }]);
+            setTasks([...tasks, { id: tasks.length, text: text, completed: false, is_suspended: false, vruntime: 0.0, priority: priority }]);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
         })
@@ -63,8 +63,8 @@ function createGlobalTaskList() {
         batch(() => {
             setTasks(
                 (task) => task.id === id,
-                "isSuspended",
-                isSuspended => !isSuspended
+                "is_suspended",
+                is_suspended => !is_suspended
             )
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);

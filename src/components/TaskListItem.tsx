@@ -1,5 +1,5 @@
 import { batch, createEffect, createSignal, Show } from "solid-js";
-import { Task } from "../models/Task";
+import { Task } from "../models/bindings";
 
 import TaskContext from "./context/GlobalTaskList"
 import TimeEntry from "./TimeEntry";
@@ -45,7 +45,7 @@ export default function TaskListItem(props: TaskListItemProps) {
             setShouldSuspend(true);
         }}
     >
-        {props.task.isSuspended ? "▶️" : "⏸️"}
+        {props.task.is_suspended ? "▶️" : "⏸️"}
     </button>;
     let completeBtn = <button
         onClick={() => {
@@ -78,7 +78,7 @@ export default function TaskListItem(props: TaskListItemProps) {
                         {
                             props.task.text + " " +
                             props.task.completed + " " +
-                            props.task.isSuspended + " " +
+                            props.task.is_suspended + " " +
                             props.task.vruntime.toFixed(0) + " " +
                             props.task.priority
                         }
