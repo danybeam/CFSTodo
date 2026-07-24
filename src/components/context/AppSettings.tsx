@@ -28,7 +28,7 @@ function createSettings() {
         let candidateTimeSlice = globalThis.AppSettings.availableHours / Math.max(filteredList.length, 1.0);
 
         let timeSlice = Math.max(candidateTimeSlice, globalThis.AppSettings.minimumScheduleSlice);
-        setCalculatedTimeSlice(timeSlice);
+        setCalculatedTimeSlice(Math.floor(timeSlice));
         setIsOverburdened(candidateTimeSlice < globalThis.AppSettings.minimumScheduleSlice);
     }
 
