@@ -1,13 +1,30 @@
+import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import "./App.css";
 
 import CurrentTask from "./components/CurrentTask";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import SettingsContext from "./components/context/AppSettings"
+import TaskContext from "./components/context/GlobalTaskList"
+
+import { commands } from "./models/bindings";
 
 function App() {
+
+  const [hasLoaded, setHasLoaded] = createSignal(false);
+
+  onMount(async () => {
+    console.log("Loading")
+    setHasLoaded(false);
+    TaskContext.batchAddTasks(await commands.loadTasks());
+    setHasLoaded(true);
+  })
+
   return (
-    <>
+    <Show
+      when={hasLoaded()}
+      fallback={<div>Loading tasks...</div>}
+    >
       <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
         {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
       </div>
@@ -18,7 +35,8 @@ function App() {
         <div class="medium padded" />
         <TaskList />
       </div>
-    </>
+    </Show>
+
   );
 }
 

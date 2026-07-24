@@ -1,10 +1,9 @@
 use specta;
 use specta_typescript::Typescript;
-use std::fs::File;
+use std::fs::{self, File};
 use tauri_specta::{collect_commands, Builder};
 
 pub mod models;
-
 use models::task::Task;
 
 #[tauri::command]
@@ -20,8 +19,8 @@ fn save_tasks(items: Vec<Task>) {
 #[tauri::command]
 #[specta::specta]
 fn load_tasks() -> Vec<Task> {
-    println!("start loading");
-    vec![]
+    let contents = fs::read_to_string("./ignore_test.json").expect("Should work");
+    serde_json::from_str(&contents).expect("should work")
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -32,7 +31,7 @@ pub fn run() {
         .expect("Failed to export types");
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![save_tasks])
+        .invoke_handler(tauri::generate_handler![save_tasks, load_tasks])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

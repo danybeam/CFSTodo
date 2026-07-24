@@ -1,4 +1,4 @@
-import { batch, createRoot, onMount } from "solid-js";
+import { batch, createRoot, onMount, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Task } from "../../models/bindings";
 
@@ -46,6 +46,11 @@ function createGlobalTaskList() {
             sortTasks(tasks, setTasks);
         })
 
+    }
+
+    const batchAddTasks = (list: Task[]) => {
+        setTasks([...tasks, ...list]);
+        sortTasks(tasks, setTasks);
     }
 
     const toggleTask = (id: number) => {
@@ -99,7 +104,15 @@ function createGlobalTaskList() {
         })
     }
 
-    return { tasks, addTask, toggleTask, suspendResumeTask, rotateTask, removeTask };
+    return {
+        tasks,
+        addTask,
+        batchAddTasks,
+        toggleTask,
+        suspendResumeTask,
+        rotateTask,
+        removeTask
+    };
 }
 
 export default createRoot(createGlobalTaskList);
