@@ -1,17 +1,25 @@
+import { createSignal } from "solid-js";
+
 type TimeEntryProps = {
     timeEntryCallback: (hrs: number) => void
     requestSuspendCallback: (suspend: boolean) => void
 }
 
 export default function TimeEntry(props: TimeEntryProps) {
+    const [popup, setPopup] = createSignal(true);
     return (
-        <form class="popup row"
+        <form
+            class="row"
+            classList={{ popup: popup(), popdown: !popup() }}
             onSubmit={(e) => {
                 e.preventDefault();
                 let button = new FormData(e.currentTarget, e.submitter).get("action");
                 let hours = (new FormData(e.currentTarget).get("hr-input") ?? 0.0) as number;
-                props.timeEntryCallback(hours);
-                props.requestSuspendCallback(button == "suspend");
+                setTimeout(() => {
+                    props.timeEntryCallback(hours);
+                    props.requestSuspendCallback(button == "suspend");
+                }, 500);
+                setPopup(false);
             }}>
             <input
                 type="number"

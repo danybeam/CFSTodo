@@ -135,8 +135,50 @@
 .popup>* {
   animation-name: popupChildrenAnimation;
   animation-duration: 1s;
-  animation-timing-function: cubic-bezier(1,0,.75,1);
+  animation-timing-function: cubic-bezier(1, 0, .75, 1);
 }
+
+@keyframes popdownAnimation {
+  from {
+    width: 350px;
+    height: 42px;
+  }
+
+  to {
+    width: 0px;
+    height: 0px;
+  }
+}
+
+.popdown {
+  background-color: #0f0f0f98;
+  width: 0px;
+  height: 0px;
+  padding: 0px;
+  animation-name: popdownAnimation;
+  animation-duration: 0.5s;
+  text-align: center;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+@keyframes popdownChildrenAnimation {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.popdown>* {
+  animation-name: popdownChildrenAnimation;
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(1, 0, .75, 1);
+}
+
+
 
 a {
   font-weight: 500;
