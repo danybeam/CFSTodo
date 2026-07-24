@@ -11,6 +11,7 @@ function TaskForm() {
                 let form = new FormData(e.currentTarget);
                 let text = form.get("input")?.toString();
                 let priority = (form.get("priority-input") ?? 0.0) as number;
+                e.currentTarget.reset();
 
                 if (text == null) {
                     throw "Bad input on task form data";
