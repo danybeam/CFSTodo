@@ -5,17 +5,20 @@ import { Task } from "../../models/Task";
 import SettingsContext from "./AppSettings"
 
 function compareTasks(left: Task, right: Task) {
-    if (left.completed != right.completed) {
+    if (left.completed !== right.completed) {
         return left.completed ? 1 : -1;
     }
-    if (left.isSuspended != right.isSuspended) {
+    if (left.isSuspended !== right.isSuspended) {
         return left.isSuspended ? 1 : -1;
     }
-    if (left.vruntime === right.vruntime) {
-        return left.id > right.id ? 1 : -1;
+    if (left.vruntime !== right.vruntime) {
+        return left.vruntime - right.vruntime;
+    }
+    if (left.priority !== right.priority) {
+        return left.priority - right.priority;
     }
 
-    return left.vruntime - right.vruntime;
+    return left.id - right.id;
 }
 
 function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
@@ -65,11 +68,19 @@ function createGlobalTaskList() {
     }
 
     const rotateTask = (id: number, runtime: number) => {
+        let task = tasks.find((t) => t.id === id);
+        if (task == null) {
+            return;
+        }
+
+        let taskPriority = task.priority;
+        let runtimeMultiplier = Math.pow(2, taskPriority);
+
         batch(() => {
             setTasks(
                 (task) => task.id === id,
                 "vruntime",
-                vruntime => vruntime + Math.max(runtime, globalThis.AppSettings.minimumRotationCost)
+                vruntime => vruntime + Math.max(runtime * runtimeMultiplier, globalThis.AppSettings.minimumRotationCost)
             )
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
