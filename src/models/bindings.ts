@@ -16,5 +16,6 @@ export type Task = {
 	is_suspended: boolean,
 	vruntime: number,
 	priority: number,
+	tags: string[] | null,
 };
 
