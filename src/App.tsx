@@ -9,6 +9,31 @@ import TaskContext from "./components/context/GlobalTaskList"
 
 import { commands } from "./models/bindings";
 
+import { BailErrorStrategy, CharStreams, CommonTokenStream } from 'antlr4';
+import TagWranglerLexer from './models/.antlr/TagWranglerLexer';
+import TagWranglerParser from './models/.antlr/TagWranglerParser';
+import { TagVisitor } from "./models/TagVisitor";
+
+
+function testAntlr() {
+  const input = "(has foo) and has bar and not has foo";
+  const chars = CharStreams.fromString(input);
+
+  const lexer = new TagWranglerLexer(chars);
+
+  const tokens = new CommonTokenStream(lexer);
+
+  let parser = new TagWranglerParser(tokens);
+  parser.removeErrorListeners();
+  parser._errHandler = new BailErrorStrategy();
+
+  const tree = parser.expr();
+  const visitor = new TagVisitor();
+  const result: (input: string) => boolean = visitor.visit(tree);
+  console.log("outside")
+  console.log(result("foo"));
+}
+
 function App() {
 
   const [hasLoaded, setHasLoaded] = createSignal(false);
@@ -24,6 +49,7 @@ function App() {
       when={hasLoaded()}
       fallback={<div>Loading tasks...</div>}
     >
+      <button onClick={() => testAntlr()}>test antlr</button>
       <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
         {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
       </div>
