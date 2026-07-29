@@ -1,66 +1,75 @@
-import { BinaryContext, ExprContext, ParenthContext, UnaryContext } from './.antlr/TagWranglerParser';
+import { BinaryContext, ExprContext, InnerBinaryContext, InnerUnaryContext, UnaryContext } from './.antlr/TagWranglerParser';
 import TagWranglerVisitor from "./.antlr/TagWranglerVisitor";
 
-export class TagVisitor extends TagWranglerVisitor<(input: string) => boolean> {
+export class TagVisitor extends TagWranglerVisitor<boolean> {
+
+    private _visitorContext?: string;
+
+    public set visitorContext(v: string) {
+        this._visitorContext = v;
+    }
+
 
     visitExpr = (ctx: ExprContext) => {
-        console.log("Expr");
-        let newCtx: UnaryContext | BinaryContext | null = null;
-
-        if ((newCtx = ctx.unary())) {
-            return this.visitUnary(newCtx);
+        let left = false;
+        let unaryCounter = 0;
+        let binaryCounter = 0;
+        if (ctx.getChild(0) instanceof BinaryContext) {
+            left = this.visitBinary(ctx.binary(binaryCounter++));
+        } else {
+            left = this.visitUnary(ctx.unary(unaryCounter++));
         }
 
-        return this.visitBinary(ctx.binary());
-    };
+        for (let op = 1, input = 2; op < ctx.getChildCount() && input < ctx.getChildCount(); (op += 2, input += 2)) {
+            let isOR = ctx.getChild(op).getText() == "or";
+            // if isOR && left || !isOR && !left
+            if (isOR == left) {
+                break;
+            }
 
-    visitParenth = (ctx: ParenthContext) => {
-        console.log("Parenth");
-        let newCtx: UnaryContext | BinaryContext | null = null;
-
-        if ((newCtx = ctx.unary())) {
-            return this.visitUnary(newCtx);
+            if (isOR) {
+                left = left || ctx.getChild(input) instanceof UnaryContext ? this.visitUnary(ctx.unary(unaryCounter++)) : this.visitBinary(ctx.binary(binaryCounter++));
+            } else {
+                left = left && ctx.getChild(input) instanceof UnaryContext ? this.visitUnary(ctx.unary(unaryCounter++)) : this.visitBinary(ctx.binary(binaryCounter++));
+            }
         }
 
-        return this.visitBinary(ctx.binary());
+        return left;
     };
 
     visitBinary = (ctx: BinaryContext) => {
-        // TODO check if unary or parenth context
-        // TODO check children by pairs to compose more complex functions
-        console.log("Binary");
-        console.log(ctx.unary(0).getText())
-        console.log(ctx.getChild(0) instanceof UnaryContext);
-        console.log(ctx.getChild(1) instanceof UnaryContext);
-        console.log(ctx.getChild(1).getText());
-        console.log(ctx.getChild(2) instanceof UnaryContext);
-        return (input: string) => false;
+        return this.visitInnerBinary(ctx.innerBinary());
     };
 
-    visitUnary = (ctx: UnaryContext) => {
-        console.log("unary")
-        //console.log(`visiting ${ctx}`);
-        let input = ctx.INPUT().getText();
+    visitInnerBinary = (ctx: InnerBinaryContext) => {
+        if (ctx.OR()) {
+            return this.visitUnary(ctx.unary(0)) || this.visitUnary(ctx.unary(1));
+        }
 
-        let result = (i: string) => { return false; };
-        let negate: boolean = ctx.NOT() != null;
+        return this.visitUnary(ctx.unary(0)) && this.visitUnary(ctx.unary(1));
+    };
+
+
+    visitUnary = (ctx: UnaryContext) => {
+        return this.visitInnerUnary(ctx.innerUnary());
+    };
+
+    visitInnerUnary = (ctx: InnerUnaryContext) => {
+        let negate = ctx.NOT() != null;
+        let result = false;
 
         switch (ctx.OPCODE().getText()) {
             case "has":
-                result = (ih: string) => { return negate !== ih.includes(input); };
+                result = this._visitorContext?.includes(ctx.INPUT().getText()) ?? false;
                 break;
             case "startsWith":
-                result = (ih: string) => { return negate !== ih.startsWith(input); };
+                result = this._visitorContext?.startsWith(ctx.INPUT().getText()) ?? false;
                 break;
             case "is":
             default:
-                result = (ih: string) => { return negate !== (ih == input); };
-
+                result = (this?._visitorContext ?? "") === ctx.INPUT().getText();
         }
 
-        //console.log(ctx.INPUT());
-        // console.log(ctx.OPCODE().getText());
-        //console.log(ctx.NOT());
-        return result;
+        return result !== negate;
     };
 }

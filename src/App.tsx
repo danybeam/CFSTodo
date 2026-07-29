@@ -16,7 +16,7 @@ import { TagVisitor } from "./models/TagVisitor";
 
 
 function testAntlr() {
-  const input = "(has foo) and has bar and not has foo";
+  const input = "not is bar and is buzz and has foo";
   const chars = CharStreams.fromString(input);
 
   const lexer = new TagWranglerLexer(chars);
@@ -29,9 +29,10 @@ function testAntlr() {
 
   const tree = parser.expr();
   const visitor = new TagVisitor();
-  const result: (input: string) => boolean = visitor.visit(tree);
+  visitor.visitorContext = "foo";
+  const result: boolean = visitor.visit(tree);
   console.log("outside")
-  console.log(result("foo"));
+  console.log(result);
 }
 
 function App() {

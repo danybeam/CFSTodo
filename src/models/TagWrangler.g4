@@ -2,11 +2,11 @@ grammar TagWrangler;
 
 expr: (binary | unary) ((AND | OR) (binary | unary))*;
 
-innerUnary: NOT? OPCODE INPUT;
 unary: innerUnary | LPAREN innerUnary RPAREN;
+innerUnary: NOT? OPCODE INPUT;
 
-innerBinary: unary (AND | OR) unary;
 binary: innerBinary | LPAREN innerBinary RPAREN;
+innerBinary: unary (AND | OR) unary;
 
 OPCODE: 'has' | 'is' | 'startsWith';
 
