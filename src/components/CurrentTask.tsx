@@ -21,7 +21,7 @@ export default function CurrentTask() {
         let isTaskCompleted = (firstTask()?.completed ?? true);
         let isTaskSuspended = (firstTask()?.is_suspended ?? true);
 
-        setFirstTask(TaskContext.tasks.at(0) ?? { id: -1, text: "error", completed: false, is_suspended: false, vruntime: 0, priority: -1 });
+        setFirstTask(TaskContext.tasks.at(0) ?? { id: -1, text: "error", completed: false, is_suspended: false, vruntime: 0, priority: -1, tags:[] });
         setIsValidId(isValidId)
         setIsValidTask(!isTaskCompleted && !isTaskSuspended)
     })
