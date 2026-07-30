@@ -28,7 +28,7 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     let topRuntime = copyList[0]?.vruntime ?? 0;
 
     setterFunction(copyList.map(item => {
-        return { ...item, vruntime: item.vruntime - topRuntime } as Task;
+        return { ...item, vruntime: Math.max(item.vruntime - topRuntime, 0) } as Task;
     }));
 }
 
@@ -41,7 +41,7 @@ function createGlobalTaskList() {
 
     const addTask = (text: string, priority: number) => {
         batch(() => {
-            setTasks([...tasks, { id: tasks.length, text: text, completed: false, is_suspended: false, vruntime: 0.0, priority: priority, tags:[] }]);
+            setTasks([...tasks, { id: tasks.length, text: text, completed: false, is_suspended: false, vruntime: 0.0, priority: priority, tags: [] }]);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
         })
