@@ -31,7 +31,7 @@ const fileSubmenu: Submenu = await Submenu.new({
     items: [
         await MenuItem.new({
             id: 'save-item',
-            text: 'Save',
+            text: 'Save\tCtrl+S',
             action: async (_: string) => {
                 console.log("Save");
                 await commands.saveTasks(TaskContext.tasks);
