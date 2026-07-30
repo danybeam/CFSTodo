@@ -28,6 +28,10 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     let topRuntime = copyList[0]?.vruntime ?? 0;
 
     setterFunction(copyList.map(item => {
+        if (item.is_suspended || item.completed) {
+            return item;
+        }
+
         return { ...item, vruntime: Math.max(item.vruntime - topRuntime, 0) } as Task;
     }));
 }
