@@ -30,6 +30,7 @@ pub fn run() {
         .export(Typescript::default(), "../src/models/bindings.ts")
         .expect("Failed to export types");
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![save_tasks, load_tasks])
         .run(tauri::generate_context!())

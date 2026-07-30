@@ -6,6 +6,55 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import TaskContext from "./components/context/GlobalTaskList"
 import { commands } from "./models/bindings";
 
+import { Menu, MenuItem, Submenu } from '@tauri-apps/api/menu';
+
+import { platform } from '@tauri-apps/plugin-os'
+
+
+// App Menu
+// Will become the application submenu on MacOS
+const aboutSubmenu: Submenu = await Submenu.new({
+    text: 'About',
+    items: [
+        await MenuItem.new({
+            id: 'quit',
+            text: 'Quit',
+            action: (_: string) => {
+                getCurrentWindow().emit('tauri://close-requested');
+            },
+        }),
+    ],
+});
+
+const fileSubmenu: Submenu = await Submenu.new({
+    text: 'File',
+    items: [
+        await MenuItem.new({
+            id: 'save-item',
+            text: 'Save',
+            action: async (_: string) => {
+                console.log("Save");
+                await commands.saveTasks(TaskContext.tasks);
+            }
+        })
+    ]
+});
+
+let subMenus = [fileSubmenu];
+if (platform() === 'macos' && aboutSubmenu) {
+    subMenus = [aboutSubmenu, ...subMenus];
+}
+
+const menu = await Menu.new({ items: subMenus });
+
+
+// If a window was not created with an explicit menu or had one set explicitly,
+// this menu will be assigned to it.
+
+await menu.setAsAppMenu();
+
+
+// App listeners
 const appWindow = getCurrentWindow();
 await appWindow.listen('tauri://close-requested', async (_) => {
     let incompleteTasks = TaskContext.tasks.filter(t => !t.completed);
