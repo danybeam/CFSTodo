@@ -55,6 +55,7 @@ function createGlobalTaskList() {
     const batchAddTasks = (list: Task[]) => {
         setTasks([...tasks, ...list]);
         sortTasks(tasks, setTasks);
+        SettingsContext.calculateNewTimeSlice(tasks);
     }
 
     const toggleTask = (id: number) => {
