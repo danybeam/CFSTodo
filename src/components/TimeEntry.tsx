@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { batch, createSignal } from "solid-js";
 
 import AppContext from "./context/AppSettings"
 
@@ -18,8 +18,10 @@ export default function TimeEntry(props: TimeEntryProps) {
                 let button = new FormData(e.currentTarget, e.submitter).get("action");
                 let hours = (new FormData(e.currentTarget).get("hr-input") ?? 0.0) as number;
                 setTimeout(() => {
-                    props.timeEntryCallback(hours);
-                    props.requestSuspendCallback(button == "suspend");
+                    batch(() => {
+                        props.timeEntryCallback(hours);
+                        props.requestSuspendCallback(button == "suspend");
+                    });
                 }, 100);
                 setPopup(false);
             }}>
