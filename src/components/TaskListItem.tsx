@@ -53,7 +53,7 @@ export default function TaskListItem(props: TaskListItemProps) {
             TaskContext.toggleTask(props.task.id);
         }}
     >
-        ✅
+        {props.task.completed ? "✅" : "✔️"}
     </button>;
     let deleteBtn = <button
         onClick={() => {
