@@ -43,9 +43,9 @@ function createGlobalTaskList() {
         SettingsContext.calculateNewTimeSlice(tasks);
     });
 
-    const addTask = (text: string, priority: number) => {
+    const addTask = (text: string, priority: number, tags: string[]) => {
         batch(() => {
-            setTasks([...tasks, { id: tasks.length, text: text, completed: false, is_suspended: false, vruntime: 0.0, priority: priority, tags: [] }]);
+            setTasks([...tasks, { id: tasks.length, text: text, completed: false, is_suspended: false, vruntime: 0.0, priority: priority, tags: tags }]);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
         })
