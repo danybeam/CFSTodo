@@ -33,7 +33,6 @@ const fileSubmenu: Submenu = await Submenu.new({
             id: 'save-item',
             text: 'Save\tCtrl+S',
             action: async (_: string) => {
-                console.log("Save");
                 await commands.saveTasks(TaskContext.tasks);
             }
         })
@@ -67,11 +66,9 @@ await appWindow.listen('tauri://close-requested', async (_) => {
 
 await window.addEventListener('keydown', async (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-        console.log('Ctrl+S pressed! Saving data...');
         e.preventDefault();
         let incompleteTasks = TaskContext.tasks.filter(t => !t.completed);
         await commands.saveTasks(incompleteTasks);
-        console.log('Saved');
         // Add your save logic or invoke a Tauri command here
     }
 });
