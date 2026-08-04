@@ -8,6 +8,7 @@ import SettingsContext from "./components/context/AppSettings"
 import TaskContext from "./components/context/GlobalTaskList"
 
 import { commands } from "./models/bindings";
+import Sidebar from "./components/Sidebar";
 
 // Commenting for later
 /*
@@ -48,22 +49,26 @@ function App() {
   })
 
   return (
-    <Show
-      when={hasLoaded()}
-      fallback={<div>Loading tasks...</div>}
-    >
-      <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
-        {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
+    <div style="display:flex; height:100%;">
+      <Sidebar />
+      <div style="overflow:hidden;">
+        <Show
+          when={hasLoaded()}
+          fallback={<div>Loading tasks...</div>}
+        >
+          <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
+            {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
+          </div>
+          <div class="container">
+            <CurrentTask />
+            <div class="medium padded" />
+            <TaskForm />
+            <div class="medium padded" />
+            <TaskList />
+          </div>
+        </Show>
       </div>
-      <div class="container">
-        <CurrentTask />
-        <div class="medium padded" />
-        <TaskForm />
-        <div class="medium padded" />
-        <TaskList />
-      </div>
-    </Show>
-
+    </div>
   );
 }
 

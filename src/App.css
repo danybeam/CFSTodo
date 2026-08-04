@@ -323,3 +323,63 @@ button {
     background-color: #0f0f0f69;
   }
 }
+
+
+@keyframes popdownSidebarAnimation {
+  from {
+    width: 250px;
+    min-width: 250px;
+  }
+
+  to {
+    width: 64px;
+    min-width: 64px;
+  }
+}
+
+@keyframes popupSidebarAnimation {
+  from {
+    width: 64px;
+    min-width: 64px;
+  }
+
+  to {
+    width: 250px;
+    min-width: 250px;
+  }
+}
+
+.sidebar {
+  margin-right: 10px;
+  width: 250px;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+  animation-name: popupSidebarAnimation;
+  animation-duration: 0.2s;
+}
+
+.sidebar.collapsed {
+  width: 64px;
+
+  animation-name: popdownSidebarAnimation;
+  animation-duration: 0.2s;
+}
+
+.sidebar.fixed {
+  position: fixed;
+  background: #202020;
+  color: white;
+}
+
+.sidebar.dummy {
+  min-width: 250px;
+}
+
+
+.sidebar.dummy.collapsed {
+  min-width: 64px;
+}
