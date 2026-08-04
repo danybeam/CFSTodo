@@ -1,4 +1,4 @@
-import { Workspace } from "../models/bindings"
+import { Task, Workspace } from "../models/bindings"
 import CurrentTask from "./CurrentTask"
 import TaskForm from "./TaskForm"
 import TaskList from "./TaskList"
@@ -9,33 +9,47 @@ import TagWranglerParser from '../models/.antlr/TagWranglerParser';
 import { TagVisitor } from "../models/TagVisitor";
 
 import TaskContext from "../components/context/GlobalTaskList"
+import { createStore } from "solid-js/store";
+import { onMount } from "solid-js";
 
 type WorkspaceViewerProps = {
-    workspace: Workspace
+    workspace: Workspace | undefined
 }
 
 export default function WorkspaceViewer(props: WorkspaceViewerProps) {
-    const chars = CharStreams.fromString(props.workspace.filter_query);
-    const lexer = new TagWranglerLexer(chars);
-    const tokens = new CommonTokenStream(lexer);
-    let parser = new TagWranglerParser(tokens);
-    parser.removeErrorListeners();
-    parser._errHandler = new BailErrorStrategy();
+    if (props.workspace == undefined) {
+        return <p>ERROR DISPLAYING WORKSPACE</p>;
+    }
 
-    const tree = parser.expr();
-    const visitor = new TagVisitor();
+    const [tasks, setTasks] = createStore<Task[]>([]);
 
-    // TODO! finish after extending language
-   
-    const result: boolean = visitor.visit(tree);
+    onMount(() => {
+        const chars = CharStreams.fromString(props.workspace?.filter_query ?? "any(is impossible)");
+        const lexer = new TagWranglerLexer(chars);
+        const tokens = new CommonTokenStream(lexer);
+        let parser = new TagWranglerParser(tokens);
+        parser.removeErrorListeners();
+        parser._errHandler = new BailErrorStrategy();
+
+        const tree = parser.expr();
+        const visitor = new TagVisitor();
+
+        let newTasks = TaskContext.tasks.filter((t) => {
+            visitor.visitorContext = t.tags ?? [];
+            return visitor.visit(tree);
+        });
+
+        setTasks(newTasks);
+        console.log(newTasks);
+    });
 
     return <>
         <div class="container">
-            <CurrentTask tasks={TaskContext.tasks} />
+            <CurrentTask tasks={tasks} />
             <div class="medium padded" />
             <TaskForm />
             <div class="medium padded" />
-            <TaskList tasks={TaskContext.tasks} />
+            <TaskList tasks={tasks} />
         </div>
     </>
 }

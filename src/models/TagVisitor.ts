@@ -12,6 +12,11 @@ export class TagVisitor extends TagWranglerVisitor<boolean> {
 
 
     visitExpr = (ctx: ExprContext) => {
+
+        if (this._visitorContext == null || this._visitorContext.length == 0) {
+            return false;
+        }
+
         let left = false;
         let unaryCounter = 0;
         let binaryCounter = 0;

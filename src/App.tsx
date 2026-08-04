@@ -1,4 +1,4 @@
-import { createSignal, onMount, Show, Switch, Match } from "solid-js";
+import { createSignal, onMount, Show, Switch, Match, batch } from "solid-js";
 import "./App.css";
 
 import CurrentTask from "./components/CurrentTask";
@@ -58,6 +58,10 @@ function App() {
 
   return (
     <div style="display:flex; height:100%;">
+      <button onClick={() => {
+        console.log(currentWorkspaceId());
+        console.log(WorkspaceContext.workspaces);
+      }}>debug</button>
       <Sidebar setTab={(p, i) => { setCurrentView(p) }} />
       <div style="overflow:hidden;">
         <Switch fallback={<div>Loading...</div>}>
@@ -79,10 +83,15 @@ function App() {
             </Show>
           </Match>
           <Match when={currentView() == PageView.WorkspaceBuilder}>
-            <WorkspaceBuilder onSaveCallback={(id: number) => { setCurrentView(PageView.Workspace); setCurrentWorkspaceId(id); console.log(currentWorkspaceId()) }} />
+            <WorkspaceBuilder onSaveCallback={(id: number) => {
+              batch(() => {
+                setCurrentView(PageView.Workspace);
+                setCurrentWorkspaceId(id);
+              })
+            }} />
           </Match>
           <Match when={currentView() == PageView.Workspace}>
-            <WorkspaceViewer workspace={WorkspaceContext.workspaces[currentWorkspaceId()]} />
+            <WorkspaceViewer workspace={WorkspaceContext.workspaces.find((w) => w.id == currentWorkspaceId())} />
           </Match>
         </Switch>
       </div>

@@ -14,6 +14,10 @@ type WorkspaceBuilderProps = {
 }
 
 function minMaxID(currentWorkspaces: Workspace[]) {
+   if (currentWorkspaces?.length == 0) {
+      return 0;
+   }
+
    let candidate = 0;
    let sortedWorkspaces = [...currentWorkspaces].sort((l, r) => l.id - r.id);
    let currentElement = 0;

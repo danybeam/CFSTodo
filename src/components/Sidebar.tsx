@@ -20,6 +20,9 @@ export default function Sidebar(props: SidebarProps) {
                 <button onClick={() => props.setTab(PageView.DefaultTaskList, -1)}>
                     {collapsed() ? "📃" : "📃 Default List"}
                 </button>
+                <button onClick={() => props.setTab(PageView.Workspace, 0)}>
+                    {collapsed() ? "T" : "📃 Default List"}
+                </button>
             </aside>
         </>
     );
