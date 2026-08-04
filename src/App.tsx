@@ -12,6 +12,7 @@ import { commands } from "./models/bindings";
 import Sidebar from "./components/Sidebar";
 import WorkspaceBuilder from "./components/WorkspaceBuilder/WorkspaceBuilder";
 import { PageView } from "./models/Enums";
+import WorkspaceViewer from "./components/WorkspaceViewer";
 
 // Commenting for later
 /*
@@ -45,6 +46,7 @@ function App() {
 
   const [hasLoaded, setHasLoaded] = createSignal(false);
   const [currentView, setCurrentView] = createSignal(PageView.DefaultTaskList);
+  const [currentWorkspaceId, setCurrentWorkspaceId] = createSignal(-1);
 
   onMount(async () => {
     setHasLoaded(false);
@@ -76,10 +78,10 @@ function App() {
             </Show>
           </Match>
           <Match when={currentView() == PageView.WorkspaceBuilder}>
-            <WorkspaceBuilder />
+            <WorkspaceBuilder onSaveCallback={(id: number) => { setCurrentView(PageView.Workspace); setCurrentWorkspaceId(id); }} />
           </Match>
           <Match when={currentView() == PageView.Workspace}>
-            <p>under construction</p>
+            <WorkspaceViewer workspace={WorkspaceContext.workspaces[currentWorkspaceId()]} />
           </Match>
         </Switch>
       </div>
