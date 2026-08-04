@@ -53,7 +53,10 @@ function createGlobalTaskList() {
     }
 
     const batchAddTasks = (list: Task[]) => {
-        setTasks([...tasks, ...list]);
+        let newTasks = new Set<Task>();
+        tasks.forEach(newTasks.add, newTasks);
+        list.forEach(newTasks.add, newTasks);
+        setTasks([...newTasks]);
         sortTasks(tasks, setTasks);
         SettingsContext.calculateNewTimeSlice(tasks);
     }
