@@ -6,6 +6,7 @@ import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import SettingsContext from "./components/context/AppSettings"
 import TaskContext from "./components/context/GlobalTaskList"
+import WorkspaceContext from "./components/context/WorkspaceList"
 
 import { commands } from "./models/bindings";
 import Sidebar from "./components/Sidebar";
@@ -48,6 +49,7 @@ function App() {
   onMount(async () => {
     setHasLoaded(false);
     TaskContext.batchAddTasks(await commands.loadTasks());
+    WorkspaceContext.batchAddWorkspaces(await commands.loadWorkspaces());
     await setTimeout(() => { setHasLoaded(true); }, 100);
   })
 

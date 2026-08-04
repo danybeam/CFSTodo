@@ -6,6 +6,8 @@ import { invoke as __TAURI_INVOKE } from "@tauri-apps/api/core";
 export const commands = {
 	saveTasks: (items: Task[]) => __TAURI_INVOKE<void>("save_tasks", { items }),
 	loadTasks: () => __TAURI_INVOKE<Task[]>("load_tasks"),
+	saveWorkspaces: (items: Workspace[]) => __TAURI_INVOKE<void>("save_workspaces", { items }),
+	loadWorkspaces: () => __TAURI_INVOKE<Workspace[]>("load_workspaces"),
 };
 
 /* Types */
@@ -17,5 +19,12 @@ export type Task = {
 	vruntime: number,
 	priority: number,
 	tags: string[] | null,
+};
+
+export type Workspace = {
+	id: number,
+	name: string,
+	icon_id: string | null,
+	filter_query: string,
 };
 

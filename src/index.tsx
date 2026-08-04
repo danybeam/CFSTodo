@@ -4,6 +4,7 @@ import App from "./App";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
 import TaskContext from "./components/context/GlobalTaskList"
+import WorkspaceContext from "./components/context/WorkspaceList"
 import { commands } from "./models/bindings";
 
 import { Menu, MenuItem, Submenu } from '@tauri-apps/api/menu';
@@ -59,6 +60,7 @@ await appWindow.listen('tauri://close-requested', async (_) => {
     let incompleteTasks = TaskContext.tasks.filter(t => !t.completed);
 
     await commands.saveTasks(incompleteTasks);
+    await commands.saveWorkspaces(WorkspaceContext.workspaces);
 
     // doesn't close program but effectively closes program
     appWindow.destroy();
