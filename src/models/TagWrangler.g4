@@ -2,7 +2,7 @@ grammar TagWrangler;
 
 expr: (binary | unary) ((AND | OR) (binary | unary))*;
 
-unary: innerUnary | LPAREN innerUnary RPAREN;
+unary: innerUnary | (ANY | ALL)? LPAREN innerUnary RPAREN;
 innerUnary: NOT? OPCODE INPUT;
 
 binary: innerBinary | LPAREN innerBinary RPAREN;
@@ -15,6 +15,8 @@ AND: 'and';
 OR: 'or';
 LPAREN: '(';
 RPAREN: ')';
+ANY: 'any';
+ALL: 'all';
 
 INPUT: [a-zA-Z_]+;
 WS: [ \t\r\n]+ -> skip;

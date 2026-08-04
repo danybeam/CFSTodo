@@ -3,9 +3,10 @@ import TagWranglerVisitor from "./.antlr/TagWranglerVisitor";
 
 export class TagVisitor extends TagWranglerVisitor<boolean> {
 
-    private _visitorContext?: string;
+    private _visitorContext?: string[];
+    private _any: boolean = false;
 
-    public set visitorContext(v: string) {
+    public set visitorContext(v: string[]) {
         this._visitorContext = v;
     }
 
@@ -51,6 +52,7 @@ export class TagVisitor extends TagWranglerVisitor<boolean> {
 
 
     visitUnary = (ctx: UnaryContext) => {
+        this._any = ctx.ANY() != null;
         return this.visitInnerUnary(ctx.innerUnary());
     };
 
@@ -58,18 +60,29 @@ export class TagVisitor extends TagWranglerVisitor<boolean> {
         let negate = ctx.NOT() != null;
         let result = false;
 
-        switch (ctx.OPCODE().getText()) {
-            case "has":
-                result = this._visitorContext?.includes(ctx.INPUT().getText()) ?? false;
-                break;
-            case "startsWith":
-                result = this._visitorContext?.startsWith(ctx.INPUT().getText()) ?? false;
-                break;
-            case "is":
-            default:
-                result = (this?._visitorContext ?? "") === ctx.INPUT().getText();
-        }
+        for (let tag of this._visitorContext ?? []) {
+            switch (ctx.OPCODE().getText()) {
+                case "has":
+                    result = negate !== tag.toLowerCase().includes(ctx.INPUT().getText().toLowerCase());
+                    break;
+                case "startsWith":
+                    result = negate !== tag.toLowerCase().startsWith(ctx.INPUT().getText().toLowerCase());
+                    break;
+                case "is":
+                default:
+                    result = negate !== (tag.toLowerCase() === ctx.INPUT().getText().toLowerCase());
+            }
 
-        return result !== negate;
+            console.log(`result=${result} after ${ctx.INPUT().getText()} with any = ${this._any} and op=${ctx.OPCODE().getText()}`);
+            console.log(`tag=${tag}`);
+            console.log(result === this._any);
+
+            if (result === this._any) {
+                break;
+            }
+        }
+        console.log("---")
+
+        return result;
     };
 }

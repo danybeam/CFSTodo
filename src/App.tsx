@@ -15,32 +15,32 @@ import { PageView } from "./models/Enums";
 import WorkspaceViewer from "./components/WorkspaceViewer";
 
 // Commenting for later
-/*
+
 import { BailErrorStrategy, CharStreams, CommonTokenStream } from 'antlr4';
 import TagWranglerLexer from './models/.antlr/TagWranglerLexer';
 import TagWranglerParser from './models/.antlr/TagWranglerParser';
 import { TagVisitor } from "./models/TagVisitor";
 
 function testAntlr() {
-  const input = "not is bar and is buzz and has foo";
+  const input = "any(not is bar) or all(not is buzz)";
   const chars = CharStreams.fromString(input);
-  
+
   const lexer = new TagWranglerLexer(chars);
-  
+
   const tokens = new CommonTokenStream(lexer);
-  
+
   let parser = new TagWranglerParser(tokens);
   parser.removeErrorListeners();
   parser._errHandler = new BailErrorStrategy();
-  
+
   const tree = parser.expr();
   const visitor = new TagVisitor();
-  visitor.visitorContext = "foo";
+  visitor.visitorContext = ["buzz", "foo", "bar", "bozz", "bazz"];
   const result: boolean = visitor.visit(tree);
   console.log("outside")
   console.log(result);
 }
-*/
+
 
 function App() {
 
@@ -57,6 +57,7 @@ function App() {
 
   return (
     <div style="display:flex; height:100%;">
+      <button onClick={testAntlr}>test antlr</button>
       <Sidebar setTab={(p, i) => { setCurrentView(p) }} />
       <div style="overflow:hidden;">
         <Switch fallback={<div>Loading...</div>}>
