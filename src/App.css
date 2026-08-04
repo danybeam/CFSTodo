@@ -373,6 +373,15 @@ button {
   position: fixed;
   background: #202020;
   color: white;
+  overflow-y: auto;
+  scrollbar-color: #8B8B8B #FF000000;
+}
+
+.sidebar.fixed.collapsed {
+  position: fixed;
+  background: #202020;
+  color: white;
+  overflow-y: hidden;
 }
 
 .sidebar.dummy {
