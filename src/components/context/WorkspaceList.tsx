@@ -3,7 +3,6 @@ import { Workspace } from "../../models/bindings";
 import { createStore } from "solid-js/store";
 
 function compareWorkspace(left: Workspace, right: Workspace) {
-    // TODO implement
     return left.id - right.id;
 }
 
@@ -17,7 +16,6 @@ function sortWorkspaces(list: Workspace[], setterFunction: (list: Workspace[]) =
 function createGlobalWorkspaceList() {
     const [workspaces, setWorkspaces] = createStore<Workspace[]>([]);
 
-    // TODO sort workspaces by ID when adding
     const batchAddWorkspaces = (list: Workspace[]) => {
         let newWorkspaces = new Set<Workspace>();
         workspaces.forEach(newWorkspaces.add, newWorkspaces);

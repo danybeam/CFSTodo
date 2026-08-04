@@ -64,7 +64,7 @@ export default function TaskListItem(props: TaskListItemProps) {
         ❌
     </button>;
 
-    // TODO Implement later if/when I add additional details to tasks
+    // TODO_ Implement later if/when I add additional details to tasks
     // let infoBtn =  <button>ℹ️</button>;
 
     return (
