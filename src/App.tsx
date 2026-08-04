@@ -10,7 +10,7 @@ import WorkspaceContext from "./components/context/WorkspaceList"
 
 import { commands } from "./models/bindings";
 import Sidebar from "./components/Sidebar";
-import WorkspaceBuilder from "./components/WorkspaceBuilder";
+import WorkspaceBuilder from "./components/WorkspaceBuilder/WorkspaceBuilder";
 import { PageView } from "./models/Enums";
 
 // Commenting for later

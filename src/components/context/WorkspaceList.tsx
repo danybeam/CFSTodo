@@ -17,6 +17,7 @@ function sortWorkspaces(list: Workspace[], setterFunction: (list: Workspace[]) =
 function createGlobalWorkspaceList() {
     const [workspaces, setWorkspaces] = createStore<Workspace[]>([]);
 
+    // TODO sort workspaces by ID when adding
     const batchAddWorkspaces = (list: Workspace[]) => {
         let newWorkspaces = new Set<Workspace>();
         workspaces.forEach(newWorkspaces.add, newWorkspaces);
@@ -25,7 +26,11 @@ function createGlobalWorkspaceList() {
         sortWorkspaces(workspaces, setWorkspaces);
     }
 
-    return { workspaces, batchAddWorkspaces };
+    const addWorkspace = (workspace: Workspace) => {
+        setWorkspaces([...workspaces, workspace])
+    }
+
+    return { workspaces, batchAddWorkspaces, addWorkspace };
 }
 
 export default createRoot(createGlobalWorkspaceList);
