@@ -15,7 +15,7 @@ import { PageView } from "./models/Enums";
 import WorkspaceViewer from "./components/WorkspaceViewer";
 
 // Commenting for later
-
+/*
 import { BailErrorStrategy, CharStreams, CommonTokenStream } from 'antlr4';
 import TagWranglerLexer from './models/.antlr/TagWranglerLexer';
 import TagWranglerParser from './models/.antlr/TagWranglerParser';
@@ -40,6 +40,7 @@ function testAntlr() {
   console.log("outside")
   console.log(result);
 }
+*/
 
 
 function App() {
@@ -57,7 +58,6 @@ function App() {
 
   return (
     <div style="display:flex; height:100%;">
-      <button onClick={testAntlr}>test antlr</button>
       <Sidebar setTab={(p, i) => { setCurrentView(p) }} />
       <div style="overflow:hidden;">
         <Switch fallback={<div>Loading...</div>}>
