@@ -1,4 +1,4 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, onMount, Show, Switch, Match } from "solid-js";
 import "./App.css";
 
 import CurrentTask from "./components/CurrentTask";
@@ -9,6 +9,8 @@ import TaskContext from "./components/context/GlobalTaskList"
 
 import { commands } from "./models/bindings";
 import Sidebar from "./components/Sidebar";
+import WorkspaceBuilder from "./components/WorkspaceBuilder";
+import { PageView } from "./models/Enums";
 
 // Commenting for later
 /*
@@ -41,6 +43,7 @@ function testAntlr() {
 function App() {
 
   const [hasLoaded, setHasLoaded] = createSignal(false);
+  const [currentView, setCurrentView] = createSignal(PageView.DefaultTaskList);
 
   onMount(async () => {
     setHasLoaded(false);
@@ -50,23 +53,33 @@ function App() {
 
   return (
     <div style="display:flex; height:100%;">
-      <Sidebar />
+      <Sidebar setTab={(p, i) => { setCurrentView(p) }} />
       <div style="overflow:hidden;">
-        <Show
-          when={hasLoaded()}
-          fallback={<div>Loading tasks...</div>}
-        >
-          <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
-            {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
-          </div>
-          <div class="container">
-            <CurrentTask />
-            <div class="medium padded" />
-            <TaskForm />
-            <div class="medium padded" />
-            <TaskList />
-          </div>
-        </Show>
+        <Switch fallback={<div>Loading...</div>}>
+          <Match when={currentView() == PageView.DefaultTaskList}>
+            <Show
+              when={hasLoaded()}
+              fallback={<div>Loading tasks...</div>}
+            >
+              <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
+                {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
+              </div>
+              <div class="container">
+                <CurrentTask />
+                <div class="medium padded" />
+                <TaskForm />
+                <div class="medium padded" />
+                <TaskList />
+              </div>
+            </Show>
+          </Match>
+          <Match when={currentView() == PageView.WorkspaceBuilder}>
+            <WorkspaceBuilder />
+          </Match>
+          <Match when={currentView() == PageView.Workspace}>
+            <p>under construction</p>
+          </Match>
+        </Switch>
       </div>
     </div>
   );
