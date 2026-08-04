@@ -9,7 +9,11 @@ type ANDStoreItems = {
    getter: () => string,
 }
 
-export default function WorkspaceBuilder() {
+type WorkspaceBuilderProps = {
+   onSaveCallback: (id: number) => void
+}
+
+export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
 
    const [workspace, setWorkspace] = createSignal<Workspace>({
       id: WorkspaceContext.workspaces[WorkspaceContext.workspaces.length - 1]?.id ?? -1 + 1,
@@ -41,18 +45,21 @@ export default function WorkspaceBuilder() {
 
                if (andRules.length == 0) {
                   alert("Please add any rules before continuing")
+                  return;
                }
 
                let result = andRules.map((v) => v.getter()).join(" and ");
 
                if (result.includes("#541361")) {
-                  alert("Please check your rules.\nSomething might not have been set.")
+                  alert("Please check your rules.\nSomething might not have been set.");
+                  return;
                }
-               
+
                let newWorkspace = workspace();
                newWorkspace.filter_query = result;
                setWorkspace(newWorkspace);
-               console.log(newWorkspace);
+               WorkspaceContext.addWorkspace(workspace());
+               props.onSaveCallback(workspace().id);
             }}>
                Save
             </button>
