@@ -15,13 +15,10 @@ export default function Sidebar(props: SidebarProps) {
                     ☰
                 </button>
                 <button onClick={() => props.setTab(PageView.WorkspaceBuilder, -1)}>
-                    Builder
+                    {collapsed() ? "🔨" : "🔨 Builder"}
                 </button>
                 <button onClick={() => props.setTab(PageView.DefaultTaskList, -1)}>
-                    List
-                </button>
-                <button onClick={() => props.setTab(PageView.Workspace, -1)}>
-                    Specific workspace
+                    {collapsed() ? "📃" : "📃 Default List"}
                 </button>
             </aside>
         </>
