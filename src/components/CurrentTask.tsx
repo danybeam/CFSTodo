@@ -1,15 +1,18 @@
 import { createEffect, createSignal, Show } from "solid-js";
-import TaskContext from "./context/GlobalTaskList"
 import TaskListItem from "./TaskListItem";
 import { Task } from "../models/bindings";
 
-export default function CurrentTask() {
-    const [firstTask, setFirstTask] = createSignal<Task>(TaskContext.tasks[0]);
+type CurrentTaskProps = {
+    tasks: Task[]
+}
+
+export default function CurrentTask(props: CurrentTaskProps) {
+    const [firstTask, setFirstTask] = createSignal<Task>(props.tasks[0]);
     const [isValidId, setIsValidId] = createSignal(false);
     const [isValidTask, setIsValidTask] = createSignal(false);
 
     createEffect(() => {
-        let task = TaskContext.tasks.at(0);
+        let task = props.tasks.at(0);
 
         if (task == null) {
             setIsValidId(false);
@@ -21,7 +24,7 @@ export default function CurrentTask() {
         let isTaskCompleted = (firstTask()?.completed ?? true);
         let isTaskSuspended = (firstTask()?.is_suspended ?? true);
 
-        setFirstTask(TaskContext.tasks.at(0) ?? { id: -1, text: "error", completed: false, is_suspended: false, vruntime: 0, priority: -1, tags:[] });
+        setFirstTask(props.tasks.at(0) ?? { id: -1, text: "error", completed: false, is_suspended: false, vruntime: 0, priority: -1, tags: [] });
         setIsValidId(isValidId)
         setIsValidTask(!isTaskCompleted && !isTaskSuspended)
     })

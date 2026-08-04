@@ -71,6 +71,7 @@ await window.addEventListener('keydown', async (e) => {
         e.preventDefault();
         let incompleteTasks = TaskContext.tasks.filter(t => !t.completed);
         await commands.saveTasks(incompleteTasks);
+        await commands.saveWorkspaces(WorkspaceContext.workspaces);
         // Add your save logic or invoke a Tauri command here
     }
 });

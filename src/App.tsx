@@ -69,16 +69,16 @@ function App() {
                 {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
               </div>
               <div class="container">
-                <CurrentTask />
+                <CurrentTask tasks={TaskContext.tasks} />
                 <div class="medium padded" />
                 <TaskForm />
                 <div class="medium padded" />
-                <TaskList />
+                <TaskList tasks={TaskContext.tasks} />
               </div>
             </Show>
           </Match>
           <Match when={currentView() == PageView.WorkspaceBuilder}>
-            <WorkspaceBuilder onSaveCallback={(id: number) => { setCurrentView(PageView.Workspace); setCurrentWorkspaceId(id); }} />
+            <WorkspaceBuilder onSaveCallback={(id: number) => { setCurrentView(PageView.Workspace); setCurrentWorkspaceId(id); console.log(currentWorkspaceId()) }} />
           </Match>
           <Match when={currentView() == PageView.Workspace}>
             <WorkspaceViewer workspace={WorkspaceContext.workspaces[currentWorkspaceId()]} />

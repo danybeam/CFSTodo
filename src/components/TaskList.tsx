@@ -1,9 +1,13 @@
 import { createEffect, createSignal, For } from "solid-js";
 import TaskListItem from "./TaskListItem";
-import TaskContext from "./context/GlobalTaskList"
+import { Task } from "../models/bindings";
 
-export default function TaskList() {
-    const { tasks } = TaskContext;
+type TaskListProps = {
+    tasks: Task[]
+}
+
+export default function TaskList(props: TaskListProps) {
+    const { tasks } = props;
 
     const [allComplete, setAllComplete] = createSignal(false);
     createEffect(() => {

@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, onMount } from "solid-js";
 import { Workspace } from "../../models/bindings";
 
 import WorkspaceContext from "../context/WorkspaceList"
@@ -13,6 +13,19 @@ type WorkspaceBuilderProps = {
    onSaveCallback: (id: number) => void
 }
 
+function minMaxID(currentWorkspaces: Workspace[]) {
+   let candidate = 0;
+   let sortedWorkspaces = [...currentWorkspaces].sort((l, r) => l.id - r.id);
+   let currentElement = 0;
+   let currentWS = sortedWorkspaces[currentElement++];
+   while (candidate >= currentWS.id) {
+      candidate = currentWS.id + 1;
+      currentWS = sortedWorkspaces[currentElement++];
+   }
+
+   return candidate;
+}
+
 export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
 
    const [workspace, setWorkspace] = createSignal<Workspace>({
@@ -20,6 +33,15 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
       name: "",
       icon_id: null,
       filter_query: "",
+   });
+
+   onMount(() => {
+      setWorkspace({
+         id: minMaxID(WorkspaceContext.workspaces),
+         name: "",
+         icon_id: null,
+         filter_query: "",
+      });
    });
    const [andRules, setAndRules] = createStore<ANDStoreItems[]>([])
 
@@ -58,6 +80,7 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
                let newWorkspace = workspace();
                newWorkspace.filter_query = result;
                setWorkspace(newWorkspace);
+               console.log(workspace());
                WorkspaceContext.addWorkspace(workspace());
                props.onSaveCallback(workspace().id);
             }}>
