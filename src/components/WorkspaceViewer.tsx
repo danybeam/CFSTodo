@@ -10,7 +10,7 @@ import { TagVisitor } from "../models/TagVisitor";
 
 import TaskContext from "../components/context/GlobalTaskList"
 import { createStore } from "solid-js/store";
-import { createEffect, createMemo, onMount } from "solid-js";
+import { createEffect } from "solid-js";
 
 type WorkspaceViewerProps = {
     workspace: Workspace | undefined

@@ -1,4 +1,4 @@
-import { batch, createSignal, For } from "solid-js";
+import { createSignal, For } from "solid-js";
 import { PageView } from "../models/Enums";
 
 import WorkspaceContext from "./context/WorkspaceList";
@@ -41,7 +41,7 @@ export default function Sidebar(props: SidebarProps) {
                 <button onClick={() => props.setTab(PageView.DefaultTaskList, -1)}>
                     {collapsedButtons() ? "📃" : "📃 Default List"}
                 </button>
-                <For each={WorkspaceContext.workspaces}>{(w, i) => {
+                <For each={WorkspaceContext.workspaces}>{(w, _) => {
                     return <>
                         <button class="small-padding" onClick={() => props.setTab(PageView.Workspace, w.id)}>
                             {collapsedButtons() ? getEmojiOrShortName(w) : w.name}
