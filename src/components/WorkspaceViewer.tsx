@@ -47,7 +47,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
         <div class="container">
             <div style="align-self:flex-start;">
                 <h1 style={`margin-bottom:${halfGap}px; text-align:left;`}>{props.workspace.name}</h1>
-                <p style={`margin-top:${halfGap}px; color:#6969697F;`}>{"Filter: " + props.workspace.filter_query}</p>
+                <p style={`margin-top:${halfGap}px; color:#6969697F; text-align:left;`}>{"Filter: " + props.workspace.filter_query}</p>
             </div>
             <CurrentTask tasks={tasks} />
             <div class="medium padded" />
