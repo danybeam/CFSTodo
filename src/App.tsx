@@ -48,8 +48,6 @@ function App() {
   const [hasLoaded, setHasLoaded] = createSignal(false);
   const [currentView, setCurrentView] = createSignal(PageView.DefaultTaskList);
   const [currentWorkspaceId, setCurrentWorkspaceId] = createSignal(-1);
-  const [addTaskMode, setAddTaskMode] = createSignal(false);
-  const [hideTaskForm, setHideTaskForm] = createSignal(true);
 
   onMount(async () => {
     setHasLoaded(false);
@@ -58,15 +56,14 @@ function App() {
     await setTimeout(() => { setHasLoaded(true); }, 100);
   })
 
-  let toggleTaskForm = () => {
-    setHideTaskForm(!hideTaskForm());
-    setTimeout(() => setAddTaskMode(!addTaskMode()), addTaskMode() ? 500 : 0);
-  };
+
 
   return (
     <div style="display:flex; height:100%;">
       <Sidebar setTab={(p, i) => {
         batch(() => {
+          console.log(WorkspaceContext.workspaces);
+          console.log(p);
           setCurrentView(p);
           setCurrentWorkspaceId(i);
         });
@@ -78,30 +75,10 @@ function App() {
               when={hasLoaded()}
               fallback={<div>Loading tasks...</div>}
             >
-              <div class="row">
-                <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
-                  {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
-                </div>
-                <button
-                  onClick={toggleTaskForm}
-                >
-                  {addTaskMode() ? "Cancel" : "Add Task"}
-                </button>
-              </div>
-              <Show when={!addTaskMode()}>
-                <div style="margin:10px;" />
-              </Show>
-              <div class="container" style="padding-top: 0px;">
-                <Show when={addTaskMode()}>
-                  <div class="task-form-container" classList={{ hidden: hideTaskForm() }}>
-                    <TaskForm onSubmitCallback={toggleTaskForm} />
-                    <div class="separator medium padded" />
-                  </div>
-                </Show>
-                <CurrentTask tasks={TaskContext.tasks} />
-                <div class="separator medium padded" style="width:100vw" />
-                <TaskList tasks={TaskContext.tasks} />
-              </div>
+              <WorkspaceViewer
+                workspace={undefined}
+                taskList={TaskContext.tasks}
+              />
             </Show>
           </Match>
           <Match when={currentView() == PageView.WorkspaceBuilder}>
@@ -113,7 +90,10 @@ function App() {
             }} />
           </Match>
           <Match when={currentView() == PageView.Workspace}>
-            <WorkspaceViewer workspace={WorkspaceContext.workspaces.find((w) => w.id == currentWorkspaceId())} />
+            <WorkspaceViewer
+              workspace={WorkspaceContext.workspaces.find((w) => w.id == currentWorkspaceId())}
+              taskList={TaskContext.tasks}
+            />
           </Match>
         </Switch>
       </div>

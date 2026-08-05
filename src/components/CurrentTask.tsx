@@ -1,40 +1,42 @@
-import { createEffect, createSignal, Show } from "solid-js";
+import { batch, createEffect, createSignal, Match, Show } from "solid-js";
 import TaskListItem from "./TaskListItem";
 import { Task } from "../models/bindings";
 
 type CurrentTaskProps = {
-    tasks: Task[]
+    firstTask: Task | undefined
 }
 
 export default function CurrentTask(props: CurrentTaskProps) {
-    const [firstTask, setFirstTask] = createSignal<Task>(props.tasks[0]);
     const [isValidId, setIsValidId] = createSignal(false);
     const [isValidTask, setIsValidTask] = createSignal(false);
 
+
     createEffect(() => {
-        let task = props.tasks.at(0);
+        if (props.firstTask == undefined) {
+            batch(() => {
 
-        if (task == null) {
-            setIsValidId(false);
-            setIsValidTask(false);
-            return;
+                setIsValidId(false);
+                setIsValidTask(false);
+            });
         }
+        let isValidId = (props.firstTask?.id ?? -1) >= 0;
+        let isTaskCompleted = (props.firstTask?.completed ?? true);
+        let isTaskSuspended = (props.firstTask?.is_suspended ?? true);
 
-        let isValidId = (firstTask()?.id ?? -1) >= 0;
-        let isTaskCompleted = (firstTask()?.completed ?? true);
-        let isTaskSuspended = (firstTask()?.is_suspended ?? true);
-
-        setFirstTask(props.tasks.at(0) ?? { id: -1, text: "error", completed: false, is_suspended: false, vruntime: 0, priority: -1, tags: [] });
         setIsValidId(isValidId)
         setIsValidTask(!isTaskCompleted && !isTaskSuspended)
     })
 
+    if (props.firstTask == undefined) {
+        return <span style="height: 68px">{"Add a task to get started"}</span>
+    }
+
     return (
         <Show
             when={isValidId() && isValidTask()}
-            fallback={<span style="height: 68px">{isValidId() ? "All task are completed or suspended. Add another task to get started." : "Add a task to get started"}</span>}
+            fallback={<span style="height: 68px">{"All task are completed or suspended. Add another task to get started."}</span>}
         >
-            <TaskListItem task={firstTask()} isCurrentTask={true} />
+            <TaskListItem task={props.firstTask} isCurrentTask={true} />
         </Show>
     );
 }

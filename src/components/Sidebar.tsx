@@ -117,6 +117,8 @@ export default function Sidebar(props: SidebarProps) {
                                         toggleSelected(selected(), w.id);
                                     });
                                 } else {
+                                    console.log("trying to switch")
+                                    console.log(props);
                                     batch(() => {
                                         props.setTab(PageView.Workspace, w.id)
                                         setCurrentTab(w.id);
