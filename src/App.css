@@ -423,3 +423,7 @@ button {
 .workspace-builder>* {
   margin-block: 3px
 }
+
+button.small-padding {
+  padding: 0.6em 0.6em;
+}

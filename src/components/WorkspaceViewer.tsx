@@ -10,7 +10,7 @@ import { TagVisitor } from "../models/TagVisitor";
 
 import TaskContext from "../components/context/GlobalTaskList"
 import { createStore } from "solid-js/store";
-import { onMount } from "solid-js";
+import { createEffect, createMemo, onMount } from "solid-js";
 
 type WorkspaceViewerProps = {
     workspace: Workspace | undefined
@@ -23,7 +23,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
 
     const [tasks, setTasks] = createStore<Task[]>([]);
 
-    onMount(() => {
+    createEffect(() => {
         const chars = CharStreams.fromString(props.workspace?.filter_query ?? "any(is impossible)");
         const lexer = new TagWranglerLexer(chars);
         const tokens = new CommonTokenStream(lexer);
@@ -44,6 +44,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
 
     return <>
         <div class="container">
+            <h1 style="align-self:flex-start">{props.workspace.name}</h1>
             <CurrentTask tasks={tasks} />
             <div class="medium padded" />
             <TaskForm />
