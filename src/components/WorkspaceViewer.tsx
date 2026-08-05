@@ -22,6 +22,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
     }
 
     const [tasks, setTasks] = createStore<Task[]>([]);
+    const halfGap = 10;
 
     createEffect(() => {
         const chars = CharStreams.fromString(props.workspace?.filter_query ?? "any(is impossible)");
@@ -44,7 +45,10 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
 
     return <>
         <div class="container">
-            <h1 style="align-self:flex-start">{props.workspace.name}</h1>
+            <div style="align-self:flex-start;">
+                <h1 style={`margin-bottom:${halfGap}px; text-align:left;`}>{props.workspace.name}</h1>
+                <p style={`margin-top:${halfGap}px; color:#6969697F;`}>{"Filter: " + props.workspace.filter_query}</p>
+            </div>
             <CurrentTask tasks={tasks} />
             <div class="medium padded" />
             <TaskForm />
