@@ -362,7 +362,7 @@ button {
   display: flex;
   flex-direction: column;
 
-  overflow: hidden;
+  overflow: auto;
   animation-name: popupSidebarAnimation;
   animation-duration: 0.2s;
 }
