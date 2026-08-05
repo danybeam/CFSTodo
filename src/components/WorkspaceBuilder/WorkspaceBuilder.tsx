@@ -22,7 +22,7 @@ function minMaxID(currentWorkspaces: Workspace[]) {
    let sortedWorkspaces = [...currentWorkspaces].sort((l, r) => l.id - r.id);
    let currentElement = 0;
    let currentWS = sortedWorkspaces[currentElement++];
-   while (candidate >= currentWS.id) {
+   while (currentWS && candidate >= currentWS.id) {
       candidate = currentWS.id + 1;
       currentWS = sortedWorkspaces[currentElement++];
    }
@@ -84,7 +84,6 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
                let newWorkspace = workspace();
                newWorkspace.filter_query = result;
                setWorkspace(newWorkspace);
-               console.log(workspace());
                WorkspaceContext.addWorkspace(workspace());
                props.onSaveCallback(workspace().id);
             }}>

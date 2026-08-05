@@ -2,6 +2,7 @@ import { createSignal, onCleanup, onMount } from "solid-js";
 
 export type RuleSet = {
     id: number,
+    any: boolean,
     negate: boolean,
     op: string,
     value: string,
@@ -12,29 +13,30 @@ type OrRuleProps = {
 }
 
 function RuleSetToString(rule: RuleSet) {
-    if (rule.value == "")
-    {
+    if (rule.value == "") {
         return "INVALID RULE#541361"
     }
-    return (rule.negate ? "not " : "") + rule.op + " " + rule.value;
+    let result = "(" + (rule.negate ? "not " : "") + rule.op + " " + rule.value + ")";
+    result = (rule.any ? "any" : "all") + result;
+    return result;
 }
 
 export default function OrRule(props: OrRuleProps) {
-    const [ruleset, setRuleset] = createSignal({ id: 1, negate: false, op: "has", value: "" })
+    const [ruleset, setRuleset] = createSignal({ id: 1, any: true, negate: false, op: "has", value: "" })
 
     onMount(() => {
         props.setRuleCallback(() => RuleSetToString(ruleset()));
     })
 
-    return <div class="row">
-        <input
-            type="checkbox"
-            onClick={(e) => {
-                let newRuleset = ruleset();
-                newRuleset.negate = e.currentTarget.checked;
-                setRuleset(newRuleset);
-            }}
-        />
+    return <div class="row spaced">
+        <select onChange={(e) => {
+            let newRuleset = ruleset();
+            newRuleset.any = e.currentTarget.value == "any";
+            setRuleset(newRuleset);
+        }}>
+            <option value="any">any tag</option>
+            <option value="all">all tags</option>
+        </select>
         <select onChange={(e) => {
             let newRuleset = ruleset();
             newRuleset.op = e.currentTarget.value;
@@ -50,5 +52,16 @@ export default function OrRule(props: OrRuleProps) {
                 newRuleset.value = e.target.value;
                 setRuleset(newRuleset);
             }} />
+        <div class="row">
+            <input
+                type="checkbox"
+                onClick={(e) => {
+                    let newRuleset = ruleset();
+                    newRuleset.negate = e.currentTarget.checked;
+                    setRuleset(newRuleset);
+                }}
+            />
+            <p>negate</p>
+        </div>
     </div>
 }

@@ -40,7 +40,6 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
         });
 
         setTasks(newTasks);
-        console.log(newTasks);
     });
 
     return <>

@@ -78,15 +78,10 @@ export class TagVisitor extends TagWranglerVisitor<boolean> {
                     result = negate !== (tag.toLowerCase() === ctx.INPUT().getText().toLowerCase());
             }
 
-            console.log(`result=${result} after ${ctx.INPUT().getText()} with any = ${this._any} and op=${ctx.OPCODE().getText()}`);
-            console.log(`tag=${tag}`);
-            console.log(result === this._any);
-
             if (result === this._any) {
                 break;
             }
         }
-        console.log("---")
 
         return result;
     };
