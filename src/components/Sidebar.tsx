@@ -32,6 +32,7 @@ function getEmojiOrShortName(w: Workspace) {
 
 export default function Sidebar(props: SidebarProps) {
     const [collapsed, setCollapsed] = createSignal(true);
+    const [firstToggle, setFirstToggle] = createSignal(false);
     const [collapsedButtons, setCollapsedButtons] = createSignal(true);
 
     const [deleteMode, setDeleteMode] = createSignal(false);
@@ -53,10 +54,11 @@ export default function Sidebar(props: SidebarProps) {
     // TODO_ Extract delete mode lambda to function
     return (
         <>
-            <div class="sidebar dummy" classList={{ collapsed: collapsed() }} />
-            <aside class="sidebar fixed" classList={{ collapsed: collapsed() }}>
+            <div class="sidebar dummy" classList={{ collapsed: firstToggle() && collapsed(), firstToggle: !firstToggle() }} />
+            <aside class="sidebar fixed" classList={{ collapsed: firstToggle() && collapsed(), firstToggle: !firstToggle() }}>
                 <button onClick={() => {
                     setCollapsed(!collapsed());
+                    setFirstToggle(true);
                     setTimeout(() => setCollapsedButtons(!collapsedButtons()), collapsed() ? 0 : 200);
                 }}>
                     ☰
@@ -67,29 +69,31 @@ export default function Sidebar(props: SidebarProps) {
                             {collapsedButtons() ? "🔨" : "🔨 Builder"}
                         </button>
                     </Show>
-                    <button
-                        style="flex-grow:1;"
-                        onClick={() => {
-                            if (!deleteMode()) {
-                                setDeleteMode(true);
-                            } else if (selectedWorkspaces.length == 0) {
-                                setDeleteMode(false);
-                            } else if (confirm("Are you sure you want to delete the selected workspaces?")) {
-                                batch(() => {
-                                    WorkspaceContext.batchDeleteWorkspaces(selectedWorkspaces);
+                    <Show when={!collapsed()}>
+                        <button
+                            style="flex-grow:1;"
+                            onClick={() => {
+                                if (!deleteMode()) {
+                                    setDeleteMode(true);
+                                } else if (selectedWorkspaces.length == 0) {
                                     setDeleteMode(false);
-                                    if (selectedWorkspaces.includes(currentTab())) {
-                                        props.setTab(PageView.DefaultTaskList, -1);
-                                    }
-                                    setSelectedWorkspaces([]);
-                                })
+                                } else if (confirm("Are you sure you want to delete the selected workspaces?")) {
+                                    batch(() => {
+                                        WorkspaceContext.batchDeleteWorkspaces(selectedWorkspaces);
+                                        setDeleteMode(false);
+                                        if (selectedWorkspaces.includes(currentTab())) {
+                                            props.setTab(PageView.DefaultTaskList, -1);
+                                        }
+                                        setSelectedWorkspaces([]);
+                                    })
+                                }
+                            }}
+                        >
+                            {
+                                collapsedButtons() ? "" : deleteMode() ? "Delete selected" : "Select workspaces"
                             }
-                        }}
-                    >
-                        {
-                            collapsedButtons() ? "" : deleteMode() ? "Delete selected" : "Select workspaces"
-                        }
-                    </button>
+                        </button>
+                    </Show>
                     <Show when={deleteMode()}>
                         <button
                             style="flex-grow:1;"
