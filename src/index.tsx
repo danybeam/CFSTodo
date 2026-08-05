@@ -1,16 +1,23 @@
 /* @refresh reload */
-import { render } from "solid-js/web";
-import App from "./App";
-import { getCurrentWindow } from "@tauri-apps/api/window";
 
-import TaskContext from "./components/context/GlobalTaskList"
-import WorkspaceContext from "./components/context/WorkspaceList"
+// Tauri imports
+import { Menu, MenuItem, Submenu } from '@tauri-apps/api/menu';
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import { platform } from '@tauri-apps/plugin-os';
+
+// SolidJS imports
+import { render } from "solid-js/web";
+
+// App imports
+import App from "./App";
+import TaskContext from "./components/context/GlobalTaskList";
+import WorkspaceContext from "./components/context/WorkspaceList";
 import { commands } from "./models/bindings";
 
-import { Menu, MenuItem, Submenu } from '@tauri-apps/api/menu';
 
-import { platform } from '@tauri-apps/plugin-os'
-
+///////////////////////////////////////////////////////////////////
+//        SETUP APP
+///////////////////////////////////////////////////////////////////
 
 // App Menu
 // Will become the application submenu on MacOS
@@ -54,6 +61,11 @@ const menu = await Menu.new({ items: subMenus });
 await menu.setAsAppMenu();
 
 
+///////////////////////////////////////////////////////////////////
+//        SETUP EVENT LISTENERS
+///////////////////////////////////////////////////////////////////
+
+
 // App listeners
 const appWindow = getCurrentWindow();
 await appWindow.listen('tauri://close-requested', async (_) => {
@@ -75,5 +87,9 @@ await window.addEventListener('keydown', async (e) => {
         // Add your save logic or invoke a Tauri command here
     }
 });
+
+///////////////////////////////////////////////////////////////////
+//        START APP
+///////////////////////////////////////////////////////////////////
 
 render(() => <App />, document.getElementById("root") as HTMLElement);

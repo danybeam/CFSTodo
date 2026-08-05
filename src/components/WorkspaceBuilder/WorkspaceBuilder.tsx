@@ -1,16 +1,24 @@
+// SolidJS imports
 import { createSignal, For, onMount } from "solid-js";
-import { Workspace } from "../../models/bindings";
-
-import WorkspaceContext from "../context/WorkspaceList"
-import AndRule from "./AndRule";
 import { createStore } from "solid-js/store";
 
-type ANDStoreItems = {
-   getter: () => string,
-}
+// General App imports
+import { Workspace } from "../../models/bindings";
 
+// App Context imports
+import WorkspaceContext from "../context/WorkspaceList";
+
+// Component imports
+import AndRule from "./AndRule";
+
+// Props type definiton
 type WorkspaceBuilderProps = {
    onSaveCallback: () => void
+}
+
+// Type definition to extract values of rules at any moment
+type ANDStoreItems = {
+   getter: () => string,
 }
 
 function minMaxID(currentWorkspaces: Workspace[]) {
@@ -39,6 +47,8 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
       filter_query: "",
    });
 
+
+   // TODO_ is this still needed?
    onMount(() => {
       setWorkspace({
          id: minMaxID(WorkspaceContext.workspaces),
@@ -47,8 +57,13 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
          filter_query: "",
       });
    });
+
+   // TODO_#001 This is "necessary" because I haven't figured out how to traverse the children and get their current state.
+   // Call down signal up. How else can I signal up the state?
+   // Keep state all the time?
    const [andRules, setAndRules] = createStore<ANDStoreItems[]>([])
 
+   // TODO_ Extract save lambda function to external function
    return (
       <div class="workspace-builder">
          <div class="spaced row">
@@ -89,7 +104,7 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
             }}>
                Save
             </button>
-            <button onClick={() => setAndRules([{ getter: () => "" }])}>
+            <button onClick={() => setAndRules([])}>
                Clear
             </button>
          </div>
@@ -105,6 +120,9 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
             </>
          }
          </For>
+            {
+               // empty getter needed on reset to create a new rule to be filled
+            }
          <button onClick={() => {
             setAndRules([...andRules, { getter: () => "" }]);
          }}>

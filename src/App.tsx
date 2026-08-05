@@ -1,46 +1,19 @@
-import { createSignal, onMount, Show, Switch, Match, batch } from "solid-js";
+// SolidJS imports
+import { batch, createSignal, Match, onMount, Show, Switch } from "solid-js";
+
+// General App imports
 import "./App.css";
-
-import CurrentTask from "./components/CurrentTask";
-import TaskForm from "./components/TaskForm";
-import TaskList from "./components/TaskList";
-import SettingsContext from "./components/context/AppSettings"
-import TaskContext from "./components/context/GlobalTaskList"
-import WorkspaceContext from "./components/context/WorkspaceList"
-
 import { commands } from "./models/bindings";
+import { PageView } from "./models/Enums";
+
+// Global App imports
+import TaskContext from "./components/context/GlobalTaskList";
+import WorkspaceContext from "./components/context/WorkspaceList";
+
+// App component imports
 import Sidebar from "./components/Sidebar";
 import WorkspaceBuilder from "./components/WorkspaceBuilder/WorkspaceBuilder";
-import { PageView } from "./models/Enums";
 import WorkspaceViewer from "./components/WorkspaceViewer";
-
-// Commenting for later
-/*
-import { BailErrorStrategy, CharStreams, CommonTokenStream } from 'antlr4';
-import TagWranglerLexer from './models/.antlr/TagWranglerLexer';
-import TagWranglerParser from './models/.antlr/TagWranglerParser';
-import { TagVisitor } from "./models/TagVisitor";
-
-function testAntlr() {
-  const input = "any(not is bar) or all(not is buzz)";
-  const chars = CharStreams.fromString(input);
-
-  const lexer = new TagWranglerLexer(chars);
-
-  const tokens = new CommonTokenStream(lexer);
-
-  let parser = new TagWranglerParser(tokens);
-  parser.removeErrorListeners();
-  parser._errHandler = new BailErrorStrategy();
-
-  const tree = parser.expr();
-  const visitor = new TagVisitor();
-  visitor.visitorContext = ["buzz", "foo", "bar", "bozz", "bazz"];
-  const result: boolean = visitor.visit(tree);
-  console.log("outside")
-  console.log(result);
-}
-*/
 
 
 function App() {
@@ -62,8 +35,6 @@ function App() {
     <div style="display:flex; height:100%;">
       <Sidebar setTab={(p, i) => {
         batch(() => {
-          console.log(WorkspaceContext.workspaces);
-          console.log(p);
           setCurrentView(p);
           setCurrentWorkspaceId(i);
         });

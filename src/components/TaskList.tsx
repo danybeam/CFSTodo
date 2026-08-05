@@ -1,7 +1,13 @@
+// SolidJS imports
 import { createEffect, createSignal, For } from "solid-js";
-import TaskListItem from "./TaskListItem";
+
+// General App imports
 import { Task } from "../models/bindings";
 
+// App component imports
+import TaskListItem from "./TaskListItem";
+
+// Props type definiton
 type TaskListProps = {
     tasks: Task[]
 }

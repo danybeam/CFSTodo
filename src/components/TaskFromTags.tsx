@@ -1,18 +1,28 @@
+// SolidJS imports
 import { For } from "solid-js";
 
+// Props type definition
 type TaskFormTagsProps = {
     tags: string[],
     addTagCallback: (newTag: string) => void,
     removeTagCallback: (tag: string) => void,
 }
+
+// TODO_ extract form submit event to external function
 export default function TaskFormTags(props: TaskFormTagsProps) {
     return (
         <div class="tag-form">
             <div class="framed tag-container">
-                <For each={props.tags}>
-                    {
-                        (tag) => <div class="tag"><p>{tag}</p><button class="fake-button" onclick={() => { props.removeTagCallback(tag); }}>X</button></div>
-                    }
+                <For each={props.tags}>{
+                    (tag) => <div class="tag">
+                        <p>
+                            {tag}
+                        </p>
+                        <button class="fake-button" onclick={() => { props.removeTagCallback(tag); }}>
+                            X
+                        </button>
+                    </div>
+                }
                 </For>
             </div>
             <form
@@ -45,7 +55,7 @@ export default function TaskFormTags(props: TaskFormTagsProps) {
                         style="width:100%;"
                     />
                 </div>
-                <div class="medium"/>
+                <div class="medium" />
                 <button type="submit" style="height: fit-content; align-self:flex-end;">Add</button>
             </form>
         </div>

@@ -1,17 +1,27 @@
-import { Task, Workspace } from "../models/bindings"
-import CurrentTask from "./CurrentTask"
-import TaskForm from "./TaskForm"
-import TaskList from "./TaskList"
-
+// Antlr imports
 import { BailErrorStrategy, CharStreams, CommonTokenStream } from 'antlr4';
 import TagWranglerLexer from '../models/.antlr/TagWranglerLexer';
 import TagWranglerParser from '../models/.antlr/TagWranglerParser';
+
+// Custom Antlr imports
 import { TagVisitor } from "../models/TagVisitor";
 
-import SettingsContext from "../components/context/AppSettings"
-import { createStore } from "solid-js/store";
+// SolidJS imports
 import { batch, createEffect, createSignal, Show } from "solid-js";
+import { createStore } from "solid-js/store";
 
+// General app imports
+import { Task, Workspace } from "../models/bindings";
+
+// App Context imports
+import SettingsContext from "../components/context/AppSettings";
+
+// App Component imports
+import CurrentTask from "./CurrentTask";
+import TaskForm from "./TaskForm";
+import TaskList from "./TaskList";
+
+// Props type definition
 type WorkspaceViewerProps = {
     workspace: Workspace | undefined,
     taskList: Task[]
@@ -54,18 +64,14 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
             return visitor.visit(tree);
         });
 
-        console.log("props")
-        console.log(props.taskList);
-        console.log(newTasks);
-
         batch(() => {
             setTasks(newTasks);
             setFirstTask(newTasks.at(0) as Task);
-            console.log("first task");
-            console.log(firstTask());
         })
     });
 
+    // TODO_ Break down into more manageable chunks
+    // TODO! Break header into component and send task list to recalculate overburden
     return <>
         <div class="row">
             <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
@@ -109,20 +115,4 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
             <TaskList tasks={tasks} />
         </div>
     </>
-
-    /*
-    return <>
-    <div class="container">
-    <div style="align-self:flex-start;">
-    <h1 style={`margin-bottom:${halfGap}px; text-align:left;`}>{props.workspace.name}</h1>
-    <p style={`margin-top:${halfGap}px; color:#6969697F; text-align:left;`}>{"Filter: " + props.workspace.filter_query}</p>
-    </div>
-    <CurrentTask tasks={tasks} />
-    <div class="medium padded" />
-    <TaskForm />
-    <div class="medium padded" />
-    <TaskList tasks={tasks} />
-    </div>
-    </>
-    */
 }

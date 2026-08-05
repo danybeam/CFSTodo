@@ -1,12 +1,17 @@
+// SolidJS imports
 import { batch, createSignal } from "solid-js";
 
-import AppContext from "./context/AppSettings"
+// App context imports
+import AppContext from "./context/AppSettings";
 
+
+// Props Type definition
 type TimeEntryProps = {
     timeEntryCallback: (hrs: number) => void
     requestSuspendCallback: (suspend: boolean) => void
 }
 
+// TODO_ separate onSubmit lambda to external function
 export default function TimeEntry(props: TimeEntryProps) {
     const [popup, setPopup] = createSignal(true);
     return (

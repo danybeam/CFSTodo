@@ -1,12 +1,20 @@
-import { createStore } from "solid-js/store";
-import TaskContext from "./context/GlobalTaskList"
-import TaskFormTags from "./TaskFromTags";
+// SolidJS imports
 import { batch } from "solid-js";
+import { createStore } from "solid-js/store";
+
+// App context imports
+import TaskContext from "./context/GlobalTaskList";
+
+// App components imports
+import TaskFormTags from "./TaskFromTags";
 
 type TaskFormProps = {
     onSubmitCallback: () => void
 }
 
+// TODO_ extract on submit lambda to external function
+// TODO_ extract addTagCallback lambda to external function
+// TODO_ extract removeTagCallback lambda to external function
 function TaskForm(props: TaskFormProps) {
     const { addTask } = TaskContext;
     const [tags, setTags] = createStore<string[]>([]);

@@ -1,14 +1,22 @@
+// SolidJS imports
 import { batch, createEffect, createSignal, For, Show } from "solid-js";
-import { PageView } from "../models/Enums";
-
-import WorkspaceContext from "./context/WorkspaceList";
-import { Workspace } from "../models/bindings";
 import { createStore } from "solid-js/store";
 
+// General App imports
+import { PageView } from "../models/Enums";
+
+// App context imports
+import WorkspaceContext from "./context/WorkspaceList";
+
+// App components imports
+import { Workspace } from "../models/bindings";
+
+// Props type definiton
 type SidebarProps = {
     setTab: (page: PageView, pageId: number) => void;
 }
 
+// TODO update workspace.id to take an emoji instead of the id for an icon
 function getEmojiOrShortName(w: Workspace) {
     if (w.icon_id) {
         return w.icon_id;
@@ -32,6 +40,7 @@ export default function Sidebar(props: SidebarProps) {
 
     const [currentTab, setCurrentTab] = createSignal(-1);
 
+    // TODO_ extract in-function function to external function
     let toggleSelected = (selected: boolean, workspace: number) => {
         if (selected) {
             setSelectedWorkspaces([...selectedWorkspaces, workspace]);
@@ -40,6 +49,8 @@ export default function Sidebar(props: SidebarProps) {
         }
     }
 
+    // TODO_ Extract workspace toggle button to separate components
+    // TODO_ Extract delete mode lambda to function
     return (
         <>
             <div class="sidebar dummy" classList={{ collapsed: collapsed() }} />
@@ -73,7 +84,6 @@ export default function Sidebar(props: SidebarProps) {
                                     setSelectedWorkspaces([]);
                                 })
                             }
-                            // TODO delete selected workspaces
                         }}
                     >
                         {
@@ -117,8 +127,6 @@ export default function Sidebar(props: SidebarProps) {
                                         toggleSelected(selected(), w.id);
                                     });
                                 } else {
-                                    console.log("trying to switch")
-                                    console.log(props);
                                     batch(() => {
                                         props.setTab(PageView.Workspace, w.id)
                                         setCurrentTab(w.id);

@@ -1,18 +1,23 @@
+// SolidJS imports
 import { createRoot } from "solid-js";
-import { Workspace } from "../../models/bindings";
 import { createStore } from "solid-js/store";
 
+// App general imports
+import { Workspace } from "../../models/bindings";
+
+// Comparison function for workspaces
 function compareWorkspace(left: Workspace, right: Workspace) {
     return left.id - right.id;
 }
 
+// Workspace sorting function
 function sortWorkspaces(list: Workspace[], setterFunction: (list: Workspace[]) => void) {
     let copyList = [...list];
     copyList.sort(compareWorkspace);
     setterFunction([...copyList]);
 }
 
-
+// Workspace context definition (SolidJS convention)
 function createGlobalWorkspaceList() {
     const [workspaces, setWorkspaces] = createStore<Workspace[]>([]);
 

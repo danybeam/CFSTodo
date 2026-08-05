@@ -1,9 +1,14 @@
+// SolidJS imports
 import { batch, createRoot, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
+
+// General App imports
 import { Task } from "../../models/bindings";
 
+// App context imports
 import SettingsContext from "./AppSettings"
 
+// Comparison function for tasks
 function compareTasks(left: Task, right: Task) {
     if (left.completed !== right.completed) {
         return left.completed ? 1 : -1;
@@ -21,6 +26,7 @@ function compareTasks(left: Task, right: Task) {
     return left.id - right.id;
 }
 
+// Task sorting function
 function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     let copyList = [...list];
     copyList.sort(compareTasks);
@@ -36,6 +42,7 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     }));
 }
 
+// Task list context definiton
 function createGlobalTaskList() {
     const [tasks, setTasks] = createStore<Task[]>([]);
 

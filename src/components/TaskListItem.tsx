@@ -1,9 +1,16 @@
+// SolidJS imports
 import { batch, createEffect, createSignal, Show } from "solid-js";
+
+// General App imports
 import { Task } from "../models/bindings";
 
-import TaskContext from "./context/GlobalTaskList"
+// App context imports
+import TaskContext from "./context/GlobalTaskList";
+
+// App components imports
 import TimeEntry from "./TimeEntry";
 
+// Prop type definiton
 type TaskListItemProps = {
     task: Task,
     isCurrentTask: boolean
@@ -67,6 +74,7 @@ export default function TaskListItem(props: TaskListItemProps) {
     // TODO_ Implement later if/when I add additional details to tasks
     // let infoBtn =  <button>ℹ️</button>;
 
+    // TODO_ Simplify component to make more easy to read
     return (
         <>
             <Show when={showModal()}>

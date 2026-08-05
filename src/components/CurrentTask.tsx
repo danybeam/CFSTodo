@@ -1,8 +1,14 @@
-import { batch, createEffect, createSignal, Match, Show } from "solid-js";
-import TaskListItem from "./TaskListItem";
+// SolidJS imports
+import { batch, createEffect, createSignal, Show } from "solid-js";
+
+// General App imports
 import { Task } from "../models/bindings";
 
+// App component imports
+import TaskListItem from "./TaskListItem";
+
 type CurrentTaskProps = {
+    // TODO_ Check if it's possible to remove undefined
     firstTask: Task | undefined
 }
 
@@ -19,6 +25,7 @@ export default function CurrentTask(props: CurrentTaskProps) {
                 setIsValidTask(false);
             });
         }
+        // TODO_ Are all these null checks necessary anymore?
         let isValidId = (props.firstTask?.id ?? -1) >= 0;
         let isTaskCompleted = (props.firstTask?.completed ?? true);
         let isTaskSuspended = (props.firstTask?.is_suspended ?? true);

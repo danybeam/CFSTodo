@@ -1,4 +1,7 @@
+// Antlr imports
 import { BinaryContext, ExprContext, InnerBinaryContext, InnerUnaryContext, UnaryContext } from './.antlr/TagWranglerParser';
+
+// Antlr imports (generated source files)
 import TagWranglerVisitor from "./.antlr/TagWranglerVisitor";
 
 export class TagVisitor extends TagWranglerVisitor<boolean> {

@@ -1,5 +1,7 @@
+// SolidJS imports
 import { createSignal, onMount } from "solid-js";
 
+// Definiton for rule information
 export type RuleSet = {
     id: number,
     any: boolean,
@@ -8,6 +10,7 @@ export type RuleSet = {
     value: string,
 };
 
+// Definiton for rule getter
 type OrRuleProps = {
     setRuleCallback: (getter: () => string) => void,
 }
@@ -21,6 +24,7 @@ function RuleSetToString(rule: RuleSet) {
     return result;
 }
 
+// TODO_ Related to TODO_#001 maybe I can update the rule every time it changes and signal it to the parent?
 export default function OrRule(props: OrRuleProps) {
     const [ruleset, setRuleset] = createSignal({ id: 1, any: true, negate: false, op: "has", value: "" })
 

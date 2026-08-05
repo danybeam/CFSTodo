@@ -1,11 +1,16 @@
+// SolidJS imports
 import { For, onMount } from "solid-js";
-import OrRule from "./OrRule";
 import { createStore } from "solid-js/store";
 
+// App component imports
+import OrRule from "./OrRule";
+
+// Signature for getters
 type ORStoreItems = {
     getter: () => string,
 }
 
+// Props type definition
 type AndRuleProps = {
     setRuleCallback: (getter: () => string) => void,
 }
@@ -19,6 +24,8 @@ function RuleSetToString(childRules: ORStoreItems[]) {
     return result;
 }
 
+
+// TODO_ related to TODO_#001 Simplify
 export default function AndRule(props: AndRuleProps) {
 
     const [rules, setRules] = createStore<ORStoreItems[]>([{ getter: () => "" }]);

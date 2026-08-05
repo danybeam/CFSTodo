@@ -1,6 +1,11 @@
+// SolidJS imports
 import { createRoot, createSignal } from "solid-js";
+
+// General App imports
 import { Task } from "../../models/bindings";
 
+
+// TODO_ Replace with proper settings after configuration screen is done
 declare global {
     var AppSettings: {
         availableHours: number;
@@ -21,6 +26,8 @@ function createSettings() {
     initializeSettings();
 
     const [calculatedTimeSlice, setCalculatedTimeSlice] = createSignal(0);
+
+    // TODO! Change into dynamically calculated function
     const [isOverburdened, setIsOverburdened] = createSignal(false);
 
     const calculateNewTimeSlice = (list: Task[]) => {
