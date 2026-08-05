@@ -1,9 +1,13 @@
 import { createStore } from "solid-js/store";
 import TaskContext from "./context/GlobalTaskList"
 import TaskFormTags from "./TaskFromTags";
+import { batch } from "solid-js";
 
+type TaskFormProps = {
+    onSubmitCallback: () => void
+}
 
-function TaskForm() {
+function TaskForm(props: TaskFormProps) {
     const { addTask } = TaskContext;
     const [tags, setTags] = createStore<string[]>([]);
     let tags_set = new Set<string>();
@@ -27,9 +31,12 @@ function TaskForm() {
                         return; // If empty do not throw but don't save it.
                     }
 
-                    addTask(text, priority, [...tags]);
-                    setTags([]);
-                    tags_set.clear();
+                    batch(() => {
+                        addTask(text, priority, [...tags]);
+                        setTags([]);
+                        tags_set.clear();
+                        props.onSubmitCallback();
+                    });
                 }}
             >
                 <div class="large form-with-title" >

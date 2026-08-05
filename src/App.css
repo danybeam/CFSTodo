@@ -429,5 +429,39 @@ button.small-padding {
 }
 
 button.selected {
-    background-color: #401919;
+  background-color: #401919;
+}
+
+@keyframes task-form-containerFoldAnimation {
+  from {
+    height: 230px;
+  }
+
+  to {
+    height: 10px;
+  }
+}
+
+@keyframes task-form-containerUnfoldAnimation {
+  from {
+    height: 0px;
+  }
+
+  to {
+    height: 230px;
+  }
+}
+
+.task-form-container {
+  height: 230px;
+  overflow: hidden;
+  animation-name: task-form-containerUnfoldAnimation;
+  animation-duration: 0.5s;
+}
+
+.task-form-container.hidden {
+  height: 10px;
+  overflow: hidden;
+  animation-name: task-form-containerFoldAnimation;
+  animation-duration: 0.5s;
 }

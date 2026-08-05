@@ -48,6 +48,8 @@ function App() {
   const [hasLoaded, setHasLoaded] = createSignal(false);
   const [currentView, setCurrentView] = createSignal(PageView.DefaultTaskList);
   const [currentWorkspaceId, setCurrentWorkspaceId] = createSignal(-1);
+  const [addTaskMode, setAddTaskMode] = createSignal(false);
+  const [hideTaskForm, setHideTaskForm] = createSignal(true);
 
   onMount(async () => {
     setHasLoaded(false);
@@ -55,6 +57,11 @@ function App() {
     WorkspaceContext.batchAddWorkspaces(await commands.loadWorkspaces());
     await setTimeout(() => { setHasLoaded(true); }, 100);
   })
+
+  let toggleTaskForm = () => {
+    setHideTaskForm(!hideTaskForm());
+    setTimeout(() => setAddTaskMode(!addTaskMode()), addTaskMode() ? 500 : 0);
+  };
 
   return (
     <div style="display:flex; height:100%;">
@@ -71,14 +78,28 @@ function App() {
               when={hasLoaded()}
               fallback={<div>Loading tasks...</div>}
             >
-              <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
-                {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
+              <div class="row">
+                <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
+                  {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
+                </div>
+                <button
+                  onClick={toggleTaskForm}
+                >
+                  {addTaskMode() ? "Cancel" : "Add Task"}
+                </button>
               </div>
-              <div class="container">
+              <Show when={!addTaskMode()}>
+                <div style="margin:10px;" />
+              </Show>
+              <div class="container" style="padding-top: 0px;">
+                <Show when={addTaskMode()}>
+                  <div class="task-form-container" classList={{ hidden: hideTaskForm() }}>
+                    <TaskForm onSubmitCallback={toggleTaskForm} />
+                    <div class="separator medium padded" />
+                  </div>
+                </Show>
                 <CurrentTask tasks={TaskContext.tasks} />
-                <div class="medium padded" />
-                <TaskForm />
-                <div class="medium padded" />
+                <div class="separator medium padded" style="width:100vw" />
                 <TaskList tasks={TaskContext.tasks} />
               </div>
             </Show>
