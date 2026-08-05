@@ -58,7 +58,12 @@ function App() {
 
   return (
     <div style="display:flex; height:100%;">
-      <Sidebar setTab={(p, i) => { setCurrentView(p) }} />
+      <Sidebar setTab={(p, i) => {
+        batch(() => {
+          setCurrentView(p);
+          setCurrentWorkspaceId(i);
+        });
+      }} />
       <div style="overflow:hidden;">
         <Switch fallback={<div>Loading...</div>}>
           <Match when={currentView() == PageView.DefaultTaskList}>
