@@ -58,10 +58,6 @@ function App() {
 
   return (
     <div style="display:flex; height:100%;">
-      <button onClick={() => {
-        console.log(currentWorkspaceId());
-        console.log(WorkspaceContext.workspaces);
-      }}>debug</button>
       <Sidebar setTab={(p, i) => { setCurrentView(p) }} />
       <div style="overflow:hidden;">
         <Switch fallback={<div>Loading...</div>}>
