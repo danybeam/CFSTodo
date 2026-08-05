@@ -84,10 +84,10 @@ function App() {
             </Show>
           </Match>
           <Match when={currentView() == PageView.WorkspaceBuilder}>
-            <WorkspaceBuilder onSaveCallback={(id: number) => {
+            <WorkspaceBuilder onSaveCallback={() => {
               batch(() => {
-                setCurrentView(PageView.Workspace);
-                setCurrentWorkspaceId(id);
+                setCurrentView(PageView.DefaultTaskList);
+                setCurrentWorkspaceId(-1);
               })
             }} />
           </Match>

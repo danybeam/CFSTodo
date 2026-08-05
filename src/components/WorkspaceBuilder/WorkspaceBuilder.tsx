@@ -10,7 +10,7 @@ type ANDStoreItems = {
 }
 
 type WorkspaceBuilderProps = {
-   onSaveCallback: (id: number) => void
+   onSaveCallback: () => void
 }
 
 function minMaxID(currentWorkspaces: Workspace[]) {
@@ -85,7 +85,7 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
                newWorkspace.filter_query = result;
                setWorkspace(newWorkspace);
                WorkspaceContext.addWorkspace(workspace());
-               props.onSaveCallback(workspace().id);
+               props.onSaveCallback();
             }}>
                Save
             </button>

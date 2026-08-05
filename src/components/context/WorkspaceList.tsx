@@ -28,7 +28,11 @@ function createGlobalWorkspaceList() {
         setWorkspaces([...workspaces, workspace])
     }
 
-    return { workspaces, batchAddWorkspaces, addWorkspace };
+    const batchDeleteWorkspaces = (list: number[]) => {
+        setWorkspaces(workspaces.filter((v) => !list.includes(v.id)));
+    }
+
+    return { workspaces, batchAddWorkspaces, addWorkspace, batchDeleteWorkspaces };
 }
 
 export default createRoot(createGlobalWorkspaceList);

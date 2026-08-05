@@ -427,3 +427,7 @@ button {
 button.small-padding {
   padding: 0.6em 0.6em;
 }
+
+button.selected {
+    background-color: #401919;
+}
