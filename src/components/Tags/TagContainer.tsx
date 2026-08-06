@@ -1,14 +1,21 @@
 import { For, Show } from "solid-js";
 
 type TagContainerProps = {
-    tags: string[],
+    tags: string[] | null | undefined,
+    showTitle?: boolean,
+    lighter?: boolean,
     removeTagCallback?: (tag: string) => void
 }
 
 export default function TagContainer(props: TagContainerProps) {
 
-    return <div class="framed tag-container">
-        <p style="margin-right:5px;">Tags:</p>
+    return <div
+        class="framed tag-container"
+        classList={{ lighter: props.lighter }}
+    >
+        <Show when={props.showTitle}>
+            <p style="margin-right:5px;">Tags:</p>
+        </Show>
         <For each={props.tags}>{
             (tag) => <div class="tag">
                 <p>

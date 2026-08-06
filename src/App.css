@@ -271,6 +271,10 @@
   padding-block: 10px;
 }
 
+.framed.tag-container.lighter {
+  background-color: #262626;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -512,4 +516,122 @@ button.selected {
 .task-extra-info {
   display: flex;
   flex-direction: column;
+}
+
+.task-info-sidebar {
+  /* Overwrite variables set above */
+  padding: 0px;
+  margin-block: 10px;
+  min-width: auto;
+
+  /* Make floating */
+  position: fixed;
+  right: 10px;
+  top: 0px;
+
+  /* Make correct size */
+  height: calc(100% - 20px);
+
+  /* Shared style */
+  display: flex;
+  flex-flow: column nowrap;
+
+  /* Not shared not transitioned style*/
+  overflow: hidden;
+  background-color: #0f0f0f;
+
+  /* Transition */
+  width: 0px;
+  transition: width 0.3s;
+
+}
+
+.task-info-sidebar.extended {
+  /* Not shared not transitioned style */
+  overflow: auto;
+  padding-inline: 10px;
+
+  /* Transition */
+  width: 33vw;
+  transition: width 0.3s;
+}
+
+.task-info-contents {
+  /* Sizing */
+  min-width: 10vw;
+  max-width: 87%;
+  width: 87%;
+
+  /* Color */
+  background-color: #262626;
+}
+
+.blocking-background {
+  /* Common traits */
+  position: fixed;
+  height: 100%;
+  right: 0px;
+  top: 0px;
+
+  /* Transitionable variables */
+  width: 0px;
+  background-color: #00000000;
+
+  /* Transition definition */
+  transition:
+    background-color 0.3s;
+}
+
+.blocking-background.extended {
+  /* Transitionable variables */
+  width: 100%;
+  background-color: #0f0f0f98;
+
+  /* Transition definition */
+  transition:
+    background-color 0.3s;
+}
+
+@keyframes gradient {
+  from {
+    background-position: 50%;
+  }
+
+  to {
+    background-position: 300% 0%;
+  }
+}
+
+.placeholder-block {
+  /* Sizing styling*/
+  width: 100%;
+  flex: 1;
+  margin: 0px;
+  margin-block: 5px;
+  border-radius: 25px;
+
+  /* Color styling*/
+  background: linear-gradient(90deg, #d3d3d300 0%, #d3d3d300 60%, hsla(240, 20%, 80%, 0.30) 75%, #d3d3d300 90%, #d3d3d300 100%);
+  animation: gradient 1s linear infinite;
+  background-size: 300%;
+}
+
+.placeholder-block.first {
+  margin-top: 10px;
+}
+
+.placeholder-block.last {
+  margin-bottom: 10px;
+}
+
+.placeholder-block.medium {
+  flex: 1.5;
+}
+
+.placeholder-block.medium-big {
+  flex: 2;
+}
+
+.placeholder-block.big {
+  flex: 3 0;
 }

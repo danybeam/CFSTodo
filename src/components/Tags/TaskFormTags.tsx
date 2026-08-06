@@ -14,6 +14,7 @@ export default function TaskFormTags(props: TaskFormTagsProps) {
         <div class="tag-form">
             <TagContainer
                 tags={props.tags}
+                showTitle={true}
                 removeTagCallback={props.removeTagCallback}
             />
             <form

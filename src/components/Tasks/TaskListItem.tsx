@@ -20,7 +20,6 @@ type TaskListItemProps = {
 export default function TaskListItem(props: TaskListItemProps) {
     const [extraMenu, setExtraMenu] = createSignal(false);
     const [showTimeModal, setShowTimeModal] = createSignal(false);
-    const [showExtraInfoModal, setShowExtraInfoModal] = createSignal(false);
     const [workedHours, setWorkedHours] = createSignal(0.0);
     const [shouldSuspend, setShouldSuspend] = createSignal(false);
 
@@ -75,7 +74,10 @@ export default function TaskListItem(props: TaskListItemProps) {
 
     let infoBtn = <button
         onClick={() => {
-            setShowExtraInfoModal(!showExtraInfoModal());
+            batch(() => {
+                TaskContext.setShowTaskInfo(true);
+                TaskContext.setTaskInfo(props.task);
+            })
         }}
     >
         ℹ️
@@ -138,18 +140,6 @@ export default function TaskListItem(props: TaskListItemProps) {
                             </div>
                         </Show>
                     </div>
-                </div>
-                <div
-                    class="foldable task-extra-info"
-                    classList={{
-                        extended: showExtraInfoModal(),
-                        framed: showExtraInfoModal()
-                    }}
-                >
-                    <p>Description goes here</p>
-                    <TagContainer
-                        tags={props.task.tags ?? []}
-                    />
                 </div>
             </div>
         </>

@@ -46,9 +46,15 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
 
 // Task list context definiton
 function createGlobalTaskList() {
+    // Public
     const [tasks, setTasks] = createStore<Task[]>([]);
+    const [taskInfo, setTaskInfo] = createSignal<Task>();
+    const [showTaskInfo, setShowTaskInfo] = createSignal(false);
+
+    // Private
     const [IdAllocator, setIdAllocator] = createSignal<IdAllocator>({} as IdAllocator);
 
+    // Public
     onMount(() => {
         SettingsContext.calculateNewTimeSlice(tasks);
     });
@@ -135,7 +141,11 @@ function createGlobalTaskList() {
         toggleTask,
         suspendResumeTask,
         rotateTask,
-        removeTask
+        removeTask,
+        taskInfo,
+        setTaskInfo,
+        showTaskInfo,
+        setShowTaskInfo
     };
 }
 

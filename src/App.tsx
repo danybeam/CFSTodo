@@ -14,6 +14,7 @@ import WorkspaceContext from "./components/context/WorkspaceList";
 import Sidebar from "./components/Sidebar";
 import WorkspaceBuilder from "./components/WorkspaceBuilder/WorkspaceBuilder";
 import WorkspaceViewer from "./components/WorkspaceViewer";
+import TaskInfoSidebar from "./components/TaskInfoSidebar";
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           setCurrentWorkspaceId(i);
         });
       }} />
+      <TaskInfoSidebar/>
       <div style="overflow:hidden;">
         <Switch fallback={<div>Loading...</div>}>
           <Match when={currentView() == PageView.DefaultTaskList}>
