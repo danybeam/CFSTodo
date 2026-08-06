@@ -45,6 +45,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
             batch(() => {
                 setTasks(props.taskList);
                 setFirstTask(props.taskList.at(0) as Task);
+                SettingsContext.calculateNewTimeSlice(props.taskList);
             })
             return;
         }
@@ -67,11 +68,11 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
         batch(() => {
             setTasks(newTasks);
             setFirstTask(newTasks.at(0) as Task);
+            SettingsContext.calculateNewTimeSlice(newTasks);
         })
     });
 
     // TODO_ Break down into more manageable chunks
-    // TODO! Break header into component and send task list to recalculate overburden
     return <>
         <div class="row">
             <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
