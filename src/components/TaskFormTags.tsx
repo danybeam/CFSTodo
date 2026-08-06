@@ -1,5 +1,5 @@
-// SolidJS imports
-import { For } from "solid-js";
+// App component imports
+import TagContainer from "./TagContainer";
 
 // Props type definition
 type TaskFormTagsProps = {
@@ -12,19 +12,10 @@ type TaskFormTagsProps = {
 export default function TaskFormTags(props: TaskFormTagsProps) {
     return (
         <div class="tag-form">
-            <div class="framed tag-container">
-                <For each={props.tags}>{
-                    (tag) => <div class="tag">
-                        <p>
-                            {tag}
-                        </p>
-                        <button class="fake-button" onclick={() => { props.removeTagCallback(tag); }}>
-                            X
-                        </button>
-                    </div>
-                }
-                </For>
-            </div>
+            <TagContainer
+                tags={props.tags}
+                removeTagCallback={props.removeTagCallback}
+            />
             <form
                 class="row"
                 style="justify-content: space-around;"

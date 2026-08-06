@@ -9,6 +9,7 @@ import TaskContext from "./context/GlobalTaskList";
 
 // App components imports
 import TimeEntry from "./TimeEntry";
+import TagContainer from "./TagContainer";
 
 // Prop type definiton
 type TaskListItemProps = {
@@ -146,7 +147,9 @@ export default function TaskListItem(props: TaskListItemProps) {
                     }}
                 >
                     <p>Description goes here</p>
-                    <p>Tags go here</p>
+                    <TagContainer
+                        tags={props.task.tags ?? []}
+                    />
                 </div>
             </div>
         </>
