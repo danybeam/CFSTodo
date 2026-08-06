@@ -71,7 +71,7 @@ function createGlobalTaskList() {
             setTasks([...newTasks]);
             sortTasks(tasks, setTasks);
             SettingsContext.calculateNewTimeSlice(tasks);
-            setIdAllocator(createIdAllocator([...newTasks].map((v) => v.id).sort()));
+            setIdAllocator(createIdAllocator([...newTasks].map((v) => v.id)));
         });
     }
 
@@ -125,7 +125,6 @@ function createGlobalTaskList() {
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
             freeId(IdAllocator(), id);
-            console.log(IdAllocator());
         })
     }
 

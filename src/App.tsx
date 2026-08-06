@@ -24,7 +24,9 @@ function App() {
 
   onMount(async () => {
     setHasLoaded(false);
-    TaskContext.batchAddTasks(await commands.loadTasks());
+    let tasks = await commands.loadTasks();
+    tasks.sort((l, r) => l.id - r.id);
+    TaskContext.batchAddTasks(tasks);
     WorkspaceContext.batchAddWorkspaces(await commands.loadWorkspaces());
     await setTimeout(() => { setHasLoaded(true); }, 100);
   })

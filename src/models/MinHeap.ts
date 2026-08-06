@@ -18,7 +18,6 @@ export class MinHeap {
             while (currentIndex > 0 && this.heap[Math.floor(currentIndex / 2)] > this.heap[currentIndex]) {
                 this.swapIndex(Math.floor(currentIndex / 2), currentIndex)
                 currentIndex = Math.floor(currentIndex / 2)
-                console.log(this.heap);
             }
         }
     }
