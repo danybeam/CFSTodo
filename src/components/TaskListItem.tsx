@@ -86,7 +86,7 @@ export default function TaskListItem(props: TaskListItemProps) {
             <Show when={showTimeModal()}>
                 <TimeEntry timeEntryCallback={setWorkedHours} requestSuspendCallback={setShouldSuspend} />
             </Show>
-            <div style="display:flex; flex-direction:column;">
+            <div class="task-container">
                 <div class="padded row">
                     <div class="framed row">
                         <span style={`margin-right: 20px; ${props.task.completed ? "text-decoration: line-through;" : ""}`}>
@@ -139,9 +139,11 @@ export default function TaskListItem(props: TaskListItemProps) {
                     </div>
                 </div>
                 <div
-                    class="foldable"
-                    classList={{ extended: showExtraInfoModal() }}
-                    style="display:flex;flex-direction:column"
+                    class="foldable task-extra-info"
+                    classList={{
+                        extended: showExtraInfoModal(),
+                        framed: showExtraInfoModal()
+                    }}
                 >
                     <p>Description goes here</p>
                     <p>Tags go here</p>
