@@ -3,10 +3,10 @@ import { batch } from "solid-js";
 import { createStore } from "solid-js/store";
 
 // App context imports
-import TaskContext from "./context/GlobalTaskList";
+import TaskContext from "../context/GlobalTaskList";
 
 // App components imports
-import TaskFormTags from "./TaskFormTags";
+import TaskFormTags from "../Tags/TaskFormTags";
 
 type TaskFormProps = {
     onSubmitCallback: () => void

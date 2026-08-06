@@ -17,9 +17,9 @@ import { Task, Workspace } from "../models/bindings";
 import SettingsContext from "../components/context/AppSettings";
 
 // App Component imports
-import CurrentTask from "./CurrentTask";
-import TaskForm from "./TaskForm";
-import TaskList from "./TaskList";
+import CurrentTask from "./Tasks/CurrentTask";
+import TaskForm from "./Tasks/TaskForm";
+import TaskList from "./Tasks/TaskList";
 
 // Props type definition
 type WorkspaceViewerProps = {

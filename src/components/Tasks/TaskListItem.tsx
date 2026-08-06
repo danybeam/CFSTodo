@@ -2,14 +2,14 @@
 import { batch, createEffect, createSignal, Show } from "solid-js";
 
 // General App imports
-import { Task } from "../models/bindings";
+import { Task } from "../../models/bindings";
 
 // App context imports
-import TaskContext from "./context/GlobalTaskList";
+import TaskContext from "../context/GlobalTaskList";
 
 // App components imports
-import TimeEntry from "./TimeEntry";
-import TagContainer from "./TagContainer";
+import TimeEntry from "../TimeEntry";
+import TagContainer from "../Tags/TagContainer";
 
 // Prop type definiton
 type TaskListItemProps = {

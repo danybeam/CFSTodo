@@ -2,7 +2,7 @@
 import { batch, createEffect, createSignal, Show } from "solid-js";
 
 // General App imports
-import { Task } from "../models/bindings";
+import { Task } from "../../models/bindings";
 
 // App component imports
 import TaskListItem from "./TaskListItem";
