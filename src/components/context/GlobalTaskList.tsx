@@ -1,12 +1,13 @@
 // SolidJS imports
-import { batch, createRoot, onMount } from "solid-js";
+import { batch, createRoot, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 
 // General App imports
 import { Task } from "../../models/bindings";
+import { allocateId, createIdAllocator, freeId, IdAllocator } from "./IdAllocator";
 
 // App context imports
-import SettingsContext from "./AppSettings"
+import SettingsContext from "./AppSettings";
 
 // Comparison function for tasks
 function compareTasks(left: Task, right: Task) {
@@ -42,9 +43,11 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     }));
 }
 
+
 // Task list context definiton
 function createGlobalTaskList() {
     const [tasks, setTasks] = createStore<Task[]>([]);
+    const [IdAllocator, setIdAllocator] = createSignal<IdAllocator>({} as IdAllocator);
 
     onMount(() => {
         SettingsContext.calculateNewTimeSlice(tasks);
@@ -52,7 +55,8 @@ function createGlobalTaskList() {
 
     const addTask = (text: string, priority: number, tags: string[]) => {
         batch(() => {
-            setTasks([...tasks, { id: tasks.length, text: text, completed: false, is_suspended: false, vruntime: 0.0, priority: priority, tags: tags }]);
+            const newId = allocateId(IdAllocator());
+            setTasks([...tasks, { id: newId, text: text, completed: false, is_suspended: false, vruntime: 0.0, priority: priority, tags: tags }]);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
         })
@@ -63,9 +67,12 @@ function createGlobalTaskList() {
         let newTasks = new Set<Task>();
         tasks.forEach(newTasks.add, newTasks);
         list.forEach(newTasks.add, newTasks);
-        setTasks([...newTasks]);
-        sortTasks(tasks, setTasks);
-        SettingsContext.calculateNewTimeSlice(tasks);
+        batch(() => {
+            setTasks([...newTasks]);
+            sortTasks(tasks, setTasks);
+            SettingsContext.calculateNewTimeSlice(tasks);
+            setIdAllocator(createIdAllocator([...newTasks].map((v) => v.id).sort()));
+        });
     }
 
     const toggleTask = (id: number) => {
@@ -117,6 +124,8 @@ function createGlobalTaskList() {
             setTasks(tasks.filter((task) => task.id !== id));
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
+            freeId(IdAllocator(), id);
+            console.log(IdAllocator());
         })
     }
 
