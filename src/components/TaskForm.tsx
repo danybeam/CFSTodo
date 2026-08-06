@@ -6,7 +6,7 @@ import { createStore } from "solid-js/store";
 import TaskContext from "./context/GlobalTaskList";
 
 // App components imports
-import TaskFormTags from "./TaskFromTags";
+import TaskFormTags from "./TaskFormTags";
 
 type TaskFormProps = {
     onSubmitCallback: () => void
