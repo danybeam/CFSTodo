@@ -18,7 +18,8 @@ type TaskListItemProps = {
 
 export default function TaskListItem(props: TaskListItemProps) {
     const [extraMenu, setExtraMenu] = createSignal(false);
-    const [showModal, setShowModal] = createSignal(false);
+    const [showTimeModal, setShowTimeModal] = createSignal(false);
+    const [showExtraInfoModal, setShowExtraInfoModal] = createSignal(false);
     const [workedHours, setWorkedHours] = createSignal(0.0);
     const [shouldSuspend, setShouldSuspend] = createSignal(false);
 
@@ -34,21 +35,21 @@ export default function TaskListItem(props: TaskListItemProps) {
                 setShouldSuspend(false);
             }
 
-            setShowModal(false);
+            setShowTimeModal(false);
         })
     });
 
 
     let rotateBtn = <button
         onClick={() => {
-            setShowModal(true);
+            setShowTimeModal(!showTimeModal());
         }}
     >
         🔄️
     </button >;
     let suspreemptBtn = <button
         onClick={() => {
-            setShowModal(false);
+            setShowTimeModal(false);
             setShouldSuspend(true);
         }}
     >
@@ -56,7 +57,7 @@ export default function TaskListItem(props: TaskListItemProps) {
     </button>;
     let completeBtn = <button
         onClick={() => {
-            setShowModal(false);
+            setShowTimeModal(false);
             TaskContext.toggleTask(props.task.id);
         }}
     >
@@ -64,69 +65,86 @@ export default function TaskListItem(props: TaskListItemProps) {
     </button>;
     let deleteBtn = <button
         onClick={() => {
-            setShowModal(false)
+            setShowTimeModal(false)
             TaskContext.removeTask(props.task.id);
         }}
     >
         ❌
     </button>;
 
-    // TODO_ Implement later if/when I add additional details to tasks
-    // let infoBtn =  <button>ℹ️</button>;
+    let infoBtn = <button
+        onClick={() => {
+            setShowExtraInfoModal(!showExtraInfoModal());
+        }}
+    >
+        ℹ️
+    </button>;
 
     // TODO_ Simplify component to make more easy to read
     return (
         <>
-            <Show when={showModal()}>
+            <Show when={showTimeModal()}>
                 <TimeEntry timeEntryCallback={setWorkedHours} requestSuspendCallback={setShouldSuspend} />
             </Show>
-            <div class="padded row">
-                <div class="framed row">
-                    <span style={`margin-right: 20px; ${props.task.completed ? "text-decoration: line-through;" : ""}`}>
-                        {
-                            props.task.text + " " +
-                            props.task.completed + " " +
-                            props.task.isSuspended + " " +
-                            props.task.vruntime.toFixed(0) + " " +
-                            props.task.priority
-                        }
-                    </span>
+            <div style="display:flex; flex-direction:column;">
+                <div class="padded row">
+                    <div class="framed row">
+                        <span style={`margin-right: 20px; ${props.task.completed ? "text-decoration: line-through;" : ""}`}>
+                            {
+                                props.task.text + " " +
+                                props.task.completed + " " +
+                                props.task.isSuspended + " " +
+                                props.task.vruntime.toFixed(0) + " " +
+                                props.task.priority
+                            }
+                        </span>
 
-                    <Show
-                        when={props.isCurrentTask}
-                        fallback={
-                            <div class="static-button-group">
-                                <Show when={!props.task.completed}>
-                                    {suspreemptBtn}
-                                </Show>
-                                {completeBtn}
-                                {deleteBtn}
-                            </div>
-                        }
-                    >
-                        <div class="button-container">
-                            <div class="button-slider" classList={{ secondary: extraMenu() }}>
-                                <div class="button-group">
+                        <Show
+                            when={props.isCurrentTask}
+                            fallback={
+                                <div class="static-button-group">
+                                    <Show when={!props.task.completed}>
+                                        {suspreemptBtn}
+                                    </Show>
+                                    {infoBtn}
                                     {completeBtn}
-                                    {rotateBtn}
-                                    <button
-                                        onClick={() => setExtraMenu(!extraMenu())}
-                                    >
-                                        {extraMenu() ? "🔙" : "↪️"}
-                                    </button>
-                                </div>
-                                <div class="button-group">
-                                    {suspreemptBtn}
                                     {deleteBtn}
-                                    <button
-                                        onClick={() => setExtraMenu(!extraMenu())}
-                                    >
-                                        {extraMenu() ? "🔙" : "↪️"}
-                                    </button>
+                                </div>
+                            }
+                        >
+                            <div class="button-container">
+                                <div class="button-slider" classList={{ secondary: extraMenu() }}>
+                                    <div class="button-group">
+                                        {completeBtn}
+                                        {rotateBtn}
+                                        {infoBtn}
+                                        <button
+                                            onClick={() => setExtraMenu(!extraMenu())}
+                                        >
+                                            {extraMenu() ? "🔙" : "↪️"}
+                                        </button>
+                                    </div>
+                                    <div class="button-group">
+                                        {suspreemptBtn}
+                                        {deleteBtn}
+                                        <button
+                                            onClick={() => setExtraMenu(!extraMenu())}
+                                        >
+                                            {extraMenu() ? "🔙" : "↪️"}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Show>
+                        </Show>
+                    </div>
+                </div>
+                <div
+                    class="foldable"
+                    classList={{ extended: showExtraInfoModal() }}
+                    style="display:flex;flex-direction:column"
+                >
+                    <p>Description goes here</p>
+                    <p>Tags go here</p>
                 </div>
             </div>
         </>

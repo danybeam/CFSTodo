@@ -487,5 +487,18 @@ button.selected {
   height: calc-size(var(--task-form-height-folded), size);
   min-height: calc-size(var(--task-form-height-folded), size);
   overflow: hidden;
-  transition: height 0.5s, min-height 0.5s;
+  transition:
+    height 0.5s,
+    min-height 0.5s;
+}
+
+.foldable {
+  height: 0px;
+  overflow: hidden;
+  transition: height 0.2s;
+}
+
+.foldable.extended {
+  height: calc-size(fit-content, size);
+  transition: height 0.2s;
 }
