@@ -14,8 +14,8 @@ function compareTasks(left: Task, right: Task) {
     if (left.completed !== right.completed) {
         return left.completed ? 1 : -1;
     }
-    if (left.is_suspended !== right.is_suspended) {
-        return left.is_suspended ? 1 : -1;
+    if (left.isSuspended !== right.isSuspended) {
+        return left.isSuspended ? 1 : -1;
     }
     if (left.vruntime !== right.vruntime) {
         return left.vruntime - right.vruntime;
@@ -35,7 +35,7 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     let topRuntime = copyList[0]?.vruntime ?? 0;
 
     setterFunction(copyList.map(item => {
-        if (item.is_suspended || item.completed) {
+        if (item.isSuspended || item.completed) {
             return item;
         }
 
@@ -53,12 +53,13 @@ function createGlobalTaskList() {
         SettingsContext.calculateNewTimeSlice(tasks);
     });
 
-    const addTask = (text: string, priority: number, tags: string[]) => {
+    const addTask = (text: string, extendedText: string, priority: number, tags: string[]) => {
         batch(() => {
             const newId = allocateId(IdAllocator());
-            setTasks([...tasks, { id: newId, text: text, completed: false, is_suspended: false, vruntime: 0.0, priority: priority, tags: tags }]);
+            setTasks([...tasks, { id: newId, text: text, extendedText: extendedText, completed: false, isSuspended: false, vruntime: 0.0, priority: priority, tags: tags }]);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
+            console.log(tasks)
         })
 
     }
@@ -91,8 +92,8 @@ function createGlobalTaskList() {
         batch(() => {
             setTasks(
                 (task) => task.id === id,
-                "is_suspended",
-                is_suspended => !forceResume && !is_suspended
+                "isSuspended",
+                isSuspended => !forceResume && !isSuspended
             )
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);

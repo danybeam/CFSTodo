@@ -43,8 +43,8 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
    const [workspace, setWorkspace] = createSignal<Workspace>({
       id: WorkspaceContext.workspaces[WorkspaceContext.workspaces.length - 1]?.id ?? -1 + 1,
       name: "",
-      icon_id: null,
-      filter_query: "",
+      iconId: null,
+      filterQuery: "",
    });
 
 
@@ -53,8 +53,8 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
       setWorkspace({
          id: minMaxID(WorkspaceContext.workspaces),
          name: "",
-         icon_id: null,
-         filter_query: "",
+         iconId: null,
+         filterQuery: "",
       });
    });
 
@@ -97,7 +97,7 @@ export default function WorkspaceBuilder(props: WorkspaceBuilderProps) {
                }
 
                let newWorkspace = workspace();
-               newWorkspace.filter_query = result;
+               newWorkspace.filterQuery = result;
                setWorkspace(newWorkspace);
                WorkspaceContext.addWorkspace(workspace());
                props.onSaveCallback();

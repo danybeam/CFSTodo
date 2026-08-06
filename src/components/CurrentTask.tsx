@@ -28,7 +28,7 @@ export default function CurrentTask(props: CurrentTaskProps) {
         // TODO_ Are all these null checks necessary anymore?
         let isValidId = (props.firstTask?.id ?? -1) >= 0;
         let isTaskCompleted = (props.firstTask?.completed ?? true);
-        let isTaskSuspended = (props.firstTask?.is_suspended ?? true);
+        let isTaskSuspended = (props.firstTask?.isSuspended ?? true);
 
         setIsValidId(isValidId)
         setIsValidTask(!isTaskCompleted && !isTaskSuspended)

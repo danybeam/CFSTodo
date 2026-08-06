@@ -50,7 +50,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
             return;
         }
 
-        const chars = CharStreams.fromString(props.workspace?.filter_query ?? "any(is impossible)");
+        const chars = CharStreams.fromString(props.workspace?.filterQuery ?? "any(is impossible)");
         const lexer = new TagWranglerLexer(chars);
         const tokens = new CommonTokenStream(lexer);
         let parser = new TagWranglerParser(tokens);
@@ -91,7 +91,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
             <div style="align-self:flex-start;">
                 <h1 style={`margin-bottom:${halfGap}px; text-align:left;`}>{props.workspace?.name ?? "All tasks"}</h1>
                 <p style={`margin-top:${halfGap}px; color:#6969697F; text-align:left;`}>{
-                    props.workspace?.filter_query == undefined ? "" : "Filter: " + props.workspace.filter_query
+                    props.workspace?.filterQuery == undefined ? "" : "Filter: " + props.workspace.filterQuery
                 }
                 </p>
             </div>

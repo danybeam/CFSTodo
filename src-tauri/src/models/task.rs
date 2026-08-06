@@ -2,9 +2,11 @@ use serde::{Deserialize, Serialize};
 use specta::Type;
 
 #[derive(Serialize, Deserialize, Type, Debug, Clone, PartialEq)]
+#[serde(rename_all="camelCase")]
 pub struct Task {
     id: u32,
     text: String,
+    extended_text: String,
     completed: bool,
     is_suspended: bool,
     vruntime: u32,

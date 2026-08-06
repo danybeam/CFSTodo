@@ -31,7 +31,7 @@ function createSettings() {
     const [isOverburdened, setIsOverburdened] = createSignal(false);
 
     const calculateNewTimeSlice = (list: Task[]) => {
-        let filteredList = list.filter((item) => !item.completed && !item.is_suspended);
+        let filteredList = list.filter((item) => !item.completed && !item.isSuspended);
         let candidateTimeSlice = globalThis.AppSettings.availableHours / Math.max(filteredList.length, 1.0);
 
         let timeSlice = Math.max(candidateTimeSlice, globalThis.AppSettings.minimumScheduleSlice);

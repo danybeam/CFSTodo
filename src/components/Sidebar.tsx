@@ -18,8 +18,8 @@ type SidebarProps = {
 
 // TODO_ update workspace.id to take an emoji instead of the id for an icon
 function getEmojiOrShortName(w: Workspace) {
-    if (w.icon_id) {
-        return w.icon_id;
+    if (w.iconId) {
+        return w.iconId;
     }
 
     let parts = w.name.split(/[ _-]/);

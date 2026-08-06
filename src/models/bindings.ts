@@ -14,8 +14,9 @@ export const commands = {
 export type Task = {
 	id: number,
 	text: string,
+	extendedText: string,
 	completed: boolean,
-	is_suspended: boolean,
+	isSuspended: boolean,
 	vruntime: number,
 	priority: number,
 	tags: string[] | null,
@@ -24,7 +25,7 @@ export type Task = {
 export type Workspace = {
 	id: number,
 	name: string,
-	icon_id: string | null,
-	filter_query: string,
+	iconId: string | null,
+	filterQuery: string,
 };
 

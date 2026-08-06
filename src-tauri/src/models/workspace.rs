@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use specta::Type;
 
 #[derive(Serialize, Deserialize, Type, Debug, Clone, PartialEq)]
+#[serde(rename_all="camelCase")]
 pub struct Workspace {
     id: u32,
     name: String,
