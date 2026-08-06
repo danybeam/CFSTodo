@@ -23,11 +23,11 @@ function TaskForm(props: TaskFormProps) {
     return (
         <div style="display: flex;flex-flow:column nowrap;">
             <form
-                class="row"
                 onSubmit={(e) => {
                     e.preventDefault();
                     let form = new FormData(e.currentTarget);
-                    let text = form.get("input")?.toString();
+                    let text = form.get("input")?.toString() ?? "";
+                    let extendedText = form.get("extended-input")?.toString() ?? "";
                     let priority: number = Number(form.get("priority-input") ?? 0.0);
                     e.currentTarget.reset();
 
@@ -40,33 +40,44 @@ function TaskForm(props: TaskFormProps) {
                     }
 
                     batch(() => {
-                        addTask(text, priority, [...tags]);
+                        addTask(text, extendedText, priority, [...tags]);
                         setTags([]);
                         tags_set.clear();
                         props.onSubmitCallback();
                     });
                 }}
             >
-                <div class="large form-with-title" >
-                    <p>Task</p>
-                    <input
-                        id="task-input"
-                        name="input"
-                        placeholder="Enter a task..."
-                    />
+                <div class="row">
+                    <div class="large form-with-title" >
+                        <p>Task</p>
+                        <input
+                            id="task-input"
+                            name="input"
+                            placeholder="Enter a task..."
+                        />
+                    </div>
+                    <div class="medium form-with-title">
+                        <p>Priority</p>
+                        <input
+                            id="priority-input"
+                            name="priority-input"
+                            type="number"
+                            value="10"
+                            min="0"
+                            max="500"
+                        />
+                    </div>
+                    <button type="submit" style="height: fit-content; align-self:flex-end;">Add</button>
                 </div>
-                <div class="medium form-with-title">
-                    <p>Priority</p>
-                    <input
-                        id="priority-input"
-                        name="priority-input"
-                        type="number"
-                        value="10"
-                        min="0"
-                        max="500"
-                    />
-                </div>
-                <button type="submit" style="height: fit-content; align-self:flex-end;">Add</button>
+                <div style="height:10px;"/>
+                <textarea
+                    id="task-extended-text"
+                    name="extended-input"
+                    placeholder="Task description"
+                    rows="4"
+                    cols="110"
+                    wrap="soft"
+                />
             </form>
             <TaskFormTags
                 tags={tags}
