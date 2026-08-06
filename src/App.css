@@ -264,7 +264,9 @@
   flex-flow: row wrap;
   align-items: center;
   align-self: center;
-  min-width: 88vw;
+  min-width: 10vw;
+  max-width: 88vw;
+  width: 90%;
   min-height: 40px;
   padding-inline: 10px;
   padding-block: 10px;
@@ -320,6 +322,9 @@ textarea {
 
 textarea {
   resize: none;
+  min-width: 10vw;
+  max-width: 80vw;
+  width:90%;
 }
 
 @media (prefers-color-scheme: dark) {
