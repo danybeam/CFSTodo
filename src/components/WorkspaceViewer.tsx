@@ -1,5 +1,5 @@
 // Antlr imports
-import { BailErrorStrategy, CharStreams, CommonTokenStream } from 'antlr4';
+import { CharStreams, CommonTokenStream } from 'antlr4';
 import TagWranglerLexer from '../models/.antlr/TagWranglerLexer';
 import TagWranglerParser from '../models/.antlr/TagWranglerParser';
 

@@ -27,7 +27,6 @@ function createSettings() {
 
     const [calculatedTimeSlice, setCalculatedTimeSlice] = createSignal(0);
 
-    // TODO! Change into dynamically calculated function
     const [isOverburdened, setIsOverburdened] = createSignal(false);
 
     const calculateNewTimeSlice = (list: Task[]) => {
