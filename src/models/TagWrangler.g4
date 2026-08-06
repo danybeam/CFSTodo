@@ -6,7 +6,7 @@ unary: (ANY | ALL) LPAREN innerUnary RPAREN;
 innerUnary: NOT? OPCODE INPUT;
 
 binary: innerBinary | LPAREN innerBinary RPAREN;
-innerBinary: unary (AND | OR) unary;
+innerBinary: unary ((AND | OR) unary)*;
 
 OPCODE: 'has' | 'is' | 'startsWith';
 
@@ -18,5 +18,5 @@ RPAREN: ')';
 ANY: 'any';
 ALL: 'all';
 
-INPUT: [a-zA-Z_]+;
+INPUT: [a-zA-Z0-9_\-/]+;
 WS: [ \t\r\n]+ -> skip;

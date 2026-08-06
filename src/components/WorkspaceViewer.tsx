@@ -50,12 +50,12 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
             return;
         }
 
-        const chars = CharStreams.fromString(props.workspace?.filterQuery ?? "any(is impossible)");
+        const chars = CharStreams.fromString(props.workspace?.filterQuery);
         const lexer = new TagWranglerLexer(chars);
         const tokens = new CommonTokenStream(lexer);
         let parser = new TagWranglerParser(tokens);
-        parser.removeErrorListeners();
-        parser._errHandler = new BailErrorStrategy();
+        // parser.removeErrorListeners();
+        //parser._errHandler = new BailErrorStrategy();
 
         const tree = parser.expr();
         const visitor = new TagVisitor();

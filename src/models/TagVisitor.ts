@@ -51,11 +51,25 @@ export class TagVisitor extends TagWranglerVisitor<boolean> {
     };
 
     visitInnerBinary = (ctx: InnerBinaryContext) => {
-        if (ctx.OR()) {
-            return this.visitUnary(ctx.unary(0)) || this.visitUnary(ctx.unary(1));
-        }
 
-        return this.visitUnary(ctx.unary(0)) && this.visitUnary(ctx.unary(1));
+        let left = false;
+        let unaryCounter = 0;
+        left = this.visitUnary(ctx.unary(unaryCounter++));
+
+        for (let op = 1, input = 2; op < ctx.getChildCount() && input < ctx.getChildCount(); (op += 2, input += 2)) {
+            let isOR = ctx.getChild(op).getText() == "or";
+            // if isOR && left || !isOR && !left
+            if (isOR == left) {
+                break;
+            }
+
+            if (isOR) {
+                left = left || this.visitUnary(ctx.unary(unaryCounter++));
+            } else {
+                left = left && this.visitUnary(ctx.unary(unaryCounter++));
+            }
+        }
+        return left;
     };
 
 
