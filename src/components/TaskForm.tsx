@@ -74,6 +74,7 @@ function TaskForm(props: TaskFormProps) {
                     id="task-extended-text"
                     name="extended-input"
                     placeholder="Task description"
+                    rows="4"
                     wrap="soft"
                 />
             </form>

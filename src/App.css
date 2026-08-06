@@ -13,7 +13,6 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --task-form-height: 338px;
   --task-form-height-folded: 10px;
 }
 
@@ -324,7 +323,7 @@ textarea {
   resize: none;
   min-width: 10vw;
   max-width: 80vw;
-  width:90%;
+  width: 90%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -478,13 +477,12 @@ button.selected {
   }
 
   to {
-    height: var(--task-form-height);
-    min-height: var(--task-form-height);
+    height: calc-size(fit-content, size);
+    min-height: calc-size(fit-content, size);
   }
 }
 
 .task-form-container {
-  min-height: var(--task-form-height);
   height: fit-content;
   overflow: hidden;
   animation-name: task-form-containerUnfoldAnimation;
