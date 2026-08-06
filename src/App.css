@@ -458,18 +458,11 @@ button.selected {
   background-color: #401919;
 }
 
-@keyframes task-form-containerFoldAnimation {
-  from {
-    height: calc-size(fit-content, size);
-    min-height: calc-size(fit-content, size);
-  }
-
-  to {
-    height: var(--task-form-height-folded);
-    min-height: var(--task-form-height-folded);
-  }
-}
-
+/*
+  Unfold is needed because the task-form container 
+  starts existing with its values already set up
+  TODO_ Simplify animations and get rid of unnecessary Show components in tsxs
+*/
 @keyframes task-form-containerUnfoldAnimation {
   from {
     height: var(--task-form-height-folded);
@@ -483,16 +476,16 @@ button.selected {
 }
 
 .task-form-container {
-  height: fit-content;
+  height: calc-size(fit-content, size);
   overflow: hidden;
+  transition: height 0.5s;
   animation-name: task-form-containerUnfoldAnimation;
   animation-duration: 0.5s;
 }
 
 .task-form-container.hidden {
-  height: var(--task-form-height-folded);
-  min-height: var(--task-form-height-folded);
+  height: calc-size(var(--task-form-height-folded), size);
+  min-height: calc-size(var(--task-form-height-folded), size);
   overflow: hidden;
-  animation-name: task-form-containerFoldAnimation;
-  animation-duration: 0.5s;
+  transition: height 0.5s, min-height 0.5s;
 }
