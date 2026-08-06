@@ -74,27 +74,32 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
 
     // TODO_ Break down into more manageable chunks
     return <>
-        <div class="row">
-            <div class="time-slice" classList={{ overburdened: SettingsContext.isOverburdened() }}>
+        <div class="row"
+            style="justify-content:flex-start">
+            <div
+                class="time-slice"
+                classList={{ overburdened: SettingsContext.isOverburdened() }}
+            >
                 {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
             </div>
+            <div style="width: 10px" />
             <button
                 onClick={toggleTaskForm}
             >
                 {addTaskMode() ? "Cancel" : "Add Task"}
             </button>
         </div>
+        <div style="align-self:flex-start;">
+            <h1 style={`margin-bottom:${halfGap}px; text-align:left;`}>{props.workspace?.name ?? "All tasks"}</h1>
+            <p style={`margin-top:${halfGap}px; color:#6969697F; text-align:left;`}>{
+                props.workspace?.filterQuery == undefined ? "" : "Filter: " + props.workspace.filterQuery
+            }
+            </p>
+        </div>
         <Show when={!addTaskMode()}>
             <div style="margin:10px;" />
         </Show>
         <div class="container" style="padding-top: 0px;">
-            <div style="align-self:flex-start;">
-                <h1 style={`margin-bottom:${halfGap}px; text-align:left;`}>{props.workspace?.name ?? "All tasks"}</h1>
-                <p style={`margin-top:${halfGap}px; color:#6969697F; text-align:left;`}>{
-                    props.workspace?.filterQuery == undefined ? "" : "Filter: " + props.workspace.filterQuery
-                }
-                </p>
-            </div>
             <Show when={addTaskMode()}>
                 <div class="task-form-container" classList={{ hidden: hideTaskForm() }}>
                     <TaskForm onSubmitCallback={toggleTaskForm} />

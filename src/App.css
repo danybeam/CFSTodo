@@ -12,6 +12,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --task-form-height: 338px;
+  --task-form-height-folded: 10px;
 }
 
 .container {
@@ -34,6 +37,8 @@
   width: fit-content;
   min-width: 290px;
   padding: 10px;
+  padding-inline: 20px;
+  border-radius: 20px;
 }
 
 .spaced>* {
@@ -85,8 +90,10 @@
 .time-slice {
   background-color: #0f0f0f98;
   width: fit-content;
-  min-width: 290px;
+  min-width: 300px;
   padding: 10px;
+  padding-inline: 20px;
+  border-radius: 20px;
 }
 
 .time-slice.overburdened {
@@ -254,9 +261,10 @@
 
 .framed.tag-container {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   align-items: center;
-  min-width: 97vw;
+  align-self: center;
+  min-width: 88vw;
   min-height: 40px;
   padding-inline: 10px;
   padding-block: 10px;
@@ -310,7 +318,7 @@ textarea {
   outline: none;
 }
 
-textarea{
+textarea {
   resize: none;
 }
 
@@ -448,33 +456,39 @@ button.selected {
 
 @keyframes task-form-containerFoldAnimation {
   from {
-    height: 230px;
+    height: calc-size(fit-content, size);
+    min-height: calc-size(fit-content, size);
   }
 
   to {
-    height: 10px;
+    height: var(--task-form-height-folded);
+    min-height: var(--task-form-height-folded);
   }
 }
 
 @keyframes task-form-containerUnfoldAnimation {
   from {
-    height: 0px;
+    height: var(--task-form-height-folded);
+    min-height: var(--task-form-height-folded);
   }
 
   to {
-    height: 230px;
+    height: var(--task-form-height);
+    min-height: var(--task-form-height);
   }
 }
 
 .task-form-container {
-  height: 230px;
+  min-height: var(--task-form-height);
+  height: fit-content;
   overflow: hidden;
   animation-name: task-form-containerUnfoldAnimation;
   animation-duration: 0.5s;
 }
 
 .task-form-container.hidden {
-  height: 10px;
+  height: var(--task-form-height-folded);
+  min-height: var(--task-form-height-folded);
   overflow: hidden;
   animation-name: task-form-containerFoldAnimation;
   animation-duration: 0.5s;
