@@ -17,6 +17,11 @@ export function getWeight(nice: number) {
     return Math.floor(1024 / Math.pow(1.25, nice - 20));
 }
 
+// Function for calculating vruntime
+function calculateRuntime(realRuntime: number, taskWeight: number, previousRuntime: number) {
+    return previousRuntime + (realRuntime * (taskWeight / MiddleWeight));
+}
+
 // Comparison function for tasks
 function compareTasks(left: Task, right: Task) {
     if (left.completed !== right.completed) {
@@ -108,8 +113,6 @@ function createGlobalTaskList() {
                 newTasksForAllocator.sort(compareTasksById);
             }
 
-            console.log(newTasksForAllocator);
-
             setIdAllocator(createIdAllocator([...newTasksForAllocator].map((v) => v.id)));
         });
     }
@@ -151,7 +154,7 @@ function createGlobalTaskList() {
             setTasks(
                 (task) => task.id === id,
                 "vruntime",
-                vruntime => vruntime + Math.max(runtime * runtimeMultiplier, globalThis.AppSettings.minimumRotationCost)
+                vruntime => calculateRuntime(runtime, task.weight!, vruntime)
             )
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
