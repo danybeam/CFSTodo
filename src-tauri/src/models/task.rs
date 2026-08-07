@@ -9,7 +9,7 @@ pub struct Task {
     extended_text: String,
     completed: bool,
     is_suspended: bool,
-    vruntime: u32,
+    vruntime: f64,
     priority: u32,
     weight: Option<u32>,
     tags: Option<Vec<String>>,

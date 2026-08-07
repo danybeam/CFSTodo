@@ -9,7 +9,6 @@ import TaskContext from "../context/GlobalTaskList";
 
 // App components imports
 import TimeEntry from "../TimeEntry";
-import TagContainer from "../Tags/TagContainer";
 
 // Prop type definiton
 type TaskListItemProps = {
@@ -97,8 +96,8 @@ export default function TaskListItem(props: TaskListItemProps) {
                                 props.task.text + " " +
                                 props.task.completed + " " +
                                 props.task.isSuspended + " " +
-                                props.task.vruntime.toFixed(0) + " " +
-                                props.task.priority
+                                props.task.vruntime!.toFixed(0) + " " +
+                                props.task.weight
                             }
                         </span>
 

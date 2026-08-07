@@ -17,7 +17,7 @@ export type Task = {
 	extendedText: string,
 	completed: boolean,
 	isSuspended: boolean,
-	vruntime: number,
+	vruntime: number | null,
 	priority: number,
 	weight: number | null,
 	tags: string[] | null,

@@ -14,12 +14,13 @@ export const MiddleWeight = getWeight(20);
 
 // Function for calculating weights
 export function getWeight(nice: number) {
-    return Math.floor(1024 / Math.pow(1.25, nice - 20));
+    return Math.floor(1024 / Math.pow(1.25, 20 - nice));
 }
 
 // Function for calculating vruntime
 function calculateRuntime(realRuntime: number, taskWeight: number, previousRuntime: number) {
-    return previousRuntime + (realRuntime * (taskWeight / MiddleWeight));
+    let result = previousRuntime + (realRuntime * (taskWeight / MiddleWeight));
+    return result;
 }
 
 // Comparison function for tasks
@@ -31,7 +32,7 @@ function compareTasks(left: Task, right: Task) {
         return left.isSuspended ? 1 : -1;
     }
     if (left.vruntime !== right.vruntime) {
-        return left.vruntime - right.vruntime;
+        return left.vruntime! - right.vruntime!;
     }
     if (left.priority !== right.priority) {
         return left.priority - right.priority;
@@ -51,12 +52,17 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
 
     let topRuntime = copyList[0]?.vruntime ?? 0;
 
+    console.log("sort Tasks");
+    console.log(topRuntime);
+    console.log(copyList);
+    console.log(copyList[0].vruntime);
+
     setterFunction(copyList.map(item => {
         if (item.isSuspended || item.completed) {
             return item;
         }
 
-        return { ...item, vruntime: Math.max(item.vruntime - topRuntime, 0) } as Task;
+        return { ...item, vruntime: Math.max(item.vruntime! - topRuntime, 0) } as Task;
     }));
 }
 
@@ -147,14 +153,11 @@ function createGlobalTaskList() {
             return;
         }
 
-        let taskPriority = task.priority;
-        let runtimeMultiplier = Math.pow(2, taskPriority);
-
         batch(() => {
             setTasks(
                 (task) => task.id === id,
                 "vruntime",
-                vruntime => calculateRuntime(runtime, task.weight!, vruntime)
+                vruntime => calculateRuntime(runtime, task.weight!, vruntime!)
             )
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);

@@ -11,14 +11,18 @@ declare global {
         availableHours: number;
         minimumScheduleSlice: number;
         minimumRotationCost: number;
+        maxWorkTimeMarginOfError: number;
+        minWorkTimeMarginOfError: number;
     };
 }
 
 function initializeSettings() {
     globalThis.AppSettings = {
-        availableHours: 35.0,
+        availableHours: 100.0, // TODO! return to 35hrs per week
         minimumScheduleSlice: 4.0,
-        minimumRotationCost: 1.0
+        minimumRotationCost: 1.0,
+        maxWorkTimeMarginOfError: 0.2,
+        minWorkTimeMarginOfError: 0.2
     }
 }
 
@@ -31,7 +35,20 @@ function createSettings() {
 
     const calculateNewTimeSlice = (list: Task[]) => {
         let filteredList = list.filter((item) => !item.completed && !item.isSuspended);
-        let candidateTimeSlice = globalThis.AppSettings.availableHours / Math.max(filteredList.length, 1.0);
+
+        if (filteredList.length === 0) {
+            setCalculatedTimeSlice(0);
+            setIsOverburdened(false);
+            return;
+        }
+
+        let totalWeight = 0;
+
+        for (let task of filteredList) {
+            totalWeight = totalWeight + task.weight!;
+        }
+
+        let candidateTimeSlice = globalThis.AppSettings.availableHours * (filteredList[0].weight! / totalWeight);
 
         let timeSlice = Math.max(candidateTimeSlice, globalThis.AppSettings.minimumScheduleSlice);
         setCalculatedTimeSlice(Math.floor(timeSlice));

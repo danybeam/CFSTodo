@@ -32,14 +32,18 @@ export default function TimeEntry(props: TimeEntryProps) {
             }}>
             <input
                 type="number"
+                step=".01"
                 id="real-hrs"
                 name="hr-input"
-                min="1"
-                max="24"
+                min={AppSettings.minimumRotationCost * (1 - AppSettings.minWorkTimeMarginOfError)}
+                max={
+                    // Allow up to 20% margin of error
+                    AppContext.calculatedTimeSlice() * (1 + AppSettings.maxWorkTimeMarginOfError)
+                }
                 value={AppContext.calculatedTimeSlice()}
             />
             <button type="submit" name="action" style="width: fit-content" value="rotate">Rotate Task</button>
-            <button type="submit" name="action" style="width: fit-content" value="suspend">Rotate Task</button>
+            <button type="submit" name="action" style="width: fit-content" value="suspend">Rotate and suspend</button>
         </form>
     );
 }
