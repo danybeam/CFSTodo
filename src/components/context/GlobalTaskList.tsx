@@ -14,7 +14,7 @@ export const MiddleWeight = getWeight(20);
 
 // Function for calculating weights
 export function getWeight(nice: number) {
-    return Math.floor(1024 / Math.pow(1.25, 20 - nice));
+    return 1024 / Math.pow(1.25, nice - 20);
 }
 
 // Function for calculating vruntime
@@ -50,20 +50,7 @@ function sortTasks(list: Task[], setterFunction: (list: Task[]) => void) {
     let copyList = [...list];
     copyList.sort(compareTasks);
 
-    let topRuntime = copyList[0]?.vruntime ?? 0;
-
-    console.log("sort Tasks");
-    console.log(topRuntime);
-    console.log(copyList);
-    console.log(copyList[0].vruntime);
-
-    setterFunction(copyList.map(item => {
-        if (item.isSuspended || item.completed) {
-            return item;
-        }
-
-        return { ...item, vruntime: Math.max(item.vruntime! - topRuntime, 0) } as Task;
-    }));
+    setterFunction(copyList);
 }
 
 
@@ -101,6 +88,7 @@ function createGlobalTaskList() {
             ]);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
+
         })
 
     }
@@ -135,6 +123,7 @@ function createGlobalTaskList() {
             sortTasks(tasks, setTasks);
         })
     }
+
     const suspendResumeTask = (id: number, forceResume: boolean = false) => {
         batch(() => {
             setTasks(
@@ -159,10 +148,31 @@ function createGlobalTaskList() {
                 "vruntime",
                 vruntime => calculateRuntime(runtime, task.weight!, vruntime!)
             )
-            SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
         })
     }
+
+    const normalizeTasks = (list: Task[]) => {
+        if (list.length == 0) {
+            return;
+        }
+
+        let topRuntime = list[0].vruntime;
+
+        batch(() => {
+            for (let task of list) {
+                if (task.completed || task.isSuspended) {
+                    continue;
+                }
+
+                setTasks(
+                    (t) => task.id === t.id,
+                    "vruntime",
+                    vruntime => vruntime! - topRuntime!
+                )
+            }
+        })
+    };
 
     const removeTask = (id: number) => {
         batch(() => {
@@ -178,6 +188,7 @@ function createGlobalTaskList() {
         addTask,
         batchAddTasks,
         toggleTask,
+        normalizeTasks,
         suspendResumeTask,
         rotateTask,
         removeTask,

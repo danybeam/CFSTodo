@@ -9,7 +9,7 @@ import TaskListItem from "./TaskListItem";
 
 type CurrentTaskProps = {
     // TODO_ Check if it's possible to remove undefined
-    firstTask: Task | undefined
+    firstTask: Task | undefined,
 }
 
 export default function CurrentTask(props: CurrentTaskProps) {
@@ -20,7 +20,6 @@ export default function CurrentTask(props: CurrentTaskProps) {
     createEffect(() => {
         if (props.firstTask == undefined) {
             batch(() => {
-
                 setIsValidId(false);
                 setIsValidTask(false);
             });

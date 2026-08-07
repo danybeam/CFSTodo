@@ -13,7 +13,7 @@ import TimeEntry from "../TimeEntry";
 // Prop type definiton
 type TaskListItemProps = {
     task: Task,
-    isCurrentTask: boolean
+    isCurrentTask: boolean,
 }
 
 export default function TaskListItem(props: TaskListItemProps) {
@@ -24,6 +24,7 @@ export default function TaskListItem(props: TaskListItemProps) {
 
     createEffect(() => {
         batch(() => {
+
             if (workedHours() != 0) {
                 TaskContext.rotateTask(props.task.id, workedHours());
                 setWorkedHours(0);

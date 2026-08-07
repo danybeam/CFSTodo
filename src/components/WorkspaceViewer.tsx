@@ -15,6 +15,7 @@ import { Task, Workspace } from "../models/bindings";
 
 // App Context imports
 import SettingsContext from "../components/context/AppSettings";
+import TaskContext from "../components/context/GlobalTaskList";
 
 // App Component imports
 import CurrentTask from "./Tasks/CurrentTask";
@@ -46,6 +47,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
                 setTasks(props.taskList);
                 setFirstTask(props.taskList.at(0) as Task);
                 SettingsContext.calculateNewTimeSlice(props.taskList);
+                TaskContext.normalizeTasks(tasks);
             })
             return;
         }
@@ -69,6 +71,7 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
             setTasks(newTasks);
             setFirstTask(newTasks.at(0) as Task);
             SettingsContext.calculateNewTimeSlice(newTasks);
+            TaskContext.normalizeTasks(tasks);
         })
     });
 
@@ -80,7 +83,10 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
                 class="time-slice"
                 classList={{ overburdened: SettingsContext.isOverburdened() }}
             >
-                {(SettingsContext.isOverburdened() ? "Overburdened! (forcing 4hrs per slice)" : SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice")}
+                {(SettingsContext.isOverburdened() ?
+                    `Overburdened! (forcing ${AppSettings.minimumScheduleSlice} per slice)` :
+                    SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice"
+                )}
             </div>
             <div style="width: 10px" />
             <button

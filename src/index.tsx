@@ -92,4 +92,13 @@ await window.addEventListener('keydown', async (e) => {
 //        START APP
 ///////////////////////////////////////////////////////////////////
 
+for (let i = -20; i < 21; i++) {
+    console.log(`Priority: ${i}`);
+    console.log(`nice = 20 - priority = ${20 - i}`);
+    console.log(`Weight: ${(1024.0 / Math.pow(1.25, 20 - i)).toFixed(5)}`);
+    console.log(`nice = priority - 20 = ${i - 20}`);
+    console.log(`Weight: ${(1024.0 / Math.pow(1.25, i - 20)).toFixed(5)}`);
+    console.log("---");
+}
+
 render(() => <App />, document.getElementById("root") as HTMLElement);

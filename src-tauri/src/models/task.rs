@@ -11,6 +11,6 @@ pub struct Task {
     is_suspended: bool,
     vruntime: f64,
     priority: u32,
-    weight: Option<u32>,
+    weight: f64,
     tags: Option<Vec<String>>,
 }
