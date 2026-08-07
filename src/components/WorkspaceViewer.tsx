@@ -7,7 +7,7 @@ import TagWranglerParser from '../models/.antlr/TagWranglerParser';
 import { TagVisitor } from "../models/TagVisitor";
 
 // SolidJS imports
-import { batch, createEffect, createSignal, Show } from "solid-js";
+import { batch, createEffect, createSignal, onMount, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 
 // General app imports
@@ -35,6 +35,15 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
 
     const [addTaskMode, setAddTaskMode] = createSignal(false);
     const [hideTaskForm, setHideTaskForm] = createSignal(true);
+
+    const [overburdenedHovered, setOverburdenedHovered] = createSignal(false);
+    const [toolTipHovered, setToolTipHovered] = createSignal(false);
+    const [mouseX, setMouseX] = createSignal(-1);
+    const [mouseY, setMouseY] = createSignal(-1);
+
+    onMount(() => {
+        setOverburdenedHovered(false);
+    })
 
     let toggleTaskForm = () => {
         setHideTaskForm(!hideTaskForm());
@@ -82,19 +91,45 @@ export default function WorkspaceViewer(props: WorkspaceViewerProps) {
             <div
                 class="time-slice"
                 classList={{ overburdened: SettingsContext.isOverburdened() }}
+                onMouseEnter={(e) => {
+                    batch(() => {
+                        setMouseX(e.clientX);
+                        setMouseY(e.clientY);
+                        setOverburdenedHovered(true)
+                    });
+                }}
+                onMouseLeave={() => setOverburdenedHovered(false)}
             >
-                {(SettingsContext.isOverburdened() ?
-                    `Overburdened! (forcing ${AppSettings.minimumScheduleSlice} per slice)` :
-                    SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice"
-                )}
+                {
+                    (SettingsContext.isOverburdened() ?
+                        `Overburdened! (forcing ${AppSettings.minimumScheduleSlice} hours per slice)` :
+                        SettingsContext.calculatedTimeSlice().toFixed(0) + " hours per slice"
+                    )
+                }
             </div>
+            {
+                (overburdenedHovered() || toolTipHovered()) &&
+                SettingsContext.isOverburdened() &&
+                <span
+                    class="time-slice tooltip"
+                    onMouseEnter={() => setToolTipHovered(true)}
+                    onMouseLeave={() => setToolTipHovered(false)}
+                    style={{
+                        left: `${mouseX()}px`,
+                        top: `${mouseY() - 20}px`,
+                    }}
+                >
+                    You have too many tasks and the intended time slice for this task ({SettingsContext.intendedTimeSlice().toFixed(2)} hrs)<br />
+                    cannot be appropriately scheduled according to your settings.<br />
+                    Editing settings comming soon.
+                </span>}
             <div style="width: 10px" />
             <button
                 onClick={toggleTaskForm}
             >
                 {addTaskMode() ? "Cancel" : "Add Task"}
             </button>
-        </div>
+        </div >
         <div style="align-self:flex-start;">
             <h1 style={`margin-bottom:${halfGap}px; text-align:left;`}>{props.workspace?.name ?? "All tasks"}</h1>
             <p style={`margin-top:${halfGap}px; color:#6969697F; text-align:left;`}>{

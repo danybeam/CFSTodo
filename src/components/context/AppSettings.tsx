@@ -1,5 +1,5 @@
 // SolidJS imports
-import { createRoot, createSignal } from "solid-js";
+import { batch, createRoot, createSignal } from "solid-js";
 
 // General App imports
 import { Task } from "../../models/bindings";
@@ -34,7 +34,7 @@ function createSettings() {
     initializeSettings();
 
     const [calculatedTimeSlice, setCalculatedTimeSlice] = createSignal(0);
-
+    const [intendedTimeSlice, setIntendedTimeSlice] = createSignal(0);
     const [isOverburdened, setIsOverburdened] = createSignal(false);
 
     const calculateNewTimeSlice = (list: Task[]) => {
@@ -55,12 +55,16 @@ function createSettings() {
         let candidateTimeSlice = globalThis.AppSettings.availableHours * (filteredList[0].weight! / totalWeight);
 
         let timeSlice = Math.max(candidateTimeSlice, globalThis.AppSettings.minimumScheduleSlice);
-        setCalculatedTimeSlice(Math.floor(timeSlice));
-        setIsOverburdened(candidateTimeSlice < globalThis.AppSettings.minimumScheduleSlice);
+
+        batch(() => {
+            setCalculatedTimeSlice(Math.floor(timeSlice));
+            setIntendedTimeSlice(candidateTimeSlice);
+            setIsOverburdened(candidateTimeSlice < globalThis.AppSettings.minimumScheduleSlice);
+        });
     }
 
 
-    return { calculatedTimeSlice, calculateNewTimeSlice, isOverburdened };
+    return { calculatedTimeSlice, intendedTimeSlice, calculateNewTimeSlice, isOverburdened };
 }
 
 export default createRoot(createSettings);

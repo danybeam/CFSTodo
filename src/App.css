@@ -94,6 +94,11 @@
   border-radius: 20px;
 }
 
+.time-slice.tooltip {
+  background: #181818EE;
+  position: absolute;
+}
+
 .time-slice.overburdened {
   background-color: #ffd412de;
   color: #ca1b1bea;
