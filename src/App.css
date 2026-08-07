@@ -35,8 +35,7 @@
   background-color: #0f0f0f98;
   width: fit-content;
   min-width: 290px;
-  padding: 10px;
-  padding-inline: 20px;
+  padding: 20px;
   border-radius: 20px;
 }
 
@@ -102,92 +101,6 @@
   width: fit-content;
   min-width: 290px;
   padding: 10px;
-}
-
-@keyframes popupAnimation {
-  from {
-    width: 0px;
-    height: 0px;
-    color: #ffffff00
-  }
-
-  90% {
-    color: #ffffff00
-  }
-
-  to {
-    width: 350px;
-    height: 42px;
-    color: #f6f6f6
-  }
-}
-
-.popup {
-  background-color: #0f0f0f98;
-  width: 350px;
-  height: 42px;
-  padding: 10px;
-  animation-name: popupAnimation;
-  animation-duration: 1s;
-  text-align: center;
-  margin-inline: auto;
-  overflow: hidden;
-}
-
-@keyframes popupChildrenAnimation {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.popup>* {
-  animation-name: popupChildrenAnimation;
-  animation-duration: 1s;
-  animation-timing-function: cubic-bezier(1, 0, .75, 1);
-}
-
-@keyframes popdownAnimation {
-  from {
-    width: 350px;
-    height: 42px;
-  }
-
-  to {
-    width: 0px;
-    height: 0px;
-  }
-}
-
-.popdown {
-  background-color: #0f0f0f98;
-  width: 0px;
-  height: 0px;
-  padding: 0px;
-  animation-name: popdownAnimation;
-  animation-duration: 0.1s;
-  text-align: center;
-  margin-inline: auto;
-  overflow: hidden;
-}
-
-@keyframes popdownChildrenAnimation {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-.popdown>* {
-  animation-name: popdownChildrenAnimation;
-  animation-duration: 0.1s;
-  animation-timing-function: cubic-bezier(1, 0, .75, 1);
 }
 
 .form-with-title {
@@ -634,4 +547,36 @@ button.selected {
 
 .placeholder-block.big {
   flex: 3 0;
+}
+
+.time-entry.row {
+  /* Common styling */
+  align-self: center;
+  overflow: hidden;
+
+  /* Target styling */
+  width: 0px;
+  height: 0px;
+  min-width: 0px;
+  padding: 0px;
+  gap: 10px;
+  margin-bottom: 0px;
+
+  transition: all 0.2s ease;
+}
+
+.time-entry.row.extended {
+  width: calc-size(fit-content, size);
+  height: calc-size(fit-content, size);
+  gap: 10px;
+  margin-bottom: 5px;
+  padding: 20px;
+
+  transition: all 0.2s ease;
+}
+
+.overflow-button {
+  width: fit-content;
+  overflow: hidden;
+  white-space: nowrap;
 }

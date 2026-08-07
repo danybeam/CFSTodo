@@ -1,5 +1,5 @@
 // SolidJS imports
-import { batch, createSignal } from "solid-js";
+import { batch } from "solid-js";
 
 // App context imports
 import AppContext from "./context/AppSettings";
@@ -7,17 +7,17 @@ import AppContext from "./context/AppSettings";
 
 // Props Type definition
 type TimeEntryProps = {
-    timeEntryCallback: (hrs: number) => void
-    requestSuspendCallback: (suspend: boolean) => void
+    timeEntryCallback: (hrs: number) => void,
+    requestSuspendCallback: (suspend: boolean) => void,
+    extend: boolean,
 }
 
 // TODO_ separate onSubmit lambda to external function
 export default function TimeEntry(props: TimeEntryProps) {
-    const [popup, setPopup] = createSignal(true);
     return (
         <form
-            class="row"
-            classList={{ popup: popup(), popdown: !popup() }}
+            class="time-entry framed row"
+            classList={{ extended: props.extend }}
             onSubmit={(e) => {
                 e.preventDefault();
                 let button = new FormData(e.currentTarget, e.submitter).get("action");
@@ -28,7 +28,6 @@ export default function TimeEntry(props: TimeEntryProps) {
                         props.requestSuspendCallback(button == "suspend");
                     });
                 }, 100);
-                setPopup(false);
             }}>
             <input
                 type="number"
@@ -37,13 +36,27 @@ export default function TimeEntry(props: TimeEntryProps) {
                 name="hr-input"
                 min={AppSettings.minimumRotationCost * (1 - AppSettings.minWorkTimeMarginOfError)}
                 max={
-                    // Allow up to 20% margin of error
+                    // Allow up to a configurable margin of error
                     AppContext.calculatedTimeSlice() * (1 + AppSettings.maxWorkTimeMarginOfError)
                 }
                 value={AppContext.calculatedTimeSlice()}
             />
-            <button type="submit" name="action" style="width: fit-content" value="rotate">Rotate Task</button>
-            <button type="submit" name="action" style="width: fit-content" value="suspend">Rotate and suspend</button>
+            <button
+                class="overflow-button"
+                type="submit"
+                name="action"
+                value="rotate"
+            >
+                Rotate Task
+            </button>
+            <button
+                class="overflow-button"
+                type="submit"
+                name="action"
+                value="suspend"
+            >
+                Rotate and suspend
+            </button>
         </form>
     );
 }

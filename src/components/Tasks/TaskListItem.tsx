@@ -86,9 +86,12 @@ export default function TaskListItem(props: TaskListItemProps) {
     // TODO_ Simplify component to make more easy to read
     return (
         <>
-            <Show when={showTimeModal()}>
-                <TimeEntry timeEntryCallback={setWorkedHours} requestSuspendCallback={setShouldSuspend} />
-            </Show>
+            <TimeEntry
+                timeEntryCallback={setWorkedHours}
+                requestSuspendCallback={setShouldSuspend}
+                extend={showTimeModal()}
+            />
+
             <div class="task-container">
                 <div class="padded row">
                     <div class="framed row">
