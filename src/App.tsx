@@ -3,18 +3,18 @@ import { batch, createSignal, Match, onMount, Show, Switch } from "solid-js";
 
 // General App imports
 import "./App.css";
-import { commands } from "./models/bindings";
+import { commands, Task } from "./models/bindings";
 import { PageView } from "./models/Enums";
 
 // Global App imports
-import TaskContext from "./components/context/GlobalTaskList";
+import TaskContext, { getWeight } from "./components/context/GlobalTaskList";
 import WorkspaceContext from "./components/context/WorkspaceList";
 
 // App component imports
 import Sidebar from "./components/Sidebar";
+import TaskInfoSidebar from "./components/TaskInfoSidebar";
 import WorkspaceBuilder from "./components/WorkspaceBuilder/WorkspaceBuilder";
 import WorkspaceViewer from "./components/WorkspaceViewer";
-import TaskInfoSidebar from "./components/TaskInfoSidebar";
 
 
 function App() {
@@ -25,7 +25,8 @@ function App() {
 
   onMount(async () => {
     setHasLoaded(false);
-    let tasks = await commands.loadTasks();
+    let tasks: Task[] = (await commands.loadTasks())
+      .map((t: Task) => ({ ...t, weight: getWeight(t.priority) }));
     tasks.sort((l, r) => l.id - r.id);
     TaskContext.batchAddTasks(tasks);
     WorkspaceContext.batchAddWorkspaces(await commands.loadWorkspaces());
@@ -42,7 +43,7 @@ function App() {
           setCurrentWorkspaceId(i);
         });
       }} />
-      <TaskInfoSidebar/>
+      <TaskInfoSidebar />
       <div style="overflow:hidden;">
         <Switch fallback={<div>Loading...</div>}>
           <Match when={currentView() == PageView.DefaultTaskList}>

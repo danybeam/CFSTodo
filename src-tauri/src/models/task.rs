@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use specta::Type;
 
 #[derive(Serialize, Deserialize, Type, Debug, Clone, PartialEq)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct Task {
     id: u32,
     text: String,
@@ -11,5 +11,6 @@ pub struct Task {
     is_suspended: bool,
     vruntime: u32,
     priority: u32,
+    weight: Option<u32>,
     tags: Option<Vec<String>>,
 }

@@ -62,9 +62,9 @@ function TaskForm(props: TaskFormProps) {
                             id="priority-input"
                             name="priority-input"
                             type="number"
-                            value="10"
+                            value="20"
                             min="0"
-                            max="500"
+                            max="40"
                         />
                     </div>
                     <button type="submit" style="height: fit-content; align-self:flex-end;">Add</button>

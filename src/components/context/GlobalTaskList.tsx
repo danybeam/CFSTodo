@@ -9,6 +9,14 @@ import { allocateId, createIdAllocator, freeId, IdAllocator } from "./IdAllocato
 // App context imports
 import SettingsContext from "./AppSettings";
 
+// Useful constants
+export const MiddleWeight = getWeight(20);
+
+// Function for calculating weights
+export function getWeight(nice: number) {
+    return Math.floor(1024 / Math.pow(1.25, nice - 20));
+}
+
 // Comparison function for tasks
 function compareTasks(left: Task, right: Task) {
     if (left.completed !== right.completed) {
@@ -24,6 +32,10 @@ function compareTasks(left: Task, right: Task) {
         return left.priority - right.priority;
     }
 
+    return left.id - right.id;
+}
+
+function compareTasksById(left: Task, right: Task) {
     return left.id - right.id;
 }
 
@@ -62,22 +74,43 @@ function createGlobalTaskList() {
     const addTask = (text: string, extendedText: string, priority: number, tags: string[]) => {
         batch(() => {
             const newId = allocateId(IdAllocator());
-            setTasks([...tasks, { id: newId, text: text, extendedText: extendedText, completed: false, isSuspended: false, vruntime: 0.0, priority: priority, tags: tags }]);
+            setTasks([
+                ...tasks,
+                {
+                    id: newId,
+                    text: text,
+                    extendedText: extendedText,
+                    completed: false,
+                    isSuspended: false,
+                    vruntime: 0.0,
+                    priority: priority,
+                    tags: tags,
+                    weight: getWeight(priority)
+                }
+            ]);
             SettingsContext.calculateNewTimeSlice(tasks);
             sortTasks(tasks, setTasks);
         })
 
     }
 
-    const batchAddTasks = (list: Task[]) => {
+    const batchAddTasks = (list: Task[], sortTasksById: boolean = false) => {
         let newTasks = new Set<Task>();
         tasks.forEach(newTasks.add, newTasks);
         list.forEach(newTasks.add, newTasks);
+        let newTasksForAllocator = [...newTasks];
         batch(() => {
-            setTasks([...newTasks]);
+            setTasks([...newTasksForAllocator]);
             sortTasks(tasks, setTasks);
             SettingsContext.calculateNewTimeSlice(tasks);
-            setIdAllocator(createIdAllocator([...newTasks].map((v) => v.id)));
+
+            if (sortTasksById) {
+                newTasksForAllocator.sort(compareTasksById);
+            }
+
+            console.log(newTasksForAllocator);
+
+            setIdAllocator(createIdAllocator([...newTasksForAllocator].map((v) => v.id)));
         });
     }
 
