@@ -13,16 +13,20 @@ declare global {
         minimumRotationCost: number;
         maxWorkTimeMarginOfError: number;
         minWorkTimeMarginOfError: number;
+        maxPriority: number;
+        normalizationThreshold: number;
     };
 }
 
 function initializeSettings() {
     globalThis.AppSettings = {
-        availableHours: 100.0, // TODO! return to 35hrs per week
+        availableHours: 35.0,
         minimumScheduleSlice: 4.0,
         minimumRotationCost: 1.0,
-        maxWorkTimeMarginOfError: 0.2,
-        minWorkTimeMarginOfError: 0.2
+        maxWorkTimeMarginOfError: Infinity,
+        minWorkTimeMarginOfError: 0.2,
+        maxPriority: 40.0,
+        normalizationThreshold: 1000.0,
     }
 }
 

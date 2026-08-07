@@ -30,6 +30,7 @@ function App() {
     tasks.sort((l, r) => l.id - r.id);
     TaskContext.batchAddTasks(tasks);
     WorkspaceContext.batchAddWorkspaces(await commands.loadWorkspaces());
+    TaskContext.normalizeTasks(TaskContext.tasks, true);
     await setTimeout(() => { setHasLoaded(true); }, 100);
   })
 

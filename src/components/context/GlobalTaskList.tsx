@@ -10,16 +10,16 @@ import { allocateId, createIdAllocator, freeId, IdAllocator } from "./IdAllocato
 import SettingsContext from "./AppSettings";
 
 // Useful constants
-export const MiddleWeight = getWeight(20);
+export const MiddleWeight = getWeight(Math.floor(AppSettings.maxPriority / 2));
 
 // Function for calculating weights
 export function getWeight(nice: number) {
-    return 1024 / Math.pow(1.25, nice - 20);
+    return 1024 / Math.pow(1.25, nice - Math.floor(AppSettings.maxPriority / 2));
 }
 
 // Function for calculating vruntime
-function calculateRuntime(realRuntime: number, taskWeight: number, previousRuntime: number) {
-    let result = previousRuntime + (realRuntime * (taskWeight / MiddleWeight));
+function calculateRuntime(realRuntime: number, taskWeight: number) {
+    let result = (realRuntime * (MiddleWeight / taskWeight));
     return result;
 }
 
@@ -146,18 +146,24 @@ function createGlobalTaskList() {
             setTasks(
                 (task) => task.id === id,
                 "vruntime",
-                vruntime => calculateRuntime(runtime, task.weight!, vruntime!)
+                vruntime => vruntime! + calculateRuntime(runtime, task.weight!)
             )
             sortTasks(tasks, setTasks);
         })
     }
 
-    const normalizeTasks = (list: Task[]) => {
+    const normalizeTasks = (list: Task[], force: boolean = false) => {
         if (list.length == 0) {
             return;
         }
 
         let topRuntime = list[0].vruntime;
+
+        // If the top runtime is not some arbitrarily big number, don't bother normalizing
+        // Override to force on load to keep numbers relatively small between loads
+        if (!force && topRuntime! < AppSettings.normalizationThreshold) {
+            return;
+        }
 
         batch(() => {
             for (let task of list) {
