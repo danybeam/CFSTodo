@@ -98,14 +98,12 @@ export default function TaskListItem(props: TaskListItemProps) {
             <div class="task-container">
                 <div class="padded row">
                     <div class="framed row">
-                        <span style={`margin-right: 20px; ${props.task.completed ? "text-decoration: line-through;" : ""}`}>
-                            {
-                                props.task.text + " " +
-                                props.task.completed + " " +
-                                props.task.isSuspended + " " +
-                                props.task.vruntime!.toFixed(0) + " " +
-                                props.task.weight
+                        <span
+                            style={
+                                `margin-right: 20px; ${props.task.completed ? "text-decoration: line-through;" : ""}`
                             }
+                        >
+                            {props.task.text}
                         </span>
 
                         <Show
