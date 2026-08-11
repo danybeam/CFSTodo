@@ -14,7 +14,7 @@ export const MiddleWeight = getWeight(Math.floor(AppSettings.maxPriority / 2));
 
 // Function for calculating weights
 export function getWeight(nice: number) {
-    return 1024 / Math.pow(1.25, nice - Math.floor(AppSettings.maxPriority / 2));
+    return Math.round(1024 / Math.pow(1.25, nice - Math.floor(AppSettings.maxPriority / 2)));
 }
 
 // Function for calculating vruntime
