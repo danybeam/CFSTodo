@@ -95,12 +95,12 @@ export default function TaskListItem(props: TaskListItemProps) {
                 extend={showTimeModal()}
             />
 
-            <div class="task-container">
-                <div class="padded row">
-                    <div class="framed row">
+            <div class="task-container" >
+                <div class="padded row" style="width: 100%;">
+                    <div class="framed row" style="width: 100%;justify-content:space-between;">
                         <span
                             style={
-                                `margin-right: 20px; ${props.task.completed ? "text-decoration: line-through;" : ""}`
+                                `align-self: center; ${props.task.completed ? "text-decoration: line-through;" : ""}`
                             }
                         >
                             {props.task.text}
