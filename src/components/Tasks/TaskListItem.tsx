@@ -32,10 +32,6 @@ export default function TaskListItem(props: TaskListItemProps) {
                 }
             }
 
-            if (workedHours() == 0) {
-                console.log("worked hours not 0")
-            }
-
             if (workedHours() != 0) {
                 TaskContext.rotateTask(props.task.id, workedHours());
                 setWorkedHours(0);

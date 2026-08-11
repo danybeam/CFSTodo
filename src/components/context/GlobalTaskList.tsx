@@ -1,6 +1,6 @@
 // SolidJS imports
 import { batch, createRoot, createSignal, onMount } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 
 // General App imports
 import { Task } from "../../models/bindings";
@@ -189,6 +189,31 @@ function createGlobalTaskList() {
         })
     }
 
+    const updateTask = (task: Task) => {
+        let taskIndex = -1;
+
+        batch(() => {
+            setTasks(
+                produce((items: Task[]) => {
+                    taskIndex = items.findIndex((t) => t.id == task.id);
+                    if (taskIndex == -1) {
+                        return;
+                    }
+
+                    task.weight = getWeight(task.priority)
+
+                    items[taskIndex] = task;
+                })
+            );
+
+            if (taskIndex != -1) {
+                setTaskInfo(tasks[taskIndex]);
+            }
+
+            sortTasks(tasks, setTasks);
+        });
+    }
+
     return {
         tasks,
         addTask,
@@ -201,7 +226,8 @@ function createGlobalTaskList() {
         taskInfo,
         setTaskInfo,
         showTaskInfo,
-        setShowTaskInfo
+        setShowTaskInfo,
+        updateTask
     };
 }
 

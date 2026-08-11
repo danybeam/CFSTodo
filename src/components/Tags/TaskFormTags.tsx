@@ -6,6 +6,7 @@ type TaskFormTagsProps = {
     tags: string[],
     addTagCallback: (newTag: string) => void,
     removeTagCallback: (tag: string) => void,
+    hideTagsLabel?: boolean,
 }
 
 // TODO_ extract form submit event to external function
@@ -14,7 +15,7 @@ export default function TaskFormTags(props: TaskFormTagsProps) {
         <div class="tag-form">
             <TagContainer
                 tags={props.tags}
-                showTitle={true}
+                showTitle={!(props.hideTagsLabel ?? false)}
                 removeTagCallback={props.removeTagCallback}
             />
             <form
@@ -44,7 +45,7 @@ export default function TaskFormTags(props: TaskFormTagsProps) {
                         id="tag-input"
                         name="input"
                         placeholder="Enter a tag..."
-                        style="width:100%;"
+                        style={"width:100%;" + (props.hideTagsLabel ?? false) ? "background-color: #262626;" : ""}
                     />
                 </div>
                 <div class="medium" />
