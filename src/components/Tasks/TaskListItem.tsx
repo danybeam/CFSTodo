@@ -24,16 +24,23 @@ export default function TaskListItem(props: TaskListItemProps) {
 
     createEffect(() => {
         batch(() => {
+            if (shouldSuspend()) {
+                TaskContext.suspendResumeTask(props.task.id);
+                setShouldSuspend(false);
+                if (workedHours() == 0 && props.isCurrentTask) {
+                    setWorkedHours(1);
+                }
+            }
+
+            if (workedHours() == 0) {
+                console.log("worked hours not 0")
+            }
 
             if (workedHours() != 0) {
                 TaskContext.rotateTask(props.task.id, workedHours());
                 setWorkedHours(0);
             }
 
-            if (shouldSuspend()) {
-                TaskContext.suspendResumeTask(props.task.id);
-                setShouldSuspend(false);
-            }
 
             setShowTimeModal(false);
         })
