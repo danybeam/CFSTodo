@@ -7,10 +7,13 @@ pub mod models;
 use models::task::Task;
 use models::workspace::Workspace;
 
+const TASK_FILE_PATH: &str = "./tasks.json";
+const WORKSPACE_FILE_PATH: &str = "./workspaces.json";
+
 #[tauri::command]
 #[specta::specta]
 fn save_tasks(items: Vec<Task>) {
-    let file_ptr = File::create("./ignore_test.json")
+    let file_ptr = File::create(TASK_FILE_PATH)
         .map_err(|e| e.to_string())
         .unwrap();
     let file = std::io::BufWriter::new(file_ptr);
@@ -20,19 +23,17 @@ fn save_tasks(items: Vec<Task>) {
 #[tauri::command]
 #[specta::specta]
 fn load_tasks() -> Vec<Task> {
-        let file_path = "./ignore_test.json";
-
-    if !fs::exists(file_path).expect("Can't check existence") {
+    if !fs::exists(TASK_FILE_PATH).expect("Can't check existence") {
         save_tasks(vec![]);
     }
 
-    let contents = fs::read_to_string(file_path).expect("Should work");
+    let contents = fs::read_to_string(TASK_FILE_PATH).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
 }
 #[tauri::command]
 #[specta::specta]
 fn save_workspaces(items: Vec<Workspace>) {
-    let file_ptr = File::create("./ignore_test_workspace.json")
+    let file_ptr = File::create(WORKSPACE_FILE_PATH)
         .map_err(|e| e.to_string())
         .unwrap();
     let file = std::io::BufWriter::new(file_ptr);
@@ -42,13 +43,11 @@ fn save_workspaces(items: Vec<Workspace>) {
 #[tauri::command]
 #[specta::specta]
 fn load_workspaces() -> Vec<Workspace> {
-    let file_path = "./ignore_test_workspace.json";
-
-    if !fs::exists(file_path).expect("Can't check existence") {
+    if !fs::exists(WORKSPACE_FILE_PATH).expect("Can't check existence") {
         save_workspaces(vec![]);
     }
 
-    let contents = fs::read_to_string(file_path).expect("Should work");
+    let contents = fs::read_to_string(WORKSPACE_FILE_PATH).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
 }
 
