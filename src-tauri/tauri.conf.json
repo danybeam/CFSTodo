@@ -15,16 +15,28 @@
         "title": "cfs-todo",
         "width": 800,
         "height": 600,
-        "decorations":true
+        "decorations": true
       }
     ],
     "security": {
       "csp": null
     }
   },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU3Rjc5MUVGODg2NjMxMkEKUldRcU1XYUk3NUgzNTJhdDF4SS9IZjlLMmpqVGZFZE9DSGcyR1FrWlE3eEl4aW1IRHFZZlhmakkK",
+      "endpoints": [
+        "https://github.com/user/danybeam/CFSTodoReleases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",
+    "createUpdaterArtifacts": true,
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
