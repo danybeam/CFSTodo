@@ -1,9 +1,9 @@
 use specta;
 use specta_typescript::Typescript;
 use std::fs::{self, File};
-use tauri_plugin_updater::UpdaterExt;
-// use tauri_plugin_log::log;
 use tauri::Manager;
+use tauri_plugin_log::log;
+use tauri_plugin_updater::UpdaterExt;
 use tauri_specta::{collect_commands, Builder};
 
 pub mod models;
@@ -21,12 +21,14 @@ fn save_tasks(app_handle: tauri::AppHandle, items: Vec<Task>) {
         .app_data_dir()
         .map_err(|e| e.to_string())
         .expect("Couldn't find app data dir");
+    log::info!("App dir save task: {:?}", app_dir.to_str());
 
     std::fs::create_dir_all(&app_dir)
         .map_err(|e| e.to_string())
         .expect("Couldn't create dirs");
 
     let file_path = app_dir.join(TASK_FILE_PATH);
+    log::info!("File path save task: {:?}", file_path);
 
     let file_ptr = File::create(file_path).map_err(|e| e.to_string()).unwrap();
 
@@ -42,12 +44,17 @@ fn load_tasks(app_handle: tauri::AppHandle) -> Vec<Task> {
         .app_data_dir()
         .map_err(|e| e.to_string())
         .expect("Couldn't find app data dir");
+    log::info!("App dir load task: {:?}", app_dir.to_str());
 
     let file_path = app_dir.join(TASK_FILE_PATH);
+    log::info!("File path load: {:?}", file_path);
 
     if !fs::exists(&file_path).expect("Can't check existence") {
+        log::info!("File for tasks doesn't exist. Creating.");
         save_tasks(app_handle, vec![]);
     }
+
+    log::info!("File for tasks loaded");
 
     let contents = fs::read_to_string(&file_path).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
@@ -61,12 +68,14 @@ fn save_workspaces(app_handle: tauri::AppHandle, items: Vec<Workspace>) {
         .app_data_dir()
         .map_err(|e| e.to_string())
         .expect("Couldn't find app data dir");
+    log::info!("App dir save workspace: {:?}", app_dir.to_str());
 
     std::fs::create_dir_all(&app_dir)
         .map_err(|e| e.to_string())
         .expect("Couldn't create dirs");
 
     let file_path = app_dir.join(WORKSPACE_FILE_PATH);
+    log::info!("File path save workspace: {:?}", app_dir.to_str());
 
     let file_ptr = File::create(file_path).map_err(|e| e.to_string()).unwrap();
 
@@ -82,12 +91,17 @@ fn load_workspaces(app_handle: tauri::AppHandle) -> Vec<Workspace> {
         .app_data_dir()
         .map_err(|e| e.to_string())
         .expect("Couldn't find app data dir");
+    log::info!("App dir load workspace: {:?}", app_dir.to_str());
 
     let file_path = app_dir.join(WORKSPACE_FILE_PATH);
+    log::info!("File path load workspace: {:?}", app_dir.to_str());
 
     if !fs::exists(&file_path).expect("Can't check existence") {
+        log::info!("File for workspaces doesn't exist. Creating.");
         save_workspaces(app_handle, vec![]);
     }
+
+    log::info!("File for workspaces loaded");
 
     let contents = fs::read_to_string(&file_path).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
@@ -97,25 +111,27 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
     match app.updater()?.check().await {
         Ok(Some(update)) => {
             let mut downloaded = 0;
-
+            log::info!("Update found");
+            log::info!("Preparing for download");
             // alternatively we could also call update.download() and update.install() separately
             update
                 .download_and_install(
                     |chunk_length, content_length| {
                         downloaded += chunk_length;
-                        println!("downloaded {downloaded} from {content_length:?}");
+                        log::info!("downloaded {downloaded} from {content_length:?}");
                     },
                     || {
-                        println!("download finished");
+                        log::info!("download finished. Starting update.");
                     },
                 )
                 .await?;
+            log::info!("Update finished. Restarting app.");
             app.restart();
         }
         Ok(None) => {
-            println!("No update available");
+            log::info!("No update available");
         }
-        Err(e) => println!("Error: {}", e),
+        Err(e) => log::error!("Error: {}", e),
     }
 
     Ok(())
@@ -134,13 +150,15 @@ pub fn run() {
         .expect("Failed to export types");
 
     tauri::Builder::default()
-        /*
         .plugin(
             tauri_plugin_log::Builder::default()
-            .level(log::LevelFilter::Debug)
-            .build(),
+                .target(tauri_plugin_log::Target::new(
+                    tauri_plugin_log::TargetKind::LogDir {
+                        file_name: Some("logs".to_string()),
+                    },
+                ))
+                .build(),
         )
-        */
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_opener::init())
@@ -153,9 +171,9 @@ pub fn run() {
         .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
-                println!("Preparing for update");
+                log::info!("Preparing for update");
                 update(handle).await.unwrap();
-                println!("Updated");
+                log::info!("Updated");
             });
             Ok(())
         })
