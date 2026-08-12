@@ -49,6 +49,9 @@ jobs:
           echo "Key length: ${#TAURI_SIGNING_PRIVATE_KEY}"
           echo "First line:"
           printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" | head -n 1
+      - name: fail
+        shell: bash
+        run: |
           exit 1
 
       - name: install frontend dependencies
