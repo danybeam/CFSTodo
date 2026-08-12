@@ -75,7 +75,7 @@ fn save_workspaces(app_handle: tauri::AppHandle, items: Vec<Workspace>) {
         .expect("Couldn't create dirs");
 
     let file_path = app_dir.join(WORKSPACE_FILE_PATH);
-    log::info!("[WORKSPACE][SAVE] File path: {:?}", app_dir.to_str());
+    log::info!("[WORKSPACE][SAVE] File path: {:?}", file_path.to_str());
 
     let file_ptr = File::create(file_path).map_err(|e| e.to_string()).unwrap();
 
