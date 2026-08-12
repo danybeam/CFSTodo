@@ -1,69 +1,96 @@
 use specta;
 use specta_typescript::Typescript;
 use std::fs::{self, File};
-// use tauri_plugin_log::log;
 use tauri_plugin_updater::UpdaterExt;
-use tauri_plugin_log::log;
+// use tauri_plugin_log::log;
+use tauri::Manager;
 use tauri_specta::{collect_commands, Builder};
 
 pub mod models;
 use models::task::Task;
 use models::workspace::Workspace;
 
-const TASK_FILE_PATH: &str = "./tasks.json";
+const TASK_FILE_PATH: &str = "tasks.json";
 const WORKSPACE_FILE_PATH: &str = "./workspaces.json";
 
 #[tauri::command]
 #[specta::specta]
-fn save_tasks(items: Vec<Task>) {
-    return;
-    /*
-    let file_ptr = File::create(TASK_FILE_PATH)
+fn save_tasks(app_handle: tauri::AppHandle, items: Vec<Task>) {
+    let app_dir = app_handle
+        .path()
+        .app_data_dir()
         .map_err(|e| e.to_string())
-        .unwrap();
+        .expect("Couldn't find app data dir");
+
+    std::fs::create_dir_all(&app_dir)
+        .map_err(|e| e.to_string())
+        .expect("Couldn't create dirs");
+
+    let file_path = app_dir.join(TASK_FILE_PATH);
+
+    let file_ptr = File::create(file_path).map_err(|e| e.to_string()).unwrap();
+
     let file = std::io::BufWriter::new(file_ptr);
     let _ = serde_json::to_writer(file, &items);
-    */
 }
 
 #[tauri::command]
 #[specta::specta]
-fn load_tasks() -> Vec<Task> {
-    return vec![];
-    /*
-    if !fs::exists(TASK_FILE_PATH).expect("Can't check existence") {
-        save_tasks(vec![]);
+fn load_tasks(app_handle: tauri::AppHandle) -> Vec<Task> {
+    let app_dir = app_handle
+        .path()
+        .app_data_dir()
+        .map_err(|e| e.to_string())
+        .expect("Couldn't find app data dir");
+
+    let file_path = app_dir.join(TASK_FILE_PATH);
+
+    if !fs::exists(&file_path).expect("Can't check existence") {
+        save_tasks(app_handle, vec![]);
     }
 
-    let contents = fs::read_to_string(TASK_FILE_PATH).expect("Should work");
+    let contents = fs::read_to_string(&file_path).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
-    */
 }
+
 #[tauri::command]
 #[specta::specta]
-fn save_workspaces(items: Vec<Workspace>) {
-    return;
-    /*
-        let file_ptr = File::create(WORKSPACE_FILE_PATH)
+fn save_workspaces(app_handle: tauri::AppHandle, items: Vec<Workspace>) {
+    let app_dir = app_handle
+        .path()
+        .app_data_dir()
         .map_err(|e| e.to_string())
-        .unwrap();
+        .expect("Couldn't find app data dir");
+
+    std::fs::create_dir_all(&app_dir)
+        .map_err(|e| e.to_string())
+        .expect("Couldn't create dirs");
+
+    let file_path = app_dir.join(WORKSPACE_FILE_PATH);
+
+    let file_ptr = File::create(file_path).map_err(|e| e.to_string()).unwrap();
+
     let file = std::io::BufWriter::new(file_ptr);
     let _ = serde_json::to_writer(file, &items);
-    */
 }
 
 #[tauri::command]
 #[specta::specta]
-fn load_workspaces() -> Vec<Workspace> {
-    return vec![];
-    /*
-    if !fs::exists(WORKSPACE_FILE_PATH).expect("Can't check existence") {
-        save_workspaces(vec![]);
+fn load_workspaces(app_handle: tauri::AppHandle) -> Vec<Workspace> {
+    let app_dir = app_handle
+        .path()
+        .app_data_dir()
+        .map_err(|e| e.to_string())
+        .expect("Couldn't find app data dir");
+
+    let file_path = app_dir.join(WORKSPACE_FILE_PATH);
+
+    if !fs::exists(&file_path).expect("Can't check existence") {
+        save_workspaces(app_handle, vec![]);
     }
 
-    let contents = fs::read_to_string(WORKSPACE_FILE_PATH).expect("Should work");
+    let contents = fs::read_to_string(&file_path).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
-     */
 }
 
 async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
