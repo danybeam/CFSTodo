@@ -1,7 +1,7 @@
 use specta;
 use specta_typescript::Typescript;
 use std::fs::{self, File};
-use tauri_plugin_log::log;
+// use tauri_plugin_log::log;
 use tauri_plugin_updater::UpdaterExt;
 use tauri_plugin_log::log;
 use tauri_specta::{collect_commands, Builder};
