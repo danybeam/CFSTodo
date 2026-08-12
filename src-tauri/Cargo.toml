@@ -1,6 +1,6 @@
 [package]
 name = "cfs-todo"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Tauri App to manage your long term tasks using similar principles to the Linux scheduler"
 authors = ["Daniel Gerardo Oroco Hernandes a.k.a. danybeam"]
 edition = "2021"
@@ -22,6 +22,7 @@ tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 tauri-plugin-os = "2"
 tauri-plugin-log = "2"
+log = "0.4"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 specta = "2.0.0-rc.25"
