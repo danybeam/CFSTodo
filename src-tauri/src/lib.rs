@@ -14,42 +14,54 @@ const WORKSPACE_FILE_PATH: &str = "./workspaces.json";
 #[tauri::command]
 #[specta::specta]
 fn save_tasks(items: Vec<Task>) {
+    return;
+    /*
     let file_ptr = File::create(TASK_FILE_PATH)
         .map_err(|e| e.to_string())
         .unwrap();
     let file = std::io::BufWriter::new(file_ptr);
     let _ = serde_json::to_writer(file, &items);
+    */
 }
 
 #[tauri::command]
 #[specta::specta]
 fn load_tasks() -> Vec<Task> {
+    return vec![];
+    /*
     if !fs::exists(TASK_FILE_PATH).expect("Can't check existence") {
         save_tasks(vec![]);
     }
 
     let contents = fs::read_to_string(TASK_FILE_PATH).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
+    */
 }
 #[tauri::command]
 #[specta::specta]
 fn save_workspaces(items: Vec<Workspace>) {
-    let file_ptr = File::create(WORKSPACE_FILE_PATH)
+    return;
+    /*
+        let file_ptr = File::create(WORKSPACE_FILE_PATH)
         .map_err(|e| e.to_string())
         .unwrap();
     let file = std::io::BufWriter::new(file_ptr);
     let _ = serde_json::to_writer(file, &items);
+    */
 }
 
 #[tauri::command]
 #[specta::specta]
 fn load_workspaces() -> Vec<Workspace> {
+    return vec![];
+    /*
     if !fs::exists(WORKSPACE_FILE_PATH).expect("Can't check existence") {
         save_workspaces(vec![]);
     }
 
     let contents = fs::read_to_string(WORKSPACE_FILE_PATH).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
+     */
 }
 
 async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
