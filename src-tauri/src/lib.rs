@@ -1,6 +1,7 @@
 use specta;
 use specta_typescript::Typescript;
 use std::fs::{self, File};
+use tauri_plugin_log::log;
 use tauri_plugin_updater::UpdaterExt;
 use tauri_plugin_log::log;
 use tauri_specta::{collect_commands, Builder};
@@ -66,41 +67,28 @@ fn load_workspaces() -> Vec<Workspace> {
 }
 
 async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
-    println!("Inside update");
-    let a = app.updater()?;
-    let b = a.check();
-    match b.await {
+    match app.updater()?.check().await {
         Ok(Some(update)) => {
-            println!("Update available {}", &update.version);
+            let mut downloaded = 0;
+
+            // alternatively we could also call update.download() and update.install() separately
+            update
+                .download_and_install(
+                    |chunk_length, content_length| {
+                        downloaded += chunk_length;
+                        println!("downloaded {downloaded} from {content_length:?}");
+                    },
+                    || {
+                        println!("download finished");
+                    },
+                )
+                .await?;
+            app.restart();
         }
         Ok(None) => {
-            println!("None");
+            println!("No update available");
         }
         Err(e) => println!("Error: {}", e),
-    }
-
-    println!("after c");
-
-    if let Some(update) = app.updater()?.check().await? {
-        let mut downloaded = 0;
-
-        println!("starting download and install");
-
-        // alternatively we could also call update.download() and update.install() separately
-        update
-            .download_and_install(
-                |chunk_length, content_length| {
-                    downloaded += chunk_length;
-                    println!("downloaded {downloaded} from {content_length:?}");
-                },
-                || {
-                    println!("download finished");
-                },
-            )
-            .await?;
-
-        println!("update installed");
-        app.restart();
     }
 
     Ok(())
@@ -119,11 +107,13 @@ pub fn run() {
         .expect("Failed to export types");
 
     tauri::Builder::default()
+        /*
         .plugin(
             tauri_plugin_log::Builder::default()
-                .level(log::LevelFilter::Debug)
-                .build(),
+            .level(log::LevelFilter::Debug)
+            .build(),
         )
+        */
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_opener::init())
