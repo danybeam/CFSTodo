@@ -1,5 +1,4 @@
 node_modules
 dist
 **/ignore_*.*
-**/.antlr
 *.jar
