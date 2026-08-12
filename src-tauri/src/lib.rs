@@ -11,7 +11,7 @@ use models::task::Task;
 use models::workspace::Workspace;
 
 const TASK_FILE_PATH: &str = "tasks.json";
-const WORKSPACE_FILE_PATH: &str = "./workspaces.json";
+const WORKSPACE_FILE_PATH: &str = "workspaces.json";
 
 #[tauri::command]
 #[specta::specta]
@@ -21,14 +21,14 @@ fn save_tasks(app_handle: tauri::AppHandle, items: Vec<Task>) {
         .app_data_dir()
         .map_err(|e| e.to_string())
         .expect("Couldn't find app data dir");
-    log::info!("App dir save task: {:?}", app_dir.to_str());
+    log::info!("[TASK][SAVE] App dir: {:?}", app_dir.to_str());
 
     std::fs::create_dir_all(&app_dir)
         .map_err(|e| e.to_string())
         .expect("Couldn't create dirs");
 
     let file_path = app_dir.join(TASK_FILE_PATH);
-    log::info!("File path save task: {:?}", file_path);
+    log::info!("[TASK][SAVE] File path: {:?}", file_path);
 
     let file_ptr = File::create(file_path).map_err(|e| e.to_string()).unwrap();
 
@@ -44,17 +44,17 @@ fn load_tasks(app_handle: tauri::AppHandle) -> Vec<Task> {
         .app_data_dir()
         .map_err(|e| e.to_string())
         .expect("Couldn't find app data dir");
-    log::info!("App dir load task: {:?}", app_dir.to_str());
+    log::info!("[TASK][LOAD] App dir: {:?}", app_dir.to_str());
 
     let file_path = app_dir.join(TASK_FILE_PATH);
-    log::info!("File path load: {:?}", file_path);
+    log::info!("[TASK][LOAD] File path: {:?}", file_path);
 
     if !fs::exists(&file_path).expect("Can't check existence") {
         log::info!("File for tasks doesn't exist. Creating.");
         save_tasks(app_handle, vec![]);
     }
 
-    log::info!("File for tasks loaded");
+    log::info!("[TASK][LOAD] File loaded");
 
     let contents = fs::read_to_string(&file_path).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
@@ -68,14 +68,14 @@ fn save_workspaces(app_handle: tauri::AppHandle, items: Vec<Workspace>) {
         .app_data_dir()
         .map_err(|e| e.to_string())
         .expect("Couldn't find app data dir");
-    log::info!("App dir save workspace: {:?}", app_dir.to_str());
+    log::info!("[WORKSPACE][SAVE] App dir: {:?}", app_dir.to_str());
 
     std::fs::create_dir_all(&app_dir)
         .map_err(|e| e.to_string())
         .expect("Couldn't create dirs");
 
     let file_path = app_dir.join(WORKSPACE_FILE_PATH);
-    log::info!("File path save workspace: {:?}", app_dir.to_str());
+    log::info!("[WORKSPACE][SAVE] File path: {:?}", app_dir.to_str());
 
     let file_ptr = File::create(file_path).map_err(|e| e.to_string()).unwrap();
 
@@ -91,17 +91,17 @@ fn load_workspaces(app_handle: tauri::AppHandle) -> Vec<Workspace> {
         .app_data_dir()
         .map_err(|e| e.to_string())
         .expect("Couldn't find app data dir");
-    log::info!("App dir load workspace: {:?}", app_dir.to_str());
+    log::info!("[WORKSPACE][LOAD] App dir: {:?}", app_dir.to_str());
 
     let file_path = app_dir.join(WORKSPACE_FILE_PATH);
-    log::info!("File path load workspace: {:?}", app_dir.to_str());
+    log::info!("[WORKSPACE][LOAD] File path: {:?}", app_dir.to_str());
 
     if !fs::exists(&file_path).expect("Can't check existence") {
         log::info!("File for workspaces doesn't exist. Creating.");
         save_workspaces(app_handle, vec![]);
     }
 
-    log::info!("File for workspaces loaded");
+    log::info!("[WORKSPACE][LOAD] File loaded");
 
     let contents = fs::read_to_string(&file_path).expect("Should work");
     serde_json::from_str(&contents).expect("should work")
@@ -111,25 +111,25 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
     match app.updater()?.check().await {
         Ok(Some(update)) => {
             let mut downloaded = 0;
-            log::info!("Update found");
-            log::info!("Preparing for download");
+            log::info!("[UPDATE] Update found");
+            log::info!("[UPDATE] Preparing for download");
             // alternatively we could also call update.download() and update.install() separately
             update
                 .download_and_install(
                     |chunk_length, content_length| {
                         downloaded += chunk_length;
-                        log::info!("downloaded {downloaded} from {content_length:?}");
+                        log::info!("[UPDATE][DOWNLOAD] downloaded {downloaded} from {content_length:?}");
                     },
                     || {
-                        log::info!("download finished. Starting update.");
+                        log::info!("[UPDATE][DOWNLOAD] download finished. Starting update.");
                     },
                 )
                 .await?;
-            log::info!("Update finished. Restarting app.");
+            log::info!("[UPDATE] Update finished. Restarting app.");
             app.restart();
         }
         Ok(None) => {
-            log::info!("No update available");
+            log::info!("[UPDATE] No update available");
         }
         Err(e) => log::error!("Error: {}", e),
     }
@@ -171,9 +171,9 @@ pub fn run() {
         .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
-                log::info!("Preparing for update");
+                log::info!("[UPDATE] Preparing for update");
                 update(handle).await.unwrap();
-                log::info!("Updated");
+                log::info!("[UPDATE] Updated");
             });
             Ok(())
         })
