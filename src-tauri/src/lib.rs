@@ -2,6 +2,7 @@ use specta;
 use specta_typescript::Typescript;
 use std::fs::{self, File};
 use tauri_plugin_updater::UpdaterExt;
+use tauri_plugin_log::log;
 use tauri_specta::{collect_commands, Builder};
 
 pub mod models;
@@ -65,8 +66,25 @@ fn load_workspaces() -> Vec<Workspace> {
 }
 
 async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
+    println!("Inside update");
+    let a = app.updater()?;
+    let b = a.check();
+    match b.await {
+        Ok(Some(update)) => {
+            println!("Update available {}", &update.version);
+        }
+        Ok(None) => {
+            println!("None");
+        }
+        Err(e) => println!("Error: {}", e),
+    }
+
+    println!("after c");
+
     if let Some(update) = app.updater()?.check().await? {
         let mut downloaded = 0;
+
+        println!("starting download and install");
 
         // alternatively we could also call update.download() and update.install() separately
         update
@@ -101,6 +119,11 @@ pub fn run() {
         .expect("Failed to export types");
 
     tauri::Builder::default()
+        .plugin(
+            tauri_plugin_log::Builder::default()
+                .level(log::LevelFilter::Debug)
+                .build(),
+        )
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_opener::init())
@@ -113,7 +136,9 @@ pub fn run() {
         .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
+                println!("Preparing for update");
                 update(handle).await.unwrap();
+                println!("Updated");
             });
             Ok(())
         })
