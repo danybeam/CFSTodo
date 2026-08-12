@@ -26,7 +26,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU3Rjc5MUVGODg2NjMxMkEKUldRcU1XYUk3NUgzNTJhdDF4SS9IZjlLMmpqVGZFZE9DSGcyR1FrWlE3eEl4aW1IRHFZZlhmakkK",
       "endpoints": [
-        "https://github.com/user/danybeam/CFSTodoReleases/latest/download/latest.json"
+        "https://github.com/user/danybeam/CFSTodo/download/latest.json"
       ],
       "windows": {
         "installMode": "passive"
