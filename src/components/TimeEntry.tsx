@@ -47,7 +47,7 @@ export default function TimeEntry(props: TimeEntryProps) {
                 name="action"
                 value="rotate"
             >
-                Rotate Task
+                Rotate task
             </button>
             <button
                 class="overflow-button"

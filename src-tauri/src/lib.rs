@@ -146,21 +146,28 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let mut pending_logs: Vec<&str> = vec![];
+    let mut pending_logs: Vec<String> = vec![];
 
     if cfg!(debug_assertions) {
-        pending_logs.push("[SPECTA] Debug mode. Exporting types.");
-        Builder::<tauri::Wry>::new()
+        pending_logs.push(format!("[SPECTA] Debug mode. Exporting types."));
+        let specta_builder = Builder::<tauri::Wry>::new()
             .commands(collect_commands![
                 save_tasks,
                 load_tasks,
                 save_workspaces,
                 load_workspaces
             ])
-            .export(Typescript::default(), "../src/models/bindings.ts")
-            .expect("Failed to export types");
+            .export(Typescript::default(), "../src/models/bindings.ts");
+
+        match specta_builder {
+            Ok(_) => pending_logs.push(format!("[SPECTA] Correctly exported bindings")),
+            Err(err) => {
+                pending_logs.push(format!("[SPECTA] Could not export bindings."));
+                pending_logs.push(format!("[SPECTA] {}", err));
+            }
+        }
     } else {
-        pending_logs.push("[SPECTA] Release mode. Skipping exporting types.");
+        pending_logs.push(format!("[SPECTA] Release mode. Skipping exporting types."));
     }
 
     tauri::Builder::default()

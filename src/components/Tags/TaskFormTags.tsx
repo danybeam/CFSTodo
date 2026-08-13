@@ -49,7 +49,7 @@ export default function TaskFormTags(props: TaskFormTagsProps) {
                     />
                 </div>
                 <div class="medium" />
-                <button type="submit" style="height: fit-content; align-self:flex-end;">Add</button>
+                <button type="submit" style="height: fit-content; align-self:flex-end;">Add Tag</button>
             </form>
         </div>
     );

@@ -90,7 +90,7 @@ export default function Sidebar(props: SidebarProps) {
                             }}
                         >
                             {
-                                collapsedButtons() ? "" : deleteMode() ? "Delete selected" : "Select workspaces"
+                                collapsedButtons() ? "" : deleteMode() ? "Delete selected" : "Select workspaces for deletion"
                             }
                         </button>
                     </Show>

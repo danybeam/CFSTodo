@@ -477,8 +477,8 @@ button.selected {
 .task-info-contents {
   /* Sizing */
   min-width: 10vw;
-  max-width: 87%;
-  width: 87%;
+  max-width: 85%;
+  width: 85%;
 
   /* Color */
   background-color: #262626;
