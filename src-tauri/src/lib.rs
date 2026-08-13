@@ -75,7 +75,7 @@ fn save_workspaces(app_handle: tauri::AppHandle, items: Vec<Workspace>) {
         .expect("Couldn't create dirs");
 
     let file_path = app_dir.join(WORKSPACE_FILE_PATH);
-    log::info!("[WORKSPACE][SAVE] File path: {:?}", app_dir.to_str());
+    log::info!("[WORKSPACE][SAVE] File path: {:?}", file_path.to_str());
 
     let file_ptr = File::create(file_path).map_err(|e| e.to_string()).unwrap();
 
@@ -94,7 +94,7 @@ fn load_workspaces(app_handle: tauri::AppHandle) -> Vec<Workspace> {
     log::info!("[WORKSPACE][LOAD] App dir: {:?}", app_dir.to_str());
 
     let file_path = app_dir.join(WORKSPACE_FILE_PATH);
-    log::info!("[WORKSPACE][LOAD] File path: {:?}", app_dir.to_str());
+    log::info!("[WORKSPACE][LOAD] File path: {:?}", file_path.to_str());
 
     if !fs::exists(&file_path).expect("Can't check existence") {
         log::info!("File for workspaces doesn't exist. Creating.");
@@ -118,7 +118,9 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
                 .download_and_install(
                     |chunk_length, content_length| {
                         downloaded += chunk_length;
-                        log::info!("[UPDATE][DOWNLOAD] downloaded {downloaded} from {content_length:?}");
+                        log::info!(
+                            "[UPDATE][DOWNLOAD] downloaded {downloaded} from {content_length:?}"
+                        );
                     },
                     || {
                         log::info!("[UPDATE][DOWNLOAD] download finished. Starting update.");
@@ -168,6 +170,13 @@ pub fn run() {
             save_workspaces,
             load_workspaces
         ])
+        .setup(|app| {
+            log::info!(
+                "[APP] app version: {:?}",
+                app.package_info().version.to_string()
+            );
+            Ok(())
+        })
         .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
