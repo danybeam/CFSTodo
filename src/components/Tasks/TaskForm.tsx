@@ -67,7 +67,7 @@ function TaskForm(props: TaskFormProps) {
                             max="40"
                         />
                     </div>
-                    <button type="submit" style="height: fit-content; align-self:flex-end;">Add</button>
+                    <button type="submit" style="height: fit-content; align-self:flex-end;">Add Task</button>
                 </div>
                 <div style="height:10px;"/>
                 <textarea
