@@ -1,6 +1,5 @@
 use specta;
 use specta_typescript::Typescript;
-use std::error::Error;
 use std::fs::{self, File};
 use tauri::Manager;
 use tauri_plugin_log::log;
