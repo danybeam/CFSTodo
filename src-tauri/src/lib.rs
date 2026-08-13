@@ -50,7 +50,7 @@ fn load_tasks(app_handle: tauri::AppHandle) -> Vec<Task> {
     log::info!("[TASK][LOAD] File path: {:?}", file_path);
 
     if !fs::exists(&file_path).expect("Can't check existence") {
-        log::info!("File for tasks doesn't exist. Creating.");
+        log::info!("[TASK][LOAD] File for tasks doesn't exist. Creating.");
         save_tasks(app_handle, vec![]);
     }
 
@@ -97,7 +97,7 @@ fn load_workspaces(app_handle: tauri::AppHandle) -> Vec<Workspace> {
     log::info!("[WORKSPACE][LOAD] File path: {:?}", file_path.to_str());
 
     if !fs::exists(&file_path).expect("Can't check existence") {
-        log::info!("File for workspaces doesn't exist. Creating.");
+        log::info!("[WORKSPACE][LOAD] File for workspaces doesn't exist. Creating.");
         save_workspaces(app_handle, vec![]);
     }
 
@@ -108,6 +108,11 @@ fn load_workspaces(app_handle: tauri::AppHandle) -> Vec<Workspace> {
 }
 
 async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
+    if cfg!(debug_assertions) {
+        log::info!("[UPDATE] Debug mode. Skipping update.");
+        return Ok(());
+    }
+
     match app.updater()?.check().await {
         Ok(Some(update)) => {
             let mut downloaded = 0;
@@ -141,15 +146,22 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    Builder::<tauri::Wry>::new()
-        .commands(collect_commands![
-            save_tasks,
-            load_tasks,
-            save_workspaces,
-            load_workspaces
-        ])
-        .export(Typescript::default(), "../src/models/bindings.ts")
-        .expect("Failed to export types");
+    let mut pending_logs: Vec<&str> = vec![];
+
+    if cfg!(debug_assertions) {
+        pending_logs.push("[SPECTA] Debug mode. Exporting types.");
+        Builder::<tauri::Wry>::new()
+            .commands(collect_commands![
+                save_tasks,
+                load_tasks,
+                save_workspaces,
+                load_workspaces
+            ])
+            .export(Typescript::default(), "../src/models/bindings.ts")
+            .expect("Failed to export types");
+    } else {
+        pending_logs.push("[SPECTA] Release mode. Skipping exporting types.");
+    }
 
     tauri::Builder::default()
         .plugin(
@@ -171,13 +183,14 @@ pub fn run() {
             load_workspaces
         ])
         .setup(|app| {
+            for pending_log in pending_logs {
+                log::info!("{}", pending_log);
+            }
+
             log::info!(
                 "[APP] app version: {:?}",
                 app.package_info().version.to_string()
             );
-            Ok(())
-        })
-        .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
                 log::info!("[UPDATE] Preparing for update");
